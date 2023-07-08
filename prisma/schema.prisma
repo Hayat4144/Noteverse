@@ -8,7 +8,28 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String
+  id         String   @id
+  email      String   @unique
+  name       String
+  created_at DateTime @default(now())
+  password   String
+  roleId     String   @default("OWNER")
+  Role       Role     @relation(fields: [roleId], references: [id])
+
+  @@index([email, name])
+}
+
+model Role {
+  id   String   @id
+  role UserRole @default(OWNER)
+  User User[]
+
+  @@index([id], map: "idx_role_id")
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  COLLABORATOR
+  VIEWER
 }
