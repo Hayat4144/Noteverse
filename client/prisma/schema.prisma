@@ -8,20 +8,20 @@ datasource db {
 }
 
 model Role {
-  id   String   @id
-  role UserRole @default(OWNER)
+  id   String   @id @default(uuid())
+  type UserRole @default(OWNER)
   User User[]
 
   @@index([id], map: "idx_role_id")
 }
 
 model User {
-  id         String   @id
+  id         String   @id @default(uuid())
   email      String   @unique
   name       String
   created_at DateTime @default(now())
   password   String
-  roleId     String   @default("OWNER")
+  roleId     String
   Role       Role     @relation(fields: [roleId], references: [id])
 
   @@index([email, name])
