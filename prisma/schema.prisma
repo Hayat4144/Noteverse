@@ -13,7 +13,7 @@ model User {
   name       String
   created_at DateTime @default(now())
   password   String
-  roleId     String   @default("OWNER")
+  roleId     String
   Role       Role     @relation(fields: [roleId], references: [id])
 
   @@index([email, name])
@@ -21,7 +21,7 @@ model User {
 
 model Role {
   id   String   @id
-  role UserRole @default(OWNER)
+  type UserRole @default(OWNER)
   User User[]
 
   @@index([id], map: "idx_role_id")
