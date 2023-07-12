@@ -15,11 +15,14 @@ import {
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Icons } from '../Icons';
+import { signIn, useSession } from 'next-auth/react';
 
 type Inputs = z.infer<typeof authSchma>;
 
 export default function Signinform() {
   const [isPending, startTransition] = React.useTransition();
+  const m = useSession()
+  console.log(m)
   // react-hook-form
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchma),
@@ -29,16 +32,19 @@ export default function Signinform() {
     },
   });
 
-  const onSubmit =async (values: Inputs) => {
-    const response = await fetch('/api/auth/login',{
-      method:'POST',
-      headers:{
-        'Content-type':'application/json'
-      },
-      body:JSON.stringify({values})
-    })
-    const {error,data} = await response.json();
-    console.log(error,data)
+  const onSubmit = async (values: Inputs) => {
+    const result = await signIn('credentials', {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+      // callbackUrl:'/'
+    });
+    console.log(result)
+    if (result?.error) {
+      alert(`Error:${result.error}`);
+    } else {
+      alert(`Success: login successful.`);
+    }
   };
   return (
     <Form {...form}>
