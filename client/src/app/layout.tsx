@@ -3,6 +3,9 @@ import '../styles/globals.css';
 import { fontMono, fontSans } from '@/components/Fonts';
 import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
+import AuthProvider from '@/components/AuthProvider';
+import { Session } from 'next-auth';
+import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -13,11 +16,27 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
+async function getSession(cookie: string): Promise<Session> {
+  const response = await fetch('http://localhost:3000/api/auth/session', {
+    headers: {
+      cookie,
+    },
+  }
+);
+
+  const session = await response.json();
+
+  return Object.keys(session).length > 0 ? session : null;
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getSession(headers().get('cookie') ?? '');
+  console.log(session)
+
   return (
     <html lang="en">
       <body
@@ -28,7 +47,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
-          {children}
+          <AuthProvider >{children}</AuthProvider>
         </ThemeProvider>
       </body>
     </html>
