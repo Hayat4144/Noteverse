@@ -1,6 +1,7 @@
 import prisma from '@/lib/DbConfig';
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
+import { generateToken } from '@/lib/Jwt';
 
 export async function POST(req: NextRequest, res: Response) {
   try {
@@ -22,7 +23,16 @@ export async function POST(req: NextRequest, res: Response) {
         { error: `Invalid email/password` },
         { status: 400 },
       );
-    return NextResponse.json({ message: 'Login successful.' }, { status: 200 });
+    const payload = {
+      id: isUserExist.id,
+      name: isUserExist.name,
+      email: isUserExist.email,
+    };
+    const token = await generateToken(payload);
+    return NextResponse.json(
+      { message: 'Login successful.' },
+      { status: 200, headers: { 'Set-Cookie': `token=${token}` } },
+    );
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }
