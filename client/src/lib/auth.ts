@@ -1,11 +1,33 @@
-import { getUser } from './userDetails';
 import bcrypt from 'bcrypt';
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
 import GitubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { decodeToken } from '@/lib/Jwt';
+import { decodeToken, isResfreshToken } from '@/lib/Jwt';
+import { BASE_URL } from './BASE_URL';
+
+const RefreshAccessToken = async (
+  accessToken: string,
+  refreshtoken: string,
+) => {
+  try {
+    const tokenResponse = await fetch(`${BASE_URL}/api/auth/t/getaccesstoken`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ accessToken, refreshtoken }),
+    });
+    const { AccessToken, RefreshToken, error } = await tokenResponse.json();
+    if (tokenResponse.status !== 200) {
+      return Promise.reject(new Error(error));
+    }
+    return { AccessToken, RefreshToken };
+  } catch (error: any) {
+    return {accessToken,refreshtoken,error:"RefreshAccessTokenError"}
+  }
+};
 
 const providers = [
   GoogleProvider({
@@ -24,7 +46,7 @@ const providers = [
     name: 'Credentials',
     credentials: {},
     async authorize(credentials: any) {
-      const result = await fetch(`http://localhost:8000/api/auth/v/signin`, {
+      const result = await fetch(`${BASE_URL}/api/auth/v/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,24 +68,42 @@ const providers = [
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers,
   callbacks: {
     jwt: async ({ token, user }) => {
-      token.AccessToken = user.AccessToken;
-      token.RefreshToken = user.RefreshToken;
-      console.log(`token : ${token}`);
+      if (user) {
+        // This will only be executed at login. Each next invocation will skip this part.
+        const AccessToken = await decodeToken(user.AccessToken);
+        token.AccessToken = user.AccessToken;
+        token.AccessTokenExpiry = AccessToken.exp;
+        token.RefreshToken = user.RefreshToken;
+      }
+      const shouldRefreshTime = isResfreshToken(token.AccessTokenExpiry);
+      if (!shouldRefreshTime) {
+        return token;
+      }
+      const refreshTokenData = await RefreshAccessToken(
+        token.AccessToken,
+        token.RefreshToken,
+      );
+      const { exp } = await decodeToken(refreshTokenData.AccessToken);
+      token = { refreshTokenData, ...token, AccessTokenExpiry: exp };
       return token;
     },
     session: async ({ session, token }) => {
-      const accessToken = await decodeToken(token.AccessToken);
-      session.user.AccessToken = token.AccessToken;
-      session.user.RefreshToken = token.RefreshToken;
-      session.user.id = accessToken.id;
-      session.user.email = accessToken.email;
-      session.user.name = accessToken.name;
-      console.log('session', session);
+      if (token) {
+        const accessToken = await decodeToken(token.AccessToken);
+        session.user.AccessToken = token.AccessToken;
+        session.user.RefreshToken = token.RefreshToken;
+        session.user.id = accessToken.id;
+        session.user.email = accessToken.email;
+        session.user.name = accessToken.name;
+        session.error = token.error;
+      }
+
       return session;
     },
   },
