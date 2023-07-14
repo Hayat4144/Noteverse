@@ -4,9 +4,9 @@ import { join } from 'path';
 import { payload } from '../types';
 import { CustomError } from './CustomError';
 
-const SignOptions: SignOptions = {
+const options: SignOptions = {
   algorithm: 'ES256',
-  expiresIn: '1h',
+  expiresIn: '24h',
 };
 
 const getPrivateKeySecret = (): Buffer => {
@@ -23,20 +23,20 @@ const getPublicKeySecret = (): Buffer => {
 
 const getAccessToken = async (payload: any): Promise<string> => {
   const secret = getPrivateKeySecret();
-  const token = await jwt.sign(payload, secret, SignOptions);
+  const token = await jwt.sign(payload, secret, options);
   return token;
 };
 
 const getRefreshToken = async (paylod: payload): Promise<string> => {
   const secret = getPrivateKeySecret();
   const token = await jwt.sign(paylod, secret, {
-    ...SignOptions,
-    expiresIn: '10d',
+    ...options,
+    expiresIn: '30d',
   });
   return token;
 };
 
-const verifyToken = async (token: string): Promise<payload> => {
+const verifyToken = async (token: string, expiryDate:number): Promise<payload> => {
   const options: VerifyOptions = {
     algorithms: ['ES256'],
   };
@@ -50,7 +50,7 @@ const verifyToken = async (token: string): Promise<payload> => {
   }
 
   const expirationTime = exp * 1000; // Convert exp (seconds) to milliseconds
-  const expirationIn30Days = Date.now() + 20 * 24 * 60 * 60 * 1000; // 20 days in milliseconds
+  const expirationIn30Days = Date.now() + expiryDate * 24 * 60 * 60 * 1000; //  days in milliseconds
 
   if (expirationTime >= expirationIn30Days) {
     throw new CustomError('Token has expired', 400);
