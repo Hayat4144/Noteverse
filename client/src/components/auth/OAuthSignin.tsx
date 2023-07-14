@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { Icons } from '../Icons';
+import { useSession } from 'next-auth/react';
 
 export default function OAuthSignin() {
   const provider = [
