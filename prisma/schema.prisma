@@ -7,8 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Role {
+  id   String   @id @default(uuid())
+  type UserRole @default(OWNER)
+  User User[]
+
+  @@index([id], map: "idx_role_id")
+}
+
 model User {
-  id         String   @id
+  id         String   @id @default(uuid())
   email      String   @unique
   name       String
   created_at DateTime @default(now())
@@ -17,14 +25,6 @@ model User {
   Role       Role     @relation(fields: [roleId], references: [id])
 
   @@index([email, name])
-}
-
-model Role {
-  id   String   @id
-  type UserRole @default(OWNER)
-  User User[]
-
-  @@index([id], map: "idx_role_id")
 }
 
 enum UserRole {

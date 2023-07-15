@@ -38,13 +38,13 @@
     "eslint-plugin-prettier": "^4.2.1",
     "nodemon": "^1.14.9",
     "prettier": "^2.8.8",
-    "prisma": "^4.16.2",
+    "prisma": "^5.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {
     "-": "^0.0.1",
-    "@prisma/client": "^4.16.2",
+    "@prisma/client": "^5.0.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
