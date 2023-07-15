@@ -4,6 +4,7 @@ import { fontMono, fontSans } from '@/components/Fonts';
 import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 import NextAuthProvider from '@/components/NextAuthProvider';
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -21,7 +22,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           'min-h-screen font-sans antialiased',
@@ -34,6 +35,7 @@ export default async function RootLayout({
           {children}
           </NextAuthProvider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
