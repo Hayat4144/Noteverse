@@ -6,6 +6,7 @@ import logger from './utils/logger';
 import ErrorMiddleware from './middlewares/ErroMiddleware';
 import { CustomError } from './utils/CustomError';
 import Authrouter from './routes/authRoutes';
+import taskRouter from './routes/taskRoutes';
 
 const app = express();
 app.use(cookieParser());
@@ -32,6 +33,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use(Authrouter);
+app.use(taskRouter)
 
 app.use(ErrorMiddleware);
 app.listen(port, () => {
