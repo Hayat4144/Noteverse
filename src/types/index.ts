@@ -1,5 +1,17 @@
 import { JwtPayload } from 'jsonwebtoken';
 
+
+// Define custom properties for Request object
+declare global {
+  namespace Express {
+    interface Request {
+      user_id: string;
+      email: string;
+      name: string;
+    }
+  }
+}
+
 export interface payload extends JwtPayload {
   roleId: string;
   email: string;
