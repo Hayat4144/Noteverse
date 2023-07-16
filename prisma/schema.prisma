@@ -27,9 +27,38 @@ model User {
   @@index([email, name])
 }
 
+model Task {
+  id            String       @id @default(uuid())
+  title         String
+  description   String?
+  due_date      DateTime
+  status        String
+  priority      TaskPriority @default(Low)
+  parent_id     String?
+  is_standalone Boolean
+  assignee      String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  tags          Tags[]       @relation("TagsToTask")
+}
+
+
+enum TaskPriority {
+  High
+  Low
+  Medium
+}
+
 enum UserRole {
   OWNER
   ADMIN
   COLLABORATOR
   VIEWER
+}
+
+
+model Tags {
+  id    String @id @default(uuid())
+  name  String @unique
+  tasks Task[] @relation("TagsToTask")
 }
