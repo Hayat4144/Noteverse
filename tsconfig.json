@@ -8,6 +8,12 @@
     "esModuleInterop": true,                            // Emit additional JavaScript to ease support for importing CommonJS modules.
     "forceConsistentCasingInFileNames": true,            // Ensure that casing is correct in imports.
     "strict": true,                                     // Enable all strict type-checking options.
-    "skipLibCheck": true                                // Skip type checking all .d.ts files.
-  }
+    "skipLibCheck": true,                                // Skip type checking all .d.ts files.
+    "baseUrl": "./", // Set the base URL to the root of your project
+    "paths": {
+      "@/*": ["src/*"] // Alias for importing files from the 'src' directory
+    }
+  },
+  "include": ["src/**/*.ts"], // Include TypeScript files from the 'src' directory
+  "exclude": ["node_modules", "client", "dist"]
 }
