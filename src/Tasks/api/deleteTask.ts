@@ -6,7 +6,7 @@ import { Response,Request,NextFunction } from "express";
 
 const deleteTask = asyncHandler(async(req:Request,res:Response,next:NextFunction)=>{
     const {id} = req.params ;
-    const deletedTask = await taskObject.findByIdAndDelete(id);
+    const deletedTask = await taskObject.findByIdAndDelete(id,req.user_id);
     if(!deletedTask) return res.status(httpStatusCode.BAD_REQUEST).json({error:'Task does not exist'});
     return res.status(httpStatusCode.OK).json({data:`${deletedTask?.title} has been deleted successfully.`})
 })

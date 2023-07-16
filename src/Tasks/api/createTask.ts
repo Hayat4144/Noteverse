@@ -7,7 +7,7 @@ const taskObject = new Task();
 
 const createTask = asyncHandler(async (req:Request,res:Response,next:NextFunction) => {
     const data:createTaskInput = req.body;
-    const task = await taskObject.createTask(data);
+    const task = await taskObject.createTask(data,req.user_id);
     return res.status(200).json({data:task})
 })
 
