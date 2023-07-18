@@ -22,28 +22,21 @@ export const ErrorMiddleware = (
       break;
     case 'JsonWebTokenError':
       err.message = `Json Web Token is invalid, Try again `;
-      err = new CustomError(err.message,BAD_REQUEST);
+      err.statusCode = httpStatusCode.UNAUTHORIZED;
       break;
     case 'TokenExpiredError':
       err.message = 'Json Web Token is Expired, Try again ';
-      err = new CustomError(err.message,BAD_REQUEST);
+      err.statusCode = httpStatusCode.UNAUTHORIZED;
       break;
     default:
       break;
   }
 
   if (err instanceof CustomError) {
-    logger.error(err);
-    return res.status(BAD_REQUEST).json({ error: err.message });
+    return res.status(err.statusCode).json({ error: err.message });
   }
 
-  // Mongoose duplicate key error
-  if (err.code === 11000) {
-    const message = `Duplicate ${Object.keys(err.keyValue)} Entered`;
-    err = new CustomError(message,BAD_REQUEST);
-  }
-  logger.error(err);
-  res.status(err.statusCode).json({
+  return res.status(err.statusCode).json({
     error: err.message,
   });
 };
