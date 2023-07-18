@@ -24,6 +24,8 @@ model User {
   roleId     String
   Role       Role     @relation(fields: [roleId], references: [id])
 
+  tasks Task[]
+
   @@index([email, name])
 }
 
@@ -36,12 +38,13 @@ model Task {
   priority      TaskPriority @default(Low)
   parent_id     String?
   is_standalone Boolean
-  assignee      String
+  assignee      String?
+  user          User         @relation(fields: [userId], references: [id])
+  userId        String
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now())
-  tags          Tags[]       @relation("TagsToTask")
+  tags          String[]
 }
-
 
 enum TaskPriority {
   High
@@ -54,11 +57,4 @@ enum UserRole {
   ADMIN
   COLLABORATOR
   VIEWER
-}
-
-
-model Tags {
-  id    String @id @default(uuid())
-  name  String @unique
-  tasks Task[] @relation("TagsToTask")
 }
