@@ -12,6 +12,17 @@ declare global {
   }
 }
 
+export interface SeachFrilters{
+  field:string,
+  opt:string,
+  value:string
+}
+
+export interface SearchSort{
+  field:string,
+  value:string
+}
+
 export interface payload extends JwtPayload {
   roleId: string;
   email: string;
