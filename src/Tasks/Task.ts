@@ -42,9 +42,23 @@ class Task{
         })
         return deletedTask ;
     }
-    async getAllTask(userId:string):Promise<PrismaTask[] | null>{
-        const tasks = await prisma.task.findMany({where:{userId}});
-        if(tasks.length < 1) return null;
+    async getTask(userId:string,sortIn:object,skip:number){
+        const tasks = await prisma.task.findMany({
+            take:2,
+            skip,
+            where:{userId},
+            orderBy:sortIn
+        })
+        return tasks
+    }
+    async searchApifilters(filterQuery:object,sortQuery:object,skip:number){
+        console.log(filterQuery)
+        const tasks = await prisma.task.findMany({
+            take:20,
+            skip,
+            where:filterQuery,
+            orderBy:sortQuery
+        })
         return tasks
     }
 }
