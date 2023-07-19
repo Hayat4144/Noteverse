@@ -1,18 +1,41 @@
-import { SeachFrilters, SearchSort } from "@/types";
+import { IncaseSensitiveOperators, PrismaOperators, SeachFrilters, SearchSort } from "@/types";
 
 const filtersQuery = (filters:SeachFrilters[])=>{
     let filterQuery: any = {};
-    // const IncaseSensitive ={mode:'insensitive'}
+    const numberRegex = new RegExp('^[0-9]+$'); 
+    const dateRegex =  /^\d{4}-\d{2}-\d{2}$/ ;
+    const arrayRegex = /^\[.*\]$/ ; 
+    const IncaseSensitive ={mode:'insensitive'};
+
+
+    const incaseSensitiveOpertaors:IncaseSensitiveOperators[] = [
+      PrismaOperators.contains,
+      PrismaOperators.endsWith,
+      PrismaOperators.startsWith,
+    ];
+
     filters.forEach((filter) => {
+      // check if the filter value is conatains array
+      if(arrayRegex.test(filter.value)){ 
+        filter.value = filter.value.trim();
+        filter.value = JSON.parse(filter.value)
+      }
       const filterOperatorValue:any= { [filter.opt]: filter.value };
   
      // Check if the filter value is a number and convert it to a number if needed
-      const reg = new RegExp('^[0-9]+$'); 
-      if(reg.test(filter.value)){
+      if(numberRegex.test(filter.value)){
         if(!isNaN(Number(filter.value))){
           filterOperatorValue[filter.opt] = Number(filter.value) 
         }
       }
+      
+      // check is filter value is date
+      if(dateRegex.test(filter.value)){
+        const dateObject = new Date(filter.value).toISOString();
+        filterOperatorValue[filter.opt] = dateObject;
+      }
+
+     
       if (filterQuery[filter.field]) {
         // Merge the existing filter with the new filterOperatorValue
         filterQuery[filter.field] = {
@@ -24,8 +47,10 @@ const filtersQuery = (filters:SeachFrilters[])=>{
         // Create a new entry for the field in filterQuery
         filterQuery[filter.field] = {...filterOperatorValue};
       }
+      if(incaseSensitiveOpertaors.includes(filter.opt as IncaseSensitiveOperators)){
+        filterQuery[filter.field] = {...filterQuery[filter.field],...IncaseSensitive}
+      }
     });
-  
     return filterQuery;
 }
 
