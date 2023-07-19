@@ -43,6 +43,30 @@ export enum Status {
   'Completed'
 }
 
+export enum PrismaOperators {
+  equal = 'equal',
+  in = 'in',
+  NOT = 'NOT',
+  null = 'null',
+  lt = 'lt',
+  lte = 'lte',
+  gt = 'gt',
+  gte = 'gte',
+  contains = 'contains',
+  startsWith = 'startsWith',
+  endsWith = 'endsWith',
+  AND = 'AND',
+  OR = 'OR',
+  hasEvery = 'hasEvery'
+}
+
+// Define a union type for the case-insensitive operators
+export type IncaseSensitiveOperators =
+  | PrismaOperators.contains
+  | PrismaOperators.endsWith
+  | PrismaOperators.startsWith
+  | PrismaOperators.hasEvery
+
 export interface createTaskInput{
   title:string,
   description? :string,
