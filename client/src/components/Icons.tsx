@@ -57,11 +57,19 @@ import {
   X,
   type Icon as LucideIcon,
   type LucideProps,
+  Loader,
+  Text,
+  Tag,
+  ChevronDownCircle,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
 
 export const Icons = {
+  loader: Loader,
+  text:Text,
+  tag:Tag,
+  downCircle:ChevronDownCircle,
   sun: SunMedium,
   moon: Moon,
   star: Star,
