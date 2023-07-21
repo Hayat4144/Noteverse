@@ -3,8 +3,8 @@ import '../styles/globals.css';
 import { fontMono, fontSans } from '@/components/Fonts';
 import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
-import NextAuthProvider from '@/components/NextAuthProvider';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from '@/components/ui/toaster';
+import Provider from '@/components/Provider/Provider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -30,11 +30,7 @@ export default async function RootLayout({
           fontMono.variable,
         )}
       >
-        <ThemeProvider attribute="class" enableSystem defaultTheme="system">
-          <NextAuthProvider>
-          {children}
-          </NextAuthProvider>
-        </ThemeProvider>
+        <Provider>{children}</Provider>
         <Toaster />
       </body>
     </html>
