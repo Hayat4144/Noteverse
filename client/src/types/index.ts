@@ -42,3 +42,13 @@ export interface TaskResponse {
   totalResults: number;
   error?: string | undefined;
 }
+
+export enum OrderBY {
+  DESC= 'desc',
+  ASC = 'asc'
+}
+
+export interface sortObejct {
+  field:string,
+  orderBy:OrderBY
+}
