@@ -12,9 +12,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useAppSelector } from '@/hooks';
 
-export default function BoardTask({ task }: { task: TaskResponse }) {
-  const { data, resultPerPage, totalResults } = task;
+export default function BoardTask() {
+  const { data, resultPerPage, totalResults } = useAppSelector(state=>state.Task);
   const { inProgressTask, completedTask, notStartedTask } =
     sortTaskByStatus(data);
 

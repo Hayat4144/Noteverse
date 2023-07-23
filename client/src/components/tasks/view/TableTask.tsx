@@ -1,8 +1,8 @@
 'use client'
+
 import React from 'react';
 import { Icons } from '../../Icons';
 import Iconwithtext from '../../Iconwithtext';
-import { TaskResponse, taskObject } from '@/types';
 import { Badge } from '../../ui/badge';
 import {
   Table,
@@ -12,8 +12,10 @@ import {
   TableHeader,
   TableRow,
 } from '../../ui/table';
+import { useAppSelector } from '@/hooks';
 
-export default function TableTask({ task }: { task: TaskResponse | undefined}) {
+export default function TableTask() {
+  const {isLoading,data,totalResults,resultPerPage} = useAppSelector(state=>state.Task)
   return (
     <Table>
       <TableHeader>
@@ -45,7 +47,7 @@ export default function TableTask({ task }: { task: TaskResponse | undefined}) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {task?.data.map((item) => (
+        {data.map((item) => (
           <TableRow key={item?.id}>
             <TableCell className="font-medium">{item.title}</TableCell>
             <TableCell>{item.status}</TableCell>
