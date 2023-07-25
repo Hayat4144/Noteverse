@@ -44,7 +44,7 @@ class Task{
     }
     async getTask(userId:string,sortIn:object,skip:number){
         const tasks = await prisma.task.findMany({
-            take:2,
+            take:20,
             skip,
             where:{userId},
             orderBy:sortIn
