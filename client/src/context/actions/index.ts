@@ -17,6 +17,8 @@ export enum ActionTypes {
   removeSort = 'REMOVESORT',
   toggleTaskTab = 'TOGGLETASKTAB',
   task = 'TASK',
+  opensortPopover = 'OPENSORTPOPOVER',
+  openSort ='OPENSORT'
 }
 
 export interface AddFilterAction {
@@ -38,6 +40,7 @@ export interface addSortAction {
   payload: {
     field: string;
     value: string;
+    id:string
   };
 }
 
@@ -53,8 +56,18 @@ export interface taskAction {
   };
 }
 
+export interface sortPopoverAction{
+  type:ActionTypes.opensortPopover,
+  payload:boolean
+}
+
+export interface sortOpenAction {
+  type:ActionTypes.openSort,
+  payload:boolean
+}
+
 // Create a union type of all possible action types
 export type FilterActionType = AddFilterAction | RemoveFilterAction;
-export type SortActionType = addSortAction;
+export type SortActionType = addSortAction | sortPopoverAction | sortOpenAction;
 export type TaskToggleActionType = taskTabToggleAction;
 export type TaskActionType = taskAction;
