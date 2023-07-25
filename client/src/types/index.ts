@@ -48,7 +48,14 @@ export enum OrderBY {
   ASC = 'asc'
 }
 
-export interface sortObejct {
+export interface sortObject {
   field:string,
   orderBy:OrderBY
+  id:string
+}
+
+export interface sortsState {
+  sorts: [];
+  isOpen: boolean;
+  popoverOpen: boolean;
 }
