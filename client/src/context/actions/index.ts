@@ -18,7 +18,8 @@ export enum ActionTypes {
   toggleTaskTab = 'TOGGLETASKTAB',
   task = 'TASK',
   opensortPopover = 'OPENSORTPOPOVER',
-  openSort ='OPENSORT'
+  openSort ='OPENSORT',
+  taskSheetoogle="TASKSHEETTOOGLE",
 }
 
 export interface AddFilterAction {
@@ -66,8 +67,14 @@ export interface sortOpenAction {
   payload:boolean
 }
 
+export interface addTaskSheet{
+  type:ActionTypes.taskSheetoogle,
+  payload:boolean
+}
+
 // Create a union type of all possible action types
 export type FilterActionType = AddFilterAction | RemoveFilterAction;
 export type SortActionType = addSortAction | sortPopoverAction | sortOpenAction;
 export type TaskToggleActionType = taskTabToggleAction;
-export type TaskActionType = taskAction;
+export type TaskActionType = taskAction; 
+export type TaskSheetToggleActionType = addTaskSheet; 
