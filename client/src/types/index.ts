@@ -1,3 +1,6 @@
+import { addtaskSchema } from '@/lib/validation/task';
+import {z} from 'zod'
+
 export interface JwtPayload {
   id: string;
   name: string;
@@ -59,3 +62,5 @@ export interface sortsState {
   isOpen: boolean;
   popoverOpen: boolean;
 }
+
+export type taskInput= z.infer<typeof addtaskSchema>

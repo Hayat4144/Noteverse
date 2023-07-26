@@ -4,6 +4,7 @@ import { Button } from '../ui/button';
 import Filtertask from './Filtertask';
 import SearchTask from './SearchTask';
 import Sort from './sort/Sort';
+import Addtask from './Addtask';
 
 export default function FilterSortTask() {
   return (
@@ -11,7 +12,7 @@ export default function FilterSortTask() {
       <Filtertask />
       <Sort />
       <SearchTask />
-      <Button size={'sm'}>New</Button>
+      <Addtask />
     </div>
   );
 }
