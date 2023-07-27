@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
-import { Button } from '../ui/button';
-import Filtertask from './Filtertask';
+import Filtertask from './filter/Filtertask';
 import SearchTask from './SearchTask';
 import Sort from './sort/Sort';
 import Addtask from './Addtask';
