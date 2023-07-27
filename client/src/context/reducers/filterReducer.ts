@@ -39,6 +39,12 @@ const filterReducer = (state = initialState, action: FilterActionType) => {
           filter: [...state.filter, { field, value, id, operator }],
         };
       }
+
+    case ActionTypes.removeFilter:
+      const newFilters = state.filter.filter(
+        (item) => item.id !== action.payload,
+      );
+      return { ...state, filter: newFilters };
     case ActionTypes.openfilterPopover:
       return { ...state, popoverOpen: action.payload };
     case ActionTypes.openFilter:

@@ -41,9 +41,7 @@ export interface filterPopoverAction {
 
 export interface RemoveFilterAction {
   type: ActionTypes.removeFilter;
-  payload: {
-    count: number;
-  };
+  payload: string;
 }
 
 export interface addSortAction {
