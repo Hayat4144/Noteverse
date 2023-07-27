@@ -1,4 +1,4 @@
-import { taskObject } from '@/types';
+import { filterobject, taskObject } from '@/types';
 
 // types/index.ts
 
@@ -18,15 +18,25 @@ export enum ActionTypes {
   toggleTaskTab = 'TOGGLETASKTAB',
   task = 'TASK',
   opensortPopover = 'OPENSORTPOPOVER',
-  openSort ='OPENSORT',
-  taskSheetoogle="TASKSHEETTOOGLE",
+  openSort = 'OPENSORT',
+  openFilter = 'OPENFILTER',
+  openfilterPopover = 'OPENFILTERPOPOVER',
+  taskSheetoogle = 'TASKSHEETTOOGLE',
 }
 
 export interface AddFilterAction {
   type: ActionTypes.addFilter;
-  payload: {
-    data: string;
-  };
+  payload: filterobject;
+}
+
+export interface filterOpenAction {
+  type: ActionTypes.openFilter;
+  payload: boolean;
+}
+
+export interface filterPopoverAction {
+  type: ActionTypes.openfilterPopover;
+  payload: boolean;
 }
 
 export interface RemoveFilterAction {
@@ -41,7 +51,7 @@ export interface addSortAction {
   payload: {
     field: string;
     value: string;
-    id:string
+    id: string;
   };
 }
 
@@ -57,24 +67,28 @@ export interface taskAction {
   };
 }
 
-export interface sortPopoverAction{
-  type:ActionTypes.opensortPopover,
-  payload:boolean
+export interface sortPopoverAction {
+  type: ActionTypes.opensortPopover;
+  payload: boolean;
 }
 
 export interface sortOpenAction {
-  type:ActionTypes.openSort,
-  payload:boolean
+  type: ActionTypes.openSort;
+  payload: boolean;
 }
 
-export interface addTaskSheet{
-  type:ActionTypes.taskSheetoogle,
-  payload:boolean
+export interface addTaskSheet {
+  type: ActionTypes.taskSheetoogle;
+  payload: boolean;
 }
 
 // Create a union type of all possible action types
-export type FilterActionType = AddFilterAction | RemoveFilterAction;
+export type FilterActionType =
+  | AddFilterAction
+  | RemoveFilterAction
+  | filterOpenAction
+  | filterPopoverAction;
 export type SortActionType = addSortAction | sortPopoverAction | sortOpenAction;
 export type TaskToggleActionType = taskTabToggleAction;
-export type TaskActionType = taskAction; 
-export type TaskSheetToggleActionType = addTaskSheet; 
+export type TaskActionType = taskAction;
+export type TaskSheetToggleActionType = addTaskSheet;
