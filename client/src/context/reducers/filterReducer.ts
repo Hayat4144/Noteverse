@@ -16,17 +16,14 @@ const initialState: initialStateInterface = {
 const filterReducer = (state = initialState, action: FilterActionType) => {
   switch (action.type) {
     case ActionTypes.addFilter:
-      const field = action.payload.field;
-      const id = action.payload.id;
-      const value = action.payload.value;
-      const operator = action.payload.operator;
+      const payload = action.payload;
       const isFieldExist = state.filter.filter(
-        (item) => item.field === field || item.id === id,
+        (item) => item.field === payload.field || item.id === payload.id,
       );
       if (isFieldExist.length > 0) {
         // Field exists, update its value
         const updatedSorts = state.filter.map((item) =>
-          item.id === id ? { ...item, value, field, operator } : item,
+          item.id === payload.id ? { ...item, ...payload } : item,
         );
         return {
           ...state,
@@ -36,10 +33,9 @@ const filterReducer = (state = initialState, action: FilterActionType) => {
         // Field does not exist, add a new filter object
         return {
           ...state,
-          filter: [...state.filter, { field, value, id, operator }],
+          filter: [...state.filter, { ...payload }],
         };
       }
-
     case ActionTypes.removeFilter:
       const newFilters = state.filter.filter(
         (item) => item.id !== action.payload,
