@@ -12,16 +12,14 @@ import { getOperators } from '@/lib/utils';
 import React, { Fragment } from 'react';
 import OperatorComponent from './OperatorComponent';
 import DeleteFilter from './DeleteFilter';
+import SpecificFilter from './SpecificFilter';
 
 export default function FilterContent() {
   const { isOpen, popoverOpen, filter } = useAppSelector(
     (state) => state.Filter,
   );
-
   const dispatch = useAppDispatch();
   const [open, setOpen] = React.useState(true);
-  const [fieldOpen, setfieldOpen] = React.useState<boolean>(false);
-  const [value, setValue] = React.useState<String>('');
 
   const handleParentPopoverChange = (isOpen: boolean) => {
     if (!isOpen) {
@@ -70,6 +68,7 @@ export default function FilterContent() {
                           </div>
                           <DeleteFilter id={item.id} />
                         </div>
+                        <SpecificFilter field={item.field} id={item.id} />
                       </PopoverContent>
                     </Popover>
                   )}
