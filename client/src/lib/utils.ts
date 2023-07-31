@@ -24,17 +24,20 @@ interface OperatorsRespose {
 }
 
 export const getOperators = (field: string): OperatorsRespose => {
-  if (
-    field === taskField.title ||
-    taskField.assignee ||
-    taskField.description ||
-    taskField.status
-  ) {
-    const defaultOperator = TaskOperator.contains;
-    type TaskValue = `${TaskOperator}`;
-    const operators: TaskValue[] = Object.values(TaskOperator);
+  if (field === taskField.tags) {
+    const defaultOperator = TagsOperators.in;
+    type TaskValue = `${TagsOperators}`;
+    const operators: TaskValue[] = Object.values(TagsOperators);
     return { defaultOperator, operators };
   }
+
+  if(field === taskField.due_date){
+    const defaultOperator = DueDateOperator.equal;
+    type TaskValue = `${DueDateOperator}`
+    const operators:TaskValue[] =Object.values(DueDateOperator)
+    return{defaultOperator,operators}
+  }
+ 
   const defaultOperator = TaskOperator.contains;
   type TaskValue = `${TaskOperator}`;
   const operators: TaskValue[] = Object.values(TaskOperator);
