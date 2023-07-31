@@ -127,7 +127,7 @@ export enum TagsOperators {
 export interface filterobject {
   id: string;
   field: string;
-  value: string;
+  value: string | string[];
   operator: StatusOperator | DueDateOperator | TaskOperator;
 }
 
