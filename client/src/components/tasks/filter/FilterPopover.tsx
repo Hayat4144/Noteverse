@@ -33,15 +33,19 @@ export default function FilterPopover({ filterId }: filterProps) {
         payload: { field, value: '', id, operator: defaultOperator },
       });
 
-      dispatch({ type: ActionTypes.openFilter, payload: false });
-      dispatch({ type: ActionTypes.openfilterPopover, payload: true });
+      dispatch({ type: ActionTypes.openFilter, payload: true });
+      dispatch({ type: ActionTypes.openfilterPopover, payload: false });
+      dispatch({
+        type: ActionTypes.openPopoverState,
+        payload: { filterId: id, isOpen: true },
+      });
       setValue(field === value ? '' : field);
     }
   };
   return (
     <PopoverContent className="p-2 mx-4" align="start">
       <Command>
-        <CommandInput placeholder="Sort by..." />
+        <CommandInput placeholder="filter by..." />
         <CommandList>
           <CommandEmpty>No filter field found.</CommandEmpty>
           <CommandGroup>

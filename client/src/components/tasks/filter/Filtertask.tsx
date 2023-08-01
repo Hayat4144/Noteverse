@@ -7,28 +7,25 @@ import { ActionTypes } from '@/context/actions';
 import FilterPopover from './FilterPopover';
 
 export default function Taskfilter() {
-  const { isOpen, popoverOpen, filter } = useAppSelector(
-    (state) => state.Filter,
-  );
+  const { filter } = useAppSelector((state) => state.Filter);
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
 
-
   useEffect(() => {
-    if (popoverOpen) {
+    if (filter.length > 0) {
       setOpen(false);
     }
-    isOpen ? setOpen(true) : setOpen(false);
-  }, [isOpen, popoverOpen]);
+    if (!open) {
+      dispatch({ type: ActionTypes.openfilterPopover, payload: false });
+    }
+  }, [filter, open]);
 
   const openChangehandler = () => {
-    if (isOpen) {
-      dispatch({ type: ActionTypes.openFilter, payload: false });
-    }
+    filter.length > 0 ? setOpen(false) : setOpen(!open);
   };
 
   const handlefilter = () => {
-    if (filter.length > 0) {
+    if (filter.length < 1) {
       dispatch({ type: ActionTypes.openfilterPopover, payload: true });
     } else {
       dispatch({ type: ActionTypes.openFilter, payload: true });
@@ -40,7 +37,7 @@ export default function Taskfilter() {
       <PopoverTrigger asChild onClick={handlefilter}>
         <span className="cursor-pointer">filter</span>
       </PopoverTrigger>
-      {isOpen && <FilterPopover />}
+      {open && <FilterPopover />}
     </Popover>
   );
 }
