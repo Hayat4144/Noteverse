@@ -22,6 +22,7 @@ export enum ActionTypes {
   openFilter = 'OPENFILTER',
   openfilterPopover = 'OPENFILTERPOPOVER',
   taskSheetoogle = 'TASKSHEETTOOGLE',
+  openPopoverState = 'OPENPOPOVERSTATE',
 }
 
 export interface AddFilterAction {
@@ -50,6 +51,14 @@ export interface addSortAction {
     field: string;
     value: string;
     id: string;
+  };
+}
+
+export interface openPopoverStateAction {
+  type: ActionTypes.openPopoverState;
+  payload: {
+    filterId: string;
+    isOpen: boolean;
   };
 }
 
@@ -85,7 +94,8 @@ export type FilterActionType =
   | AddFilterAction
   | RemoveFilterAction
   | filterOpenAction
-  | filterPopoverAction;
+  | filterPopoverAction
+  | openPopoverStateAction;
 export type SortActionType = addSortAction | sortPopoverAction | sortOpenAction;
 export type TaskToggleActionType = taskTabToggleAction;
 export type TaskActionType = taskAction;

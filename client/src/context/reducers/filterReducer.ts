@@ -1,16 +1,22 @@
 import { filterobject } from '@/types';
 import { ActionTypes, FilterActionType } from './../actions/index';
 
+interface OpenFiltersState {
+  [key: string]: boolean;
+}
+
 interface initialStateInterface {
   filter: filterobject[];
   isOpen: boolean;
   popoverOpen: boolean;
+  openPopoverState: OpenFiltersState;
 }
 
 const initialState: initialStateInterface = {
   filter: [],
   isOpen: false,
   popoverOpen: false,
+  openPopoverState: {},
 };
 
 const filterReducer = (state = initialState, action: FilterActionType) => {
@@ -36,6 +42,14 @@ const filterReducer = (state = initialState, action: FilterActionType) => {
           filter: [...state.filter, { ...payload }],
         };
       }
+    case ActionTypes.openPopoverState:
+      return {
+        ...state,
+        openPopoverState: {
+          ...state.openPopoverState,
+          [action.payload.filterId]: action.payload.isOpen,
+        },
+      };
     case ActionTypes.removeFilter:
       const newFilters = state.filter.filter(
         (item) => item.id !== action.payload,
