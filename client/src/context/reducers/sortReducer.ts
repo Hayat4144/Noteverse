@@ -39,10 +39,18 @@ const sortReducer = (state = initialState, action: SortActionType) => {
           sorts: [...state.sorts, { field, value, id }],
         };
       }
+    case ActionTypes.removeSort:
+      if (action.payload) {
+        const sortupdated = state.sorts.filter(
+          (item) => item.id !== action.payload,
+        );
+        return { ...state, sorts: sortupdated };
+      }
+      return { ...state, sorts: [] };
     case ActionTypes.opensortPopover:
       return { ...state, popoverOpen: action.payload };
     case ActionTypes.openSort:
-      return {...state,isOpen:action.payload}
+      return { ...state, isOpen: action.payload };
     default:
       return { ...state };
   }

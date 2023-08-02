@@ -62,6 +62,11 @@ export interface openPopoverStateAction {
   };
 }
 
+export interface deleteSortAction {
+  type:ActionTypes.removeSort,
+  payload?:string
+}
+
 export interface taskTabToggleAction {
   type: ActionTypes.toggleTaskTab;
   payload: boolean;
@@ -96,7 +101,7 @@ export type FilterActionType =
   | filterOpenAction
   | filterPopoverAction
   | openPopoverStateAction;
-export type SortActionType = addSortAction | sortPopoverAction | sortOpenAction;
+export type SortActionType = addSortAction | sortPopoverAction | sortOpenAction | deleteSortAction;
 export type TaskToggleActionType = taskTabToggleAction;
 export type TaskActionType = taskAction;
 export type TaskSheetToggleActionType = addTaskSheet;
