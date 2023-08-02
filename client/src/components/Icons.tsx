@@ -1,6 +1,8 @@
 import {
   AlarmClock,
   AlertTriangle,
+  ArrowDown,
+  ArrowUpDown,
   BarChart3,
   CalendarDays,
   Check,
@@ -66,10 +68,12 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  down: ArrowDown,
+  updown:ArrowUpDown,
   loader: Loader,
-  text:Text,
-  tag:Tag,
-  downCircle:ChevronDownCircle,
+  text: Text,
+  tag: Tag,
+  downCircle: ChevronDownCircle,
   sun: SunMedium,
   moon: Moon,
   star: Star,
