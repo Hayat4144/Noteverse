@@ -4,7 +4,7 @@ import React from 'react';
 import { PopoverContent } from '../../ui/popover';
 import { OrderBY } from '@/types';
 import { Icons } from '../../Icons';
-import { useAppDispatch} from '@/hooks';
+import { useAppDispatch } from '@/hooks';
 import { ActionTypes } from '@/context/actions';
 import {
   Command,
@@ -48,9 +48,13 @@ export const sortBy = [
 
 interface SortContentPopverProps {
   sortId?: string | undefined;
+  onClosePopoverChange?: (state: boolean) => void;
 }
 
-export default function SortContentPopver({ sortId }: SortContentPopverProps) {
+export default function SortContentPopver({
+  sortId,
+  onClosePopoverChange,
+}: SortContentPopverProps) {
   const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('');
   const id = sortId ? sortId : uuid();
@@ -60,9 +64,12 @@ export default function SortContentPopver({ sortId }: SortContentPopverProps) {
       type: ActionTypes.addSort,
       payload: { field, value: OrderBY.ASC, id },
     });
-    dispatch({type:ActionTypes.openSort,payload:false})
-    dispatch({type:ActionTypes.opensortPopover,payload:true})
+    dispatch({ type: ActionTypes.openSort, payload: false });
+    dispatch({ type: ActionTypes.opensortPopover, payload: true });
     setValue(field === value ? '' : field);
+    if (onClosePopoverChange !== undefined) {
+      onClosePopoverChange(false);
+    }
   };
 
   return (
@@ -76,7 +83,9 @@ export default function SortContentPopver({ sortId }: SortContentPopverProps) {
               <CommandItem
                 className="teamaspace-y-3 flex items-center space-x-3 px-4 py-2"
                 key={sort.field}
-                onSelect={(currentValue) => {addSort(currentValue)}}
+                onSelect={(currentValue) => {
+                  addSort(currentValue);
+                }}
               >
                 {value === sort.field ? (
                   <Check
