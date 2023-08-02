@@ -21,12 +21,12 @@ import { v4 as uuid } from 'uuid';
 export const sortBy = [
   {
     field: 'title',
-    lable: 'Task title',
+    lable: 'title',
     icons: <Icons.text size={18} />,
   },
   {
     field: 'due_date',
-    lable: 'Due Date',
+    lable: 'due_date',
     icons: <Icons.calendar size={18} />,
   },
   {
