@@ -2,8 +2,9 @@ import { BASE_URL } from "@/lib/BASE_URL";
 import { TaskResponse } from "@/types";
 
 
-const getTasks = async (token: string | undefined ) => {
-  const res = await fetch(`${BASE_URL}/api/search/task`, {
+const getTasks = async (token: string | undefined ,url?:string) => {
+  const currenturl = url ? url : `${BASE_URL}/api/search/task`;
+  const res = await fetch(currenturl, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
