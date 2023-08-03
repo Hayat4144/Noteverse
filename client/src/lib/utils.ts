@@ -1,5 +1,6 @@
 import {
   DueDateOperator,
+  PriorityOperator,
   StatusOperator,
   TagsOperators,
   TaskOperator,
@@ -24,20 +25,27 @@ interface OperatorsRespose {
 }
 
 export const getOperators = (field: string): OperatorsRespose => {
+  if (field === taskField.priority) {
+    const defaultOperator = PriorityOperator.equals;
+    type TaskValue = `${PriorityOperator}`;
+    const operators: TaskValue[] = Object.values(PriorityOperator);
+    return { defaultOperator, operators };
+  }
+
   if (field === taskField.tags) {
-    const defaultOperator = TagsOperators.in;
+    const defaultOperator = TagsOperators.hasSome;
     type TaskValue = `${TagsOperators}`;
     const operators: TaskValue[] = Object.values(TagsOperators);
     return { defaultOperator, operators };
   }
 
-  if(field === taskField.due_date){
-    const defaultOperator = DueDateOperator.equal;
-    type TaskValue = `${DueDateOperator}`
-    const operators:TaskValue[] =Object.values(DueDateOperator)
-    return{defaultOperator,operators}
+  if (field === taskField.due_date) {
+    const defaultOperator = DueDateOperator.lte;
+    type TaskValue = `${DueDateOperator}`;
+    const operators: TaskValue[] = Object.values(DueDateOperator);
+    return { defaultOperator, operators };
   }
- 
+
   const defaultOperator = TaskOperator.contains;
   type TaskValue = `${TaskOperator}`;
   const operators: TaskValue[] = Object.values(TaskOperator);
