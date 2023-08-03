@@ -40,19 +40,19 @@ export interface taskObject {
 }
 
 export enum taskField {
-  id ="id",
-  title="title",
-  description="description",
-  due_date="due_date",
-  status="status",
-  priority="priority",
-  parent_id="parent_id",
-  is_standalone="is_standalone",
-  assignee="assignee",
-  userId="userId",
-  createdAt="createdAt",
-  updatedAt="updatedAt",
-  tags="tags",
+  id = 'id',
+  title = 'title',
+  description = 'description',
+  due_date = 'due_date',
+  status = 'status',
+  priority = 'priority',
+  parent_id = 'parent_id',
+  is_standalone = 'is_standalone',
+  assignee = 'assignee',
+  userId = 'userId',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+  tags = 'tags',
 }
 
 export interface TaskResponse {
@@ -74,7 +74,7 @@ export interface sortObject {
 }
 
 export enum Operators {
-  equal = 'equal',
+  equals = 'equals',
   in = 'in',
   NOT = 'NOT',
   null = 'null',
@@ -93,36 +93,43 @@ export enum Operators {
   some = 'some',
   none = 'none',
   every = 'every',
+  hasSome = 'hasSome',
+  hasEvery = 'hasEvery',
+}
+
+export enum PriorityOperator {
+  equals = Operators.equals,
+  not = Operators.not,
+  // in = Operators.in,
+  // notIn = Operators.NOT_IN,
 }
 
 export enum TaskOperator {
   contains = Operators.contains,
   endsWith = Operators.endsWith,
   startsWith = Operators.startsWith,
-  NOT = Operators.NOT,
-  equal = Operators.equal,
+  not = Operators.not,
+  equals = Operators.equals,
 }
 
 export enum StatusOperator {
   NOT = Operators.NOT,
   contains = Operators.contains,
-  equals = Operators.equal 
+  equals = Operators.equals,
 }
 
 export enum DueDateOperator {
   gt = Operators.gt,
-  equal = Operators.equal,
+  equals = Operators.equals,
   lt = Operators.lt,
   lte = Operators.lte,
   gte = Operators.gte,
 }
 
 export enum TagsOperators {
-  in = Operators.in,
-  notIn = Operators.NOT_IN
+  hasSome = Operators.hasSome,
+  hasEvery = Operators.hasEvery,
 }
-
-
 
 export interface filterobject {
   id: string;
