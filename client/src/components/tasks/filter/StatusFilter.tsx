@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { TaskStatus } from '@/types';
-import { useAppDispatch } from '@/hooks';
+import { TaskStatus, taskField } from '@/types';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { ActionTypes } from '@/context/actions';
 
 interface SpecificFilterProps {
@@ -12,6 +12,7 @@ interface SpecificFilterProps {
 
 export default function StatusFilter({ field, filterId }: SpecificFilterProps) {
   const [seletectedStatus, setseletectedStatus] = useState<string | null>(null);
+  const { filter } = useAppSelector((state) => state.Filter);
   const dispatch = useAppDispatch();
 
   const handleStatusChange = (status: string) => {
@@ -21,6 +22,18 @@ export default function StatusFilter({ field, filterId }: SpecificFilterProps) {
       payload: { id: filterId, field, value: status },
     });
   };
+
+  useEffect(() => {
+    filter.map((item) => {
+      if (
+        item.field === taskField.status &&
+        item.value.length > 0 &&
+        typeof item.value === 'string'
+      ) {
+        setseletectedStatus(item.value);
+      }
+    });
+  }, [filter]);
   return (
     <Fragment>
       <div className="my-5">

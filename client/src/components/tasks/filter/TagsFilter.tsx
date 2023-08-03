@@ -2,8 +2,9 @@ import { Icons } from '@/components/Icons';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { ActionTypes } from '@/context/actions';
-import { useAppDispatch} from '@/hooks';
-import React, { Fragment, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { taskField } from '@/types';
+import React, { Fragment, useEffect, useState } from 'react';
 
 interface TagsProps {
   filterId: string;
@@ -15,6 +16,20 @@ export default function TagsFilter({ filterId, field }: TagsProps) {
   const [tasktags, settasktags] = useState<string[]>([]);
   const [inputValue, setinputValue] = useState('');
   const dispatach = useAppDispatch();
+  const { filter } = useAppSelector((state) => state.Filter);
+
+  useEffect(() => {
+    filter.map((item) => {
+      if (
+        item.field === taskField.tags &&
+        item.value.length > 0 &&
+        Array.isArray(item.value)
+      ) {
+        settasktags(item.value);
+      }
+    });
+  }, [filter]);
+
 
   const deleteTag = (index: number) => {
     settasktags((prevState) => {
@@ -82,7 +97,7 @@ export default function TagsFilter({ filterId, field }: TagsProps) {
           onKeyUp={onkeyuphandler}
         />
       </div>
-      <p className='text-sm'>Note: press enter to create a tag.</p>
+      <p className="text-sm">Note: press enter to create a tag.</p>
     </Fragment>
   );
 }

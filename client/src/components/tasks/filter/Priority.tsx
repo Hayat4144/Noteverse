@@ -8,10 +8,10 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { ActionTypes } from '@/context/actions';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
-import { TaskPriority } from '@/types';
-import React, { Fragment, useState } from 'react';
+import { TaskPriority, taskField } from '@/types';
+import React, { Fragment, useEffect, useState } from 'react';
 
 interface PriorityProps {
   filterId: string;
@@ -22,6 +22,7 @@ export default function Priority({ filterId, field }: PriorityProps) {
   const [seletectedPriority, setseletectedPriority] = useState<string | null>(
     null,
   );
+  const { filter } = useAppSelector((state) => state.Filter);
   const dispatch = useAppDispatch();
 
   const handlePriorityChange = (priority: string) => {
@@ -30,6 +31,18 @@ export default function Priority({ filterId, field }: PriorityProps) {
       payload: { id: filterId, field, value: priority },
     });
   };
+
+  useEffect(() => {
+    filter.map((item) => {
+      if (
+        item.field === taskField.priority &&
+        item.value.length > 0 &&
+        typeof item.value === 'string'
+      ) {
+        setseletectedPriority(item.value);
+      }
+    });
+  }, [filter]);
 
   return (
     <Fragment>
