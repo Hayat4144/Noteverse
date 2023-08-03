@@ -9,14 +9,14 @@ export const TaskUrl = (sorts: [], filter: filterobject[]): string => {
   if (sortQuery.length > 0 || filterQuery.length > 0) {
     url += '?';
     if (sortQuery.length > 0) {
-      url += `sort_by=${sortQuery}`;
+      url += `sort_by=${encodeURIComponent(sortQuery)}`;
     }
     if (sortQuery.length > 0 && filterQuery.length > 0) {
       url += '&';
     }
 
     if (filterQuery.length > 0) {
-      url += `filter=${filterQuery}`;
+      url += `filter=${encodeURIComponent(filterQuery)}`;
     }
   }
   return url;
