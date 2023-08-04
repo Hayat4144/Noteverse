@@ -1,5 +1,5 @@
 import { SelectionRow } from '@/types';
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import {
   Tooltip,
   TooltipContent,
@@ -15,6 +15,7 @@ import deleteTasks from '@/service/DeletedTasks';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/components/ui/use-toast';
 import { ActionTypes } from '@/context/actions';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface RowSelections {
   selectionRow: SelectionRow;
@@ -30,6 +31,29 @@ export default function ActionComponent({
   const session = useSession();
   const { toast } = useToast();
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams();
+      searchParams.forEach((paramValue, paramName) => {
+        // Append all existing parameters except the one we want to remove
+        if (paramName !== name) {
+          params.append(paramName, paramValue);
+        }
+      });
+
+      // Append the new value if it's not null
+      if (value !== null) {
+        params.append(name, value);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const DeleteTasks = async (taskIds: string[]) => {
     const { error, message } = await deleteTasks(
@@ -79,7 +103,17 @@ export default function ActionComponent({
               <Separator orientation="vertical" />
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger
+                    onClick={() => {
+                      const taskIds: string[] = GetSelectedRow(
+                        selectionRow,
+                        data,
+                      );
+                      router.push(
+                        pathname + '?' + createQueryString('id', taskIds[0]),
+                      );
+                    }}
+                  >
                     <Iconwithtext
                       icons={<Icons.edit size={16} />}
                       text="Edit"

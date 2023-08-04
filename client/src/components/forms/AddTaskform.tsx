@@ -1,6 +1,6 @@
 import { addtaskSchema } from '@/lib/validation/task';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
@@ -18,6 +18,7 @@ import { UseFormReturn, useForm } from 'react-hook-form';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,25 +27,92 @@ import {
 import { Badge } from '../ui/badge';
 import { useAppDispatch } from '@/hooks';
 import { ActionTypes } from '@/context/actions';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import getTasksId from '@/service/getTaskById';
+import { useQuery } from '@tanstack/react-query';
+import updateTask from '@/service/updateTask';
 
-export default function AddTaskform() {
+interface RowSelections {
+  unSelectRow?: () => void;
+}
+
+export default function AddTaskform({ unSelectRow }: RowSelections) {
   const session = useSession();
   const [isKeyReleased, setisKeyReleased] = useState(false);
   const [tasktags, settasktags] = useState<string[]>([]);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const [isupdateForm, setisupdateForm] = useState(false);
+  const taskId = searchParams.get('id');
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [defaultValue, setdefaultValue] = useState<taskInput>({
+    due_date: new Date(),
+    is_standalone: false,
+    status: TaskStatus.Not_Started,
+    priority: TaskPriority.Low,
+    title: '',
+    description: '',
+    tags: '',
+    assignee: '',
+  });
+
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams();
+      searchParams.forEach((paramValue, paramName) => {
+        // Append all existing parameters except the one we want to remove
+        if (paramName !== name) {
+          params.append(paramName, paramValue);
+        }
+      });
+
+      // Append the new value if it's not null
+      if (value !== null) {
+        params.append(name, value);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const form = useForm<taskInput>({
     resolver: zodResolver(addtaskSchema),
-    defaultValues: {
-      is_standalone:false,
-      status: TaskStatus.Not_Started,
-      priority: TaskPriority.Low,
-      title: '',
-      description: '',
-      tags: '',
-      assignee: '',
-    },
+    defaultValues: defaultValue,
   });
+
+  const result = useQuery(
+    ['tasksById'],
+    () => getTasksId(session.data?.user.AccessToken, searchParams.get('id')),
+    {
+      enabled: isupdateForm && session.data?.user ? true : false,
+    },
+  );
+
+  useEffect(() => {
+    setisupdateForm(searchParams.has('id'));
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (isupdateForm && result.data) {
+      const { data } = result.data;
+      setdefaultValue((prevState) => ({
+        ...prevState,
+        ...data,
+        description: '',
+        due_date: new Date(data.due_date),
+      }));
+      settasktags(data.tags);
+      form.reset({
+        ...data,
+        due_date: new Date(data.due_date),
+        description: '',
+        tags: '',
+      });
+    }
+  }, [isupdateForm, result.data]);
 
   const onChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -95,16 +163,36 @@ export default function AddTaskform() {
   const onSubmit = async (values: taskInput) => {
     let { tags, ...dataValue } = values;
 
-    const task = {...dataValue,tags:tasktags}
-    const { error, data } = await addTask({...task}, session.data?.user.AccessToken);
-    if (error) {
-      return toast({ title: error, variant: 'destructive' });
+    const task = { ...dataValue, tags: tasktags };
+    if (isupdateForm) {
+      const { error, data } = await updateTask(
+        session.data?.user.AccessToken,
+        taskId,
+        { ...task },
+      );
+      if (error) {
+        return toast({ title: error, variant: 'destructive' });
+      }
+      form.reset();
+      dispatch({ type: ActionTypes.updateTask, payload: data });
+      router.push(pathname + '?' + createQueryString('id', null));
+      if (unSelectRow) {
+        unSelectRow();
+      }
+      return toast({ title: 'Task has been updated Successfully.' });
+    } else {
+      const { error, data } = await addTask(
+        { ...task },
+        session.data?.user.AccessToken,
+      );
+      if (error) {
+        return toast({ title: error, variant: 'destructive' });
+      }
+      form.reset();
+      dispatch({ type: ActionTypes.taskSheetoogle, payload: false });
+      return toast({ title: data });
     }
-    form.reset() 
-    dispatch({type:ActionTypes.taskSheetoogle,payload:false})
-    return toast({ title: data });
   };
-
 
   return (
     <Form {...form}>
@@ -257,6 +345,7 @@ export default function AddTaskform() {
                   />
                 </div>
               </FormControl>
+              <FormDescription>Note:Press comma (,) to create tag</FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { SelectionRow } from '@/types';
 import {
   Table,
@@ -17,6 +17,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import ActionComponent from './ActionComponent';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import AddTaskform from '@/components/forms/AddTaskform';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -28,6 +31,11 @@ export default function TableTask<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState<SelectionRow>({});
+  const searchParams = useSearchParams();
+  const [isOpen, setisOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
   const table = useReactTable({
     data,
     columns,
@@ -37,6 +45,34 @@ export default function TableTask<TData, TValue>({
       rowSelection,
     },
   });
+
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams();
+      searchParams.forEach((paramValue, paramName) => {
+        // Append all existing parameters except the one we want to remove
+        if (paramName !== name) {
+          params.append(paramName, paramValue);
+        }
+      });
+
+      // Append the new value if it's not null
+      if (value !== null) {
+        params.append(name, value);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  useEffect(() => {
+    setisOpen(searchParams.has('id'));
+  }, [searchParams]);
+
+  const updateSheetChangeHandler = () => {
+    router.push(pathname + '?' + createQueryString('id', null));
+  };
 
   const unSelectRow = () => {
     setRowSelection({});
@@ -91,6 +127,12 @@ export default function TableTask<TData, TValue>({
         {table.getFilteredSelectedRowModel().rows.length} of{' '}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
+      <Sheet open={isOpen} onOpenChange={updateSheetChangeHandler}>
+        <SheetTrigger></SheetTrigger>
+        <SheetContent side={'left'} className="overflow-auto">
+          <AddTaskform unSelectRow={unSelectRow} />
+        </SheetContent>
+      </Sheet>
     </Fragment>
   );
 }

@@ -17,6 +17,11 @@ const TaskReducer = (state = initailsState, action: TaskActionType) => {
     case ActionTypes.removeTask:
       const updatedTask = state.data.filter((item) => item.id !== action.id);
       return { ...state, data: updatedTask };
+    case ActionTypes.updateTask:
+      const updateTaskById = state.data.map((item) =>
+        item.id === action.payload.id ? { ...item, ...action.payload } : item,
+      );
+      return { ...state, data: updateTaskById };
     default:
       return state;
   }
