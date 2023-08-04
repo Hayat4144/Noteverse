@@ -1,4 +1,5 @@
 import { filterobject, taskObject } from '@/types';
+import { Action } from '@reduxjs/toolkit';
 
 // types/index.ts
 
@@ -23,6 +24,7 @@ export enum ActionTypes {
   openfilterPopover = 'OPENFILTERPOPOVER',
   taskSheetoogle = 'TASKSHEETTOOGLE',
   openPopoverState = 'OPENPOPOVERSTATE',
+  removeTask = 'REMOVETASK',
 }
 
 export interface AddFilterAction {
@@ -63,8 +65,8 @@ export interface openPopoverStateAction {
 }
 
 export interface deleteSortAction {
-  type:ActionTypes.removeSort,
-  payload?:string
+  type: ActionTypes.removeSort;
+  payload?: string;
 }
 
 export interface taskTabToggleAction {
@@ -77,6 +79,11 @@ export interface taskAction {
   payload: {
     field: taskstate;
   };
+}
+
+export interface removeTask {
+  type: ActionTypes.removeTask;
+  id: string;
 }
 
 export interface sortPopoverAction {
@@ -101,7 +108,11 @@ export type FilterActionType =
   | filterOpenAction
   | filterPopoverAction
   | openPopoverStateAction;
-export type SortActionType = addSortAction | sortPopoverAction | sortOpenAction | deleteSortAction;
+export type SortActionType =
+  | addSortAction
+  | sortPopoverAction
+  | sortOpenAction
+  | deleteSortAction;
 export type TaskToggleActionType = taskTabToggleAction;
-export type TaskActionType = taskAction;
+export type TaskActionType = taskAction | removeTask;
 export type TaskSheetToggleActionType = addTaskSheet;

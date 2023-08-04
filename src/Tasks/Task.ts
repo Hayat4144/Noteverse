@@ -1,6 +1,6 @@
 import prisma from '@/config/databaseConfig';
 import { createTaskInput } from '@/types';
-import { Task as PrismaTask } from '@prisma/client';
+import { Prisma, Task as PrismaTask } from '@prisma/client';
 
 class Task {
   async createTask(taskData: createTaskInput, userId: string) {
@@ -42,19 +42,27 @@ class Task {
     return taskExist;
   }
 
-  async findByIdAndDelete(
-    id: string,
-    userId: string,
-  ): Promise<{ title: string } | null> {
-    const isTaskExist = await this.isTaskExist(id, userId);
-    if (!isTaskExist) return null;
-    const deletedTask = await prisma.task.delete({
-      where: { id },
-      select: {
-        title: true,
-      },
+  async findByAndDelete(ids: string[], userId: string) {
+    const IsTaskExist = ids.map(async (id) => {
+      const isTaskExist = await this.isTaskExist(id, userId);
+      return isTaskExist;
     });
-    return deletedTask;
+    const isTaskExistPromise = await Promise.all(IsTaskExist);
+    if (isTaskExistPromise.some((task) => task === null)) {
+      return null;
+    }
+    const DeletdTasks = async (id: string) => {
+      return await prisma.task.delete({
+        where: { id },
+        select: {
+          title: true,
+        },
+      });
+    };
+    const DeletedTaskPromise = await Promise.all(
+      ids.map((id) => DeletdTasks(id)),
+    );
+    return DeletedTaskPromise;
   }
 
   async getTask(userId: string, sortIn: object | [], skip: number) {

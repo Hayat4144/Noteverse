@@ -11,6 +11,6 @@ const taskRouter = expres.Router();
 taskRouter.post('/api/create/task',authMiddleware,createTask)
 taskRouter.get('/api/read/task/:id',authMiddleware,FindtaskById)
 taskRouter.put('/api/update/task', authMiddleware,updateTask)
-taskRouter.delete('/api/delete/task/:id',authMiddleware,deleteTask)
+taskRouter.delete('/api/delete/task',authMiddleware,deleteTask)
 taskRouter.get('/api/search/task',authMiddleware,searchApi)
 export default taskRouter

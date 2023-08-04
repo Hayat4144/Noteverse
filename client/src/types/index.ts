@@ -145,3 +145,8 @@ export interface sortsState {
 }
 
 export type taskInput = z.infer<typeof addtaskSchema>;
+
+
+export interface SelectionRow {
+  [key: string]: boolean;
+}
