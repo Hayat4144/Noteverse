@@ -1,9 +1,7 @@
-'use client'
+'use client';
 
-import React from 'react';
-import { Icons } from '../../Icons';
-import Iconwithtext from '../../Iconwithtext';
-import { Badge } from '../../ui/badge';
+import React, { Fragment } from 'react';
+import { SelectionRow } from '@/types';
 import {
   Table,
   TableBody,
@@ -12,58 +10,87 @@ import {
   TableHeader,
   TableRow,
 } from '../../ui/table';
-import { useAppSelector } from '@/hooks';
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import ActionComponent from './ActionComponent';
 
-export default function TableTask() {
-  const {isLoading,data,totalResults,resultPerPage} = useAppSelector(state=>state.Task)
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+}
+
+export default function TableTask<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const [rowSelection, setRowSelection] = React.useState<SelectionRow>({});
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    onRowSelectionChange: setRowSelection,
+    state: {
+      rowSelection,
+    },
+  });
+
+  const unSelectRow = () => {
+    setRowSelection({});
+  };
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>
-            <Iconwithtext icons={<Icons.text size={18} />} text={'Title'} />
-          </TableHead>
-          <TableHead>
-            <Iconwithtext icons={<Icons.loader size={18} />} text={'Status'} />
-          </TableHead>
-          <TableHead>
-            <Iconwithtext icons={<Icons.user size={18} />} text={'Assignee'} />
-          </TableHead>
-          <TableHead>
-            <Iconwithtext
-              icons={<Icons.downCircle size={18} />}
-              text={'Priority'}
-            />
-          </TableHead>
-          <TableHead>
-            <Iconwithtext
-              icons={<Icons.calendar size={18} />}
-              text={'Due date'}
-            />
-          </TableHead>
-          <TableHead>
-            <Iconwithtext icons={<Icons.tag size={18} />} text={'Tags'} />
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((item) => (
-          <TableRow key={item?.id}>
-            <TableCell className="font-medium">{item.title}</TableCell>
-            <TableCell>{item.status}</TableCell>
-            <TableCell>{item.assignee} </TableCell>
-            <TableCell className="">{item.priority}</TableCell>
-            <TableCell className="">{item.due_date}</TableCell>
-            <TableCell className="md:space-x-1 space-y-1 ">
-              {item.tags.map((tag, index) => (
-                <Badge key={index} className="cursor-pointer">
-                  {tag}
-                </Badge>
-              ))}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <Fragment>
+      <ActionComponent selectionRow={rowSelection} unSelectRow={unSelectRow} />
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && 'selected'}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No Task has been found
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <div className="flex-2 text-sm text-muted-foreground my-5">
+        {table.getFilteredSelectedRowModel().rows.length} of{' '}
+        {table.getFilteredRowModel().rows.length} row(s) selected.
+      </div>
+    </Fragment>
   );
 }

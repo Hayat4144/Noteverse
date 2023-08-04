@@ -11,6 +11,7 @@ import { TaskUrl } from '@/lib/TaskUrl';
 import { useQuery } from '@tanstack/react-query';
 import getTasks from '@/service/getTask';
 import { useSession } from 'next-auth/react';
+import { columns } from './view/columns';
 
 interface taskfilterProps extends TaskResponse {
   isLoading: boolean;
@@ -71,10 +72,15 @@ export default function TaskfilterView({
   return (
     <React.Fragment>
       <TaskFilter />
-      {isLoading && <Loading />}
-      {data.length > 0 && (
+      {isLoading ? (
+        <Loading />
+      ) : (
         <section className="task_table my-2">
-          {isTasktab ? <TableTask /> : <BoardTask />}
+          {isTasktab ? (
+            <TableTask columns={columns} data={data} />
+          ) : (
+            <BoardTask />
+          )}
         </section>
       )}
     </React.Fragment>
