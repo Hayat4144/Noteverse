@@ -20,21 +20,31 @@ import ActionComponent from './ActionComponent';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import AddTaskform from '@/components/forms/AddTaskform';
+import { Paignation } from '@/components/ui/pagination';
+import { number, string } from 'zod';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  totalResults: number;
+  resultPerPage: number;
 }
 
 export default function TableTask<TData, TValue>({
   columns,
   data,
+  totalResults,
+  resultPerPage,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState<SelectionRow>({});
   const searchParams = useSearchParams();
   const [isOpen, setisOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const [currentPage, setcurrentPage] = useState<number>(1);
+  console.log(totalResults, resultPerPage);
+  const totalPages = Math.ceil(totalResults / resultPerPage);
+  console.log(totalPages);
 
   const table = useReactTable({
     data,
@@ -45,6 +55,16 @@ export default function TableTask<TData, TValue>({
       rowSelection,
     },
   });
+
+  const PageChangeHanlder = (pageNumber: number) => {
+    setcurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    if (totalPages > 1) {
+      router.push(pathname + '?' + createQueryString('page', `${currentPage}`));
+    }
+  }, [currentPage]);
 
   const createQueryString = useCallback(
     (name: string, value: string | null) => {
@@ -123,9 +143,19 @@ export default function TableTask<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex-2 text-sm text-muted-foreground my-5">
-        {table.getFilteredSelectedRowModel().rows.length} of{' '}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
+      <div className="flex">
+        <div className="flex-2 text-sm text-muted-foreground my-5">
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        {totalResults > 20 && (
+          <Paignation
+            className="m-auto"
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={PageChangeHanlder}
+          />
+        )}
       </div>
       <Sheet open={isOpen} onOpenChange={updateSheetChangeHandler}>
         <SheetTrigger></SheetTrigger>

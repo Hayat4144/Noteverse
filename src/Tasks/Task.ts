@@ -1,5 +1,6 @@
 import prisma from '@/config/databaseConfig';
 import { createTaskInput } from '@/types';
+import logger from '@/utils/logger';
 import { Prisma, Task as PrismaTask } from '@prisma/client';
 
 class Task {
@@ -72,7 +73,14 @@ class Task {
       where: { userId },
       orderBy: sortIn,
     });
-    return tasks;
+    const totalTasks = await prisma.task.count({
+      where: {
+        userId,
+      },
+      orderBy: sortIn,
+    });
+    const TaskPromise = Promise.all([tasks, totalTasks]);
+    return TaskPromise;
   }
 
   async searchApifilters(
@@ -86,7 +94,12 @@ class Task {
       where: filterQuery,
       orderBy: sortQuery,
     });
-    return tasks;
+    const totalTasks = await prisma.task.count({
+      where: filterQuery,
+      orderBy: sortQuery,
+    });
+    const TaskPromise = Promise.all([tasks, totalTasks]);
+    return TaskPromise;
   }
 }
 
