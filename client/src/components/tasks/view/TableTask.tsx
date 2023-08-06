@@ -21,7 +21,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import AddTaskform from '@/components/forms/AddTaskform';
 import { Paignation } from '@/components/ui/pagination';
-import { number, string } from 'zod';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -59,6 +58,12 @@ export default function TableTask<TData, TValue>({
   const PageChangeHanlder = (pageNumber: number) => {
     setcurrentPage(pageNumber);
   };
+
+  useEffect(() => {
+    if (searchParams.has('page')) {
+      setcurrentPage(Number(searchParams.get('page')));
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (totalPages > 1) {
