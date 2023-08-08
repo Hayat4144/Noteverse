@@ -25,15 +25,12 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen font-sans antialiased flex',
+          'min-h-screen font-sans antialiased',
           fontSans.variable,
           fontMono.variable,
         )}
       >
-        <Provider>
-          <AsideNav className="w-[15rem]" />
-          {children}
-        </Provider>
+        <Provider>{children}</Provider>
         <Toaster />
       </body>
     </html>
