@@ -4,6 +4,7 @@ import {
   ArrowDown,
   ArrowUpDown,
   BarChart3,
+  Bell,
   CalendarDays,
   Check,
   ChevronDown,
@@ -63,13 +64,19 @@ import {
   Text,
   Tag,
   ChevronDownCircle,
+  Home,
+  ListTodo,
+  Book,
+  BellDot,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
 
 export const Icons = {
+  bell: Bell,
+  home: Home,
   down: ArrowDown,
-  updown:ArrowUpDown,
+  updown: ArrowUpDown,
   loader: Loader,
   text: Text,
   tag: Tag,
@@ -103,6 +110,9 @@ export const Icons = {
   edit: Edit,
   crop: Crop,
   reset: RefreshCw,
+  task: ListTodo,
+  notes: Book,
+  notification: BellDot,
   send: Send,
   copy: Copy,
   downlaod: Download,

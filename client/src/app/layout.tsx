@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Provider from '@/components/Provider/Provider';
+import AsideNav from '@/components/Navbar/AsideNav';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,7 +16,6 @@ export const metadata: Metadata = {
   ],
 };
 
-
 export default async function RootLayout({
   children,
 }: {
@@ -25,12 +25,15 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen font-sans antialiased',
+          'min-h-screen font-sans antialiased flex',
           fontSans.variable,
           fontMono.variable,
         )}
       >
-        <Provider>{children}</Provider>
+        <Provider>
+          <AsideNav className="w-[15rem]" />
+          {children}
+        </Provider>
         <Toaster />
       </body>
     </html>
