@@ -12,7 +12,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
       <ReduxProvider store={store}>
-        <NextThemesProvider attribute="class" enableSystem defaultTheme="dark">
+        <NextThemesProvider attribute="class" enableSystem defaultTheme="system">
           <QueryClientProvider client={queryClient}>
             {children}
           </QueryClientProvider>
