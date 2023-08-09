@@ -1,4 +1,5 @@
 import { addtaskSchema } from '@/lib/validation/task';
+import React from 'react';
 import { z } from 'zod';
 
 export interface JwtPayload {
@@ -146,7 +147,9 @@ export interface sortsState {
 
 export type taskInput = z.infer<typeof addtaskSchema>;
 
-
 export interface SelectionRow {
   [key: string]: boolean;
 }
+
+export interface Typography
+  extends React.HtmlHTMLAttributes<HTMLHeadingElement & HTMLParagraphElement> {}
