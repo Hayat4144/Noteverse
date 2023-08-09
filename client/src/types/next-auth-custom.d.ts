@@ -4,11 +4,10 @@ import { JWTString } from 'next-auth/core/lib/cookie';
 import 'next-auth/jwt';
 import { Session } from 'next-auth';
 
-
 declare module 'next-auth' {
   interface Session {
     user: User;
-    error?:string
+    error?: string;
   }
 
   interface User {
@@ -19,9 +18,9 @@ declare module 'next-auth' {
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    AccessToken: string;
-    RefreshToken: string;
-    AccessTokenExpiry:number;
-    error?:string
+    // AccessToken: string;
+    // RefreshToken: string;
+    // AccessTokenExpiry: number | undefined;
+    // error?: string;
   }
 }

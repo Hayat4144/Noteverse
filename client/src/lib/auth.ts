@@ -17,15 +17,19 @@ const RefreshAccessToken = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ accessToken, refreshtoken }),
+      body: JSON.stringify({ refreshtoken }),
     });
-    const { AccessToken, RefreshToken, error } = await tokenResponse.json();
+    const { AccessToken, Refreshtoken, error } = await tokenResponse.json();
     if (tokenResponse.status !== 200) {
       return Promise.reject(new Error(error));
     }
-    return { AccessToken, RefreshToken };
+    return { AccessToken, Refreshtoken };
   } catch (error: any) {
-    return {accessToken,refreshtoken,error:"RefreshAccessTokenError"}
+    return {
+      AccessToken: accessToken,
+      Refreshtoken: refreshtoken,
+      error: 'RefreshAccessTokenError',
+    };
   }
 };
 
@@ -73,7 +77,13 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers,
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user, session }) => {
+      console.log(token);
+      /* Token is stored data after the successfull login
+         user is return variable from the providers.the user is undefined initially.
+        it is only avaible at login time at successful login 
+      */
+
       if (user) {
         // This will only be executed at login. Each next invocation will skip this part.
         const AccessToken = await decodeToken(user.AccessToken);
@@ -81,6 +91,7 @@ export const authOptions: NextAuthOptions = {
         token.AccessTokenExpiry = AccessToken.exp;
         token.RefreshToken = user.RefreshToken;
       }
+
       const shouldRefreshTime = isResfreshToken(token.AccessTokenExpiry);
       if (!shouldRefreshTime) {
         return token;
@@ -89,9 +100,22 @@ export const authOptions: NextAuthOptions = {
         token.AccessToken,
         token.RefreshToken,
       );
+
+      if (refreshTokenData.error) {
+        // clear all data token session add the provide like thing in the client side to check
+        // if there is any error occured in the session or token logout the user and redirect
+        // to the signin page.
+        token.error = refreshTokenData.error;
+        return token;
+      }
+
       const { exp } = await decodeToken(refreshTokenData.AccessToken);
-      token = { refreshTokenData, ...token, AccessTokenExpiry: exp };
-      return token;
+      return {
+        ...token,
+        AccessToken: refreshTokenData.AccessToken,
+        RefreshToken: refreshTokenData.Refreshtoken,
+        AccessTokenExpiry: exp,
+      };
     },
     session: async ({ session, token }) => {
       if (token) {
