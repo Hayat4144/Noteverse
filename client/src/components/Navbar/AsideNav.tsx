@@ -92,7 +92,7 @@ export default function AsideNav({ className }: SidebarProps) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                className="w-full justify-start space-x-2 h-12 py-3"
+                className="w-full justify-start px-1 space-x-1  h-12 py-3"
                 variant={'outline'}
               >
                 <Avatar>
@@ -102,13 +102,13 @@ export default function AsideNav({ className }: SidebarProps) {
                   />
                   <AvatarFallback>Cn</AvatarFallback>
                 </Avatar>
-                <h3 className="flex items-center justify-between space-x-8">
-                  <span>Hayat ilyas</span>
+                <h3 className="flex items-center justify-between space-x-4">
+                  <span className="text-sm">Hayat ilyas</span>
                   <Icons.horizontalThreeDots size={18} />
                 </h3>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-full min-w-[13.8rem]">
+            <DropdownMenuContent className="w-full min-w-[12rem]">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
@@ -133,7 +133,7 @@ export default function AsideNav({ className }: SidebarProps) {
                     <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className='cursor-pointer'>
+                <DropdownMenuItem className="cursor-pointer">
                   <Icons.logout className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                   <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

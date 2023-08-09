@@ -11,12 +11,12 @@ export default async function Task() {
   if (!session) {
     return redirect('/signin');
   }
-  const tasks = await getTasks(session.user.AccessToken)
+  const tasks = await getTasks(session.user.AccessToken);
   return (
     <Fragment>
-      <div className="mx-2 md:w-[80%] md:mx-auto md:my-5">
+      <div className="md:my-5 w-full mx-3 overflow-y-auto">
         <HeaderTask />
-        <TaskfilterView taskData={{...tasks,isLoading:false}}/>
+        <TaskfilterView taskData={{ ...tasks, isLoading: false }} />
       </div>
     </Fragment>
   );
