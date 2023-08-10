@@ -1,11 +1,9 @@
-import { ThemeProvider } from '@/components/ThemeProvider';
 import '../styles/globals.css';
-import { fontMono, fontSans } from '@/components/Fonts';
+import { fontSans } from '@/components/Fonts';
 import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Provider from '@/components/Provider/Provider';
-import AsideNav from '@/components/Navbar/AsideNav';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -25,9 +23,8 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen font-sans antialiased',
+          'min-h-screen bg-background font-sans antialiased',
           fontSans.variable,
-          fontMono.variable,
         )}
       >
         <Provider>{children}</Provider>
