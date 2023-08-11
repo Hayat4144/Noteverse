@@ -13,6 +13,13 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     children = <u>{children}</u>;
   }
 
+  if (leaf.subscript) {
+    children = <sub>{children}</sub>;
+  }
+  if (leaf.supscript) {
+    children = <sup>{children}</sup>;
+  }
+
   return <span {...attributes}>{children}</span>;
 };
 

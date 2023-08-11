@@ -27,10 +27,14 @@ const RenderElements = (props: RenderElementProps) => {
     case 'blockQuote':
       return <BlockQuote {...props} />;
     case 'bulletedlList':
-      return <li {...props.attributes}>{props.children}</li>;
+      return (
+        <li {...props.attributes} className="ml-6 [&>li]:mt-1">
+          {props.children}
+        </li>
+      );
     case 'numberList':
       return (
-        <ol {...props.attributes} type="1">
+        <ol {...props.attributes} type="1" className="list-decimal ml-6 [&>li]:mt-1">
           {props.children}
         </ol>
       );
