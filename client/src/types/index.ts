@@ -10,14 +10,16 @@ export type CustomText = {
   italic?: boolean;
   code?: boolean;
   underline?: boolean;
-  supscript?: boolean;
+  superscript?: boolean;
   subscript?: boolean;
+  strike?: boolean;
   text: string;
 };
 
 export type EmptyText = {
   text: string;
-  supscript?: boolean;
+  strike?: boolean;
+  superscript?: boolean;
   subscript?: boolean;
   bold?: boolean;
   italic?: boolean;
@@ -163,8 +165,8 @@ export type CustomElement =
   | CodeBlockElement
   | CodeLineElement;
 
-export interface CustomRenderElementProps  extends RenderElementProps{
-  element:CustomElement
+export interface CustomRenderElementProps extends RenderElementProps {
+  element: CustomElement;
 }
 
 export type CustomEditor = BaseEditor &

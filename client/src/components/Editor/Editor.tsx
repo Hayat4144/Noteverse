@@ -5,6 +5,7 @@ import { Slate, Editable, withReact, RenderElementProps } from 'slate-react';
 import useEditorConfig from '@/hooks/useEditorConfig';
 import { withHistory } from 'slate-history';
 import Toolbar from './Toolbar/Toolbar';
+import HoveringToolbar from './Toolbar/HoveringToolbar';
 
 const initialValue: Descendant[] = [
   {
@@ -42,12 +43,13 @@ const Editor = () => {
   return (
     <Slate editor={editor} initialValue={initialValue}>
       <Toolbar />
+      <HoveringToolbar />
       <Editable
         style={{ outline: 'none' }}
         placeholder="write something here"
         disableDefaultStyles
         renderElement={renderElement}
-        // onKeyDown={(e) => editorUtiliy.onkeydown(e, editor)}
+        onKeyDown={(e) => editorUtiliy.onkeydown(e, editor)}
         renderLeaf={renderLeaf}
       />
     </Slate>
