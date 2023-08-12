@@ -1,6 +1,188 @@
 import { addtaskSchema } from '@/lib/validation/task';
 import React from 'react';
 import { z } from 'zod';
+import { Descendant, BaseEditor, BaseRange, Range, Element } from 'slate';
+import { ReactEditor, RenderElementProps } from 'slate-react';
+import { HistoryEditor } from 'slate-history';
+
+export type CustomText = {
+  bold?: boolean;
+  italic?: boolean;
+  code?: boolean;
+  underline?: boolean;
+  supscript?: boolean;
+  subscript?: boolean;
+  text: string;
+};
+
+export type EmptyText = {
+  text: string;
+  supscript?: boolean;
+  subscript?: boolean;
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  code?: boolean;
+};
+
+export type BlockQuoteElement = {
+  type: 'blockQuote';
+  align?: string;
+  children: Descendant[];
+};
+
+export type BullitedListElement = {
+  type: 'bulletedlList';
+  align?: string;
+  children: Descendant[];
+};
+
+export type NumberListElement = {
+  type: 'numberList';
+  align?: string;
+  children: Descendant[];
+};
+
+export type CheckListItemElement = {
+  type: 'checkList';
+  checked: boolean;
+  children: Descendant[];
+};
+
+export type EditableVoidElement = {
+  type: 'editable-void';
+  children: EmptyText[];
+};
+
+export type HeadingElement = {
+  type: 'heading';
+  align?: string;
+  children: Descendant[];
+};
+
+export type HeadingTwoElement = {
+  type: 'headingTwo';
+  align?: string;
+  children: Descendant[];
+};
+
+export type HeadingThreeElement = {
+  type: 'headingThree';
+  align?: string;
+  children: Descendant[];
+};
+
+export type ImageElement = {
+  type: 'image';
+  url: string;
+  children: EmptyText[];
+};
+
+export type LinkElement = {
+  type: 'link';
+  url: string;
+  children: Descendant[];
+};
+
+export type ButtonElement = {
+  type: 'button';
+  children: Descendant[];
+};
+
+export type BadgeElement = {
+  type: 'badge';
+  children: Descendant[];
+};
+
+export type MentionElement = {
+  type: 'mention';
+  character: string;
+  children: CustomText[];
+};
+
+export type ParagraphElement = {
+  type: 'paragraph';
+  align?: string;
+  children: Descendant[];
+};
+
+export type TableCellElement = { type: 'table-cell'; children: CustomText[] };
+
+export type TableRowElement = {
+  type: 'table-row';
+  children: TableCellElement[];
+};
+
+export type TableElement = {
+  type: 'table';
+  children: TableRowElement[];
+};
+
+export type TitleElement = {
+  type: 'title';
+  children: Descendant[];
+};
+
+export type VideoElement = {
+  type: 'video';
+  url: string;
+  children: EmptyText[];
+};
+
+export type CodeBlockElement = {
+  type: 'code-block';
+  language: string;
+  children: Descendant[];
+};
+
+export type CodeLineElement = {
+  type: 'code-line';
+  children: Descendant[];
+};
+
+export type CustomElement =
+  | BlockQuoteElement
+  | BullitedListElement
+  | CheckListItemElement
+  | EditableVoidElement
+  | HeadingElement
+  | HeadingTwoElement
+  | HeadingThreeElement
+  | ImageElement
+  | LinkElement
+  | ButtonElement
+  | BadgeElement
+  | NumberListElement
+  | MentionElement
+  | ParagraphElement
+  | TableElement
+  | TableRowElement
+  | TableCellElement
+  | TitleElement
+  | VideoElement
+  | CodeBlockElement
+  | CodeLineElement;
+
+export interface CustomRenderElementProps  extends RenderElementProps{
+  element:CustomElement
+}
+
+export type CustomEditor = BaseEditor &
+  ReactEditor &
+  HistoryEditor & {
+    nodeToDecorations?: Map<Element, Range[]>;
+  };
+
+declare module 'slate' {
+  interface CustomTypes {
+    Editor: CustomEditor;
+    Element: CustomElement;
+    Text: CustomText | EmptyText;
+    Range: BaseRange & {
+      [key: string]: unknown;
+    };
+  }
+}
 
 export interface JwtPayload {
   id: string;
@@ -153,3 +335,7 @@ export interface SelectionRow {
 
 export interface Typography
   extends React.HtmlHTMLAttributes<HTMLHeadingElement & HTMLParagraphElement> {}
+
+export interface CodeProps extends React.HTMLAttributes<HTMLPreElement> {
+  asChild?: boolean;
+}

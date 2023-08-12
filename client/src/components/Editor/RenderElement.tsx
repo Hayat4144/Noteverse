@@ -9,6 +9,9 @@ import {
   Heading2block,
   Heading3block,
 } from './Blocks/Headingblock';
+import { Button } from '../ui/button';
+import LinkBlock from './Blocks/LinkBlock';
+import { CustomRenderElementProps } from '@/types';
 
 const RenderElements = (props: RenderElementProps) => {
   switch (props.element.type) {
@@ -26,6 +29,8 @@ const RenderElements = (props: RenderElementProps) => {
       return <Codelineblock {...props} />;
     case 'blockQuote':
       return <BlockQuote {...props} />;
+    case 'link':
+      return <LinkBlock {...props} />;
     case 'bulletedlList':
       return (
         <li {...props.attributes} className="ml-6 [&>li]:mt-1">
@@ -34,7 +39,11 @@ const RenderElements = (props: RenderElementProps) => {
       );
     case 'numberList':
       return (
-        <ol {...props.attributes} type="1" className="list-decimal ml-6 [&>li]:mt-1">
+        <ol
+          {...props.attributes}
+          type="1"
+          className="list-decimal ml-6 [&>li]:mt-1"
+        >
           {props.children}
         </ol>
       );
