@@ -1,13 +1,44 @@
-import { LinkElement } from '@/types';
+import { ImageElement, LinkElement } from '@/types';
 import { isHotkey } from 'is-hotkey';
 import React from 'react';
-import { Editor, Element, Transforms, Range } from 'slate';
+import { Editor, Element, Transforms, Range, Path } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 const LIST_TYPES = ['numberList', 'bulletedList'];
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
 
 const editorUtiliy = {
+  updloadImagehandler: (editor: Editor, files: FileList) => {
+    for (const file of files) {
+      // FileReader read the files from user storage
+      const reader = new FileReader();
+      const [mime] = file.type.split('/');
+      if (mime === 'image') {
+        /* send the file to server for saving
+              image upload to server or image service provider
+          */
+        reader.addEventListener('load', () => {
+          const url = reader.result;
+          console.log(url);
+          url &&
+            typeof url === 'string' &&
+            editorUtiliy.insertImage(editor, url);
+        });
+        reader.readAsDataURL(file);
+      }
+    }
+  },
+  insertImage: (editor: Editor, url: string) => {
+    const imageNode: ImageElement = {
+      type: 'image',
+      url,
+      children: [{ text: '' }],
+    };
+    editorUtiliy.InsertNode(editor, imageNode);
+  },
+  removeImage: (editor: Editor, path: Path) => {
+    Transforms.removeNodes(editor, { at: path });
+  },
   HOT_KEYS: {
     'mod+b': 'bold',
     'mod+i': 'italic',

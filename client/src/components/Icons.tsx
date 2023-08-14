@@ -1,3 +1,4 @@
+import { Heading3, List, ListOrdered } from 'lucide-react';
 import {
   Bold,
   Italic,
@@ -75,6 +76,8 @@ import {
   ListTodo,
   Book,
   BellDot,
+  Heading1,
+  Heading2,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -96,6 +99,12 @@ export const Icons = {
   bold: Bold,
   underline: Underline,
   Italic: Italic,
+  heading1: Heading1,
+  heading2: Heading2,
+  heading3: Heading3,
+  image: Image,
+  list: List,
+  numberList: ListOrdered,
   strike: Strikethrough,
   subscript: Subscript,
   Superscript: Superscript,

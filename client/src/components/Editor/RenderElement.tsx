@@ -12,6 +12,7 @@ import {
 import { Button } from '../ui/button';
 import LinkBlock from './Blocks/LinkBlock';
 import { CustomRenderElementProps } from '@/types';
+import ImageBlock from './Blocks/Imageblock';
 
 const RenderElements = (props: RenderElementProps) => {
   switch (props.element.type) {
@@ -31,6 +32,8 @@ const RenderElements = (props: RenderElementProps) => {
       return <BlockQuote {...props} />;
     case 'link':
       return <LinkBlock {...props} />;
+    case 'image':
+      return <ImageBlock {...props} />;
     case 'bulletedlList':
       return (
         <li {...props.attributes} className="ml-6 [&>li]:mt-1">

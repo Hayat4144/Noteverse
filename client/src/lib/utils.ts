@@ -8,10 +8,17 @@ import {
 } from '@/types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import isUrl from 'is-url';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const isValidUrl = (url: string): boolean => {
+  if (!url) return false;
+  const validUrl = isUrl(url);
+  return validUrl;
+};
 
 export type OperatorSet =
   | { defaultOperator: TaskOperator; operators: typeof TaskOperator }

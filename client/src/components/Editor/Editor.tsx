@@ -1,11 +1,12 @@
 'use client';
-import React, { useCallback, useMemo } from 'react';
+import React, { Children, useCallback, useMemo } from 'react';
 import { createEditor, Descendant, Editor as SlateEditor } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps } from 'slate-react';
 import useEditorConfig from '@/hooks/useEditorConfig';
 import { withHistory } from 'slate-history';
 import Toolbar from './Toolbar/Toolbar';
 import HoveringToolbar from './Toolbar/HoveringToolbar';
+import withImage from './Plugins/withImage';
 
 const initialValue: Descendant[] = [
   {
@@ -24,15 +25,37 @@ const initialValue: Descendant[] = [
       },
     ],
   },
-
+  {
+    type: 'image',
+    url: 'https://source.unsplash.com/zOwZKwZOZq8',
+    children: [{ text: '' }],
+  },
   {
     type: 'paragraph',
     children: [{ text: 'write something here' }],
   },
+  {
+    type: 'image',
+    url: 'https://source.unsplash.com/kFrdX5IeQzI',
+    children: [{ text: '' }],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: 'write something here' }],
+  },
+  {
+    type: 'heading',
+    children: [
+      { text: 'Here is the examples of the image rendering in slate js' },
+    ],
+  },
 ];
 
 const Editor = () => {
-  const editor = useMemo(() => withReact(withHistory(createEditor())), []);
+  const editor = useMemo(
+    () => withImage(withReact(withHistory(createEditor()))),
+    [],
+  );
   const { RenderElements, renderLeaf, editorUtiliy } = useEditorConfig(editor);
 
   const renderElement = useCallback(
