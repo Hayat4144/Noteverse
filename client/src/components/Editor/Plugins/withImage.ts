@@ -2,6 +2,7 @@ import useEditorConfig from '@/hooks/useEditorConfig';
 import { Editor } from 'slate';
 
 const withImage = (editor: Editor) => {
+  const { insertData } = editor;
   const { editorUtiliy } = useEditorConfig(editor);
 
   editor.insertData = (data) => {
@@ -19,7 +20,7 @@ const withImage = (editor: Editor) => {
     if (files && files.length > 0) {
       editorUtiliy.updloadImagehandler(editor, files);
     } else {
-      editor.insertData(data);
+      insertData(data);
     }
   };
   return editor;

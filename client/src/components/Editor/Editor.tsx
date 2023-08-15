@@ -7,6 +7,7 @@ import { withHistory } from 'slate-history';
 import Toolbar from './Toolbar/Toolbar';
 import HoveringToolbar from './Toolbar/HoveringToolbar';
 import withImage from './Plugins/withImage';
+import withChecklists from './Plugins/withChecklist';
 
 const initialValue: Descendant[] = [
   {
@@ -24,6 +25,21 @@ const initialValue: Descendant[] = [
         text: ',hello',
       },
     ],
+  },
+  {
+    type: 'checkList',
+    checked: false,
+    children: [{ text: 'learn typescript in 1 on shot' }],
+  },
+  {
+    type: 'checkList',
+    checked: false,
+    children: [{ text: 'work on yourself' }],
+  },
+  {
+    type: 'checkList',
+    checked: true,
+    children: [{ text: 'Watch openhiemer movie' }],
   },
   {
     type: 'image',
@@ -53,7 +69,7 @@ const initialValue: Descendant[] = [
 
 const Editor = () => {
   const editor = useMemo(
-    () => withImage(withReact(withHistory(createEditor()))),
+    () => withChecklists(withImage(withReact(withHistory(createEditor())))),
     [],
   );
   const { RenderElements, renderLeaf, editorUtiliy } = useEditorConfig(editor);
