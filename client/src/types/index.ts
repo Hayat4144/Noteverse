@@ -73,6 +73,21 @@ export type HeadingThreeElement = {
   align?: string;
   children: Descendant[];
 };
+export type HeadingFourElement = {
+  type: 'headingFour';
+  align?: string;
+  children: Descendant[];
+};
+export type HeadingFiveElement = {
+  type: 'headingFive';
+  align?: string;
+  children: Descendant[];
+};
+export type HeadingSixElement = {
+  type: 'headingSix';
+  align?: string;
+  children: Descendant[];
+};
 
 export type ImageElement = {
   type: 'image';
@@ -150,6 +165,9 @@ export type CustomElement =
   | HeadingElement
   | HeadingTwoElement
   | HeadingThreeElement
+  | HeadingFourElement
+  | HeadingFiveElement
+  | HeadingSixElement
   | ImageElement
   | LinkElement
   | ButtonElement

@@ -11,7 +11,7 @@ const TypographyH1 = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       <h1
         ref={ref}
         className={cn(
-          'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
+          'scroll-m-20 text-5xl font-extrabold tracking-tight lg:text-5xl',
           className,
         )}
         {...props}
@@ -25,7 +25,7 @@ const TypographyH2 = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       <h2
         ref={ref}
         className={cn(
-          'scroll-m-20 text-3xl font-semibold tracking-tight',
+          'scroll-m-20 text-4xl font-semibold tracking-tight',
           className,
         )}
         {...props}
@@ -39,7 +39,7 @@ const TypographyH3 = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       <h3
         ref={ref}
         className={cn(
-          'scroll-m-20 text-2xl font-semibold tracking-tight',
+          'scroll-m-20 text-3xl font-semibold tracking-tight',
           className,
         )}
         {...props}
@@ -53,7 +53,7 @@ const TypographyH4 = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       <h4
         ref={ref}
         className={cn(
-          'scroll-m-20 text-xl font-semibold tracking-tight',
+          'scroll-m-20 text-2xl font-semibold tracking-tight',
           className,
         )}
         {...props}

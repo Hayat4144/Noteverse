@@ -8,6 +8,9 @@ import {
   Heading1block,
   Heading2block,
   Heading3block,
+  Heading4block,
+  Heading5block,
+  Heading6block,
 } from './Blocks/Headingblock';
 import { Button } from '../ui/button';
 import LinkBlock from './Blocks/LinkBlock';
@@ -27,6 +30,12 @@ const RenderElements = (props: RenderElementProps) => {
       return <Heading2block {...props} />;
     case 'headingThree':
       return <Heading3block {...props} />;
+    case 'headingFour':
+      return <Heading4block {...props} />;
+    case 'headingFive':
+      return <Heading5block {...props} />;
+    case 'headingSix':
+      return <Heading6block {...props} />;
     case 'code-line':
       return <Codelineblock {...props} />;
     case 'blockQuote':

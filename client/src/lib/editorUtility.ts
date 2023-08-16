@@ -1,7 +1,8 @@
 import { ImageElement, LinkElement } from '@/types';
 import { isHotkey } from 'is-hotkey';
+import { Edit } from 'lucide-react';
 import React from 'react';
-import { Editor, Element, Transforms, Range, Path } from 'slate';
+import { Editor, Element, Transforms, Range, Path, Point } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 const LIST_TYPES = ['numberList', 'bulletedList'];
@@ -44,6 +45,20 @@ const editorUtiliy = {
     'mod+i': 'italic',
     'mod+u': 'underline',
     'mod+`': 'code',
+  },
+  MarkdownShortcut: {
+    '*': 'bulletedlList',
+    '-': 'bulletedlList',
+    '+': 'numberList',
+    '1': 'numberList',
+    '[]': 'link',
+    '>': 'blockQuote',
+    '#': 'heading',
+    '##': 'headingTwo',
+    '###': 'headingThree',
+    '####': 'headingFour',
+    '#####': 'headingFive',
+    '######': 'headingSix',
   },
   onkeydown: (event: React.KeyboardEvent, editor: Editor) => {
     for (const hotkey in editorUtiliy.HOT_KEYS) {
@@ -93,12 +108,58 @@ const editorUtiliy = {
     });
     return !!match;
   },
+  getBlock: (editor: Editor, block: string) => {
+    const [match] = Editor.nodes(editor, {
+      match: (n) =>
+        !Editor.isEditor(n) && Element.isElement(n) && n.type === block,
+    });
+    return match;
+  },
+  deleteBackwardElements: (editor: Editor, blocktype: string) => {
+    const { selection } = editor;
+    if (selection && Range.isCollapsed(selection)) {
+      const [match] = Editor.nodes(editor, {
+        match: (n) =>
+          !Editor.isEditor(n) && Element.isElement(n) && n.type === blocktype,
+      });
 
+      if (match) {
+        const [, path] = match;
+        const start = Editor.start(editor, path);
+
+        if (Point.equals(selection.anchor, start)) {
+          const newProperties: Partial<Element> = {
+            type: 'paragraph',
+          };
+          const m = Transforms.setNodes(editor, newProperties, {
+            match: (n) =>
+              !Editor.isEditor(n) &&
+              Element.isElement(n) &&
+              n.type === blocktype,
+          });
+          console.log(m);
+          return;
+        }
+      }
+    }
+  },
   InsertNode: (editor: Editor, nodes: Element) => {
     return Transforms.insertNodes(editor, nodes);
   },
-  wrapNodes: (editor: Editor, nodes: Element) => {
-    Transforms.wrapNodes(editor, nodes, { split: true });
+  wrapNodes: (
+    editor: Editor,
+    nodes: Element,
+    match?: boolean,
+    blocktype?: string,
+  ) => {
+    if (match && blocktype) {
+      Transforms.wrapNodes(editor, nodes, {
+        match: (n) =>
+          !Editor.isEditor(n) && Element.isElement(n) && n.type === blocktype,
+      });
+    } else {
+      Transforms.wrapNodes(editor, nodes, { split: true });
+    }
   },
   removeLink: (editor: Editor) => {
     Transforms.unwrapNodes(editor, {
