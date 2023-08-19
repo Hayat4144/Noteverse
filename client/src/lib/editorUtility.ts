@@ -1,6 +1,5 @@
-import { ImageElement, LinkElement } from '@/types';
+import { CustomElement, ImageElement, LinkElement } from '@/types';
 import { isHotkey } from 'is-hotkey';
-import { Edit } from 'lucide-react';
 import React from 'react';
 import { Editor, Element, Transforms, Range, Path, Point } from 'slate';
 import { ReactEditor } from 'slate-react';
@@ -9,6 +8,33 @@ const LIST_TYPES = ['numberList', 'bulletedList'];
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
 
 const editorUtiliy = {
+  gettextBlockStyle: (editor: Editor) => {
+    const { selection } = editor;
+    if (!selection) {
+      return null;
+    }
+    // gives the forward-direction points in case the selection was
+    // was backwards.
+    const [start, end] = Range.edges(selection);
+
+    //path[0] gives us the index of the top-level block.
+    let startTopLevelBlockIndex = start.path[0];
+    const endTopLevelBlockIndex = end.path[0];
+
+    let blockType = null;
+    while (startTopLevelBlockIndex <= endTopLevelBlockIndex) {
+      const [node, _] = Editor.node(editor, [startTopLevelBlockIndex]);
+      const typedParentNode = node as CustomElement;
+      if (blockType == null) {
+        blockType = typedParentNode.type;
+      } else if (blockType !== typedParentNode.type) {
+        return 'Mixed';
+      }
+      startTopLevelBlockIndex++;
+    }
+
+    return blockType;
+  },
   updloadImagehandler: (editor: Editor, files: FileList) => {
     for (const file of files) {
       // FileReader read the files from user storage
@@ -175,7 +201,7 @@ const editorUtiliy = {
     };
     return link;
   },
-  getSelectedBlock: (editor: Editor, block: string) => {
+  toggleLink: (editor: Editor, block: string) => {
     const { selection } = editor;
     ReactEditor.focus(editor);
     const isCollapsed = selection && Range.isCollapsed(selection);

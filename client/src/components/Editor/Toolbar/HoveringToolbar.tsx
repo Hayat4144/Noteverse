@@ -1,17 +1,22 @@
-import React, { useEffect, useRef } from 'react';
-import { useFocused, useSlate } from 'slate-react';
-import { Range, Element, Editor } from 'slate';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSlate } from 'slate-react';
+import { Range, Editor } from 'slate';
 import { Icons } from '@/components/Icons';
 import useEditorConfig from '@/hooks/useEditorConfig';
+
+import MarkButtons from './MarkButtons';
+import TurnIntoDropDown from './TurnIntoDropDown';
+import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
-  TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  TooltipContent,
 } from '@/components/ui/tooltip';
+import Iconwithtext from '@/components/Iconwithtext';
 
-interface Marks {
+export interface Marks {
   id: string;
   icon: React.ReactNode;
   mark: string;
@@ -21,8 +26,9 @@ interface Marks {
 export default function HoveringToolbar() {
   const toolbarRef = useRef<HTMLDivElement | null>(null);
   const editor = useSlate();
-  const inFocus = useFocused();
   const { editorUtiliy } = useEditorConfig(editor);
+  const [blocktype, setblocktype] = useState('paragraph');
+  const { selection } = editor;
 
   const marks: Marks[] = [
     {
@@ -69,12 +75,15 @@ export default function HoveringToolbar() {
     if (!el) return;
     if (
       !selection ||
-      !inFocus ||
       Range.isCollapsed(selection) ||
       Editor.string(editor, selection) === ''
     ) {
       el.removeAttribute('style');
       return;
+    }
+    const blocktype = editorUtiliy.gettextBlockStyle(editor);
+    if (blocktype) {
+      setblocktype(blocktype);
     }
     const domSelection = getSelection();
     const domRange = domSelection?.getRangeAt(0);
@@ -86,37 +95,49 @@ export default function HoveringToolbar() {
         rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
       }px`;
     }
-  });
+  }, [blocktype, selection]);
   return (
     <div
       onMouseDown={(e) => {
-        // prevent toolbar from taking focus away from editor
         e.preventDefault();
       }}
       ref={toolbarRef}
-      className="rounded-md z-10 -top[10000px]  bg-accent  opacity-0 -mt-2 -left[10000px] absolute transition-shadow border px-3 py-0 shadow-lg"
+      className="rounded-md z-50 -top[10000px] opacity-0 -mt-2
+      -left[10000px] absolute dark:bg-secondary transition-shadow
+      border py-0 object-fill overflow-hidden bg-background"
     >
-      <div className="marks flex items-center justify-between space-x-1">
-        {marks.map((item) => (
-          <TooltipProvider key={item.id}>
-            <Tooltip>
-              <TooltipTrigger
-                asChild
-                className="py-0"
-                onClick={() => editorUtiliy.toggleMark(editor, item.mark)}
+      <div className="marks flex items-center h-8">
+        <TurnIntoDropDown blockType={blocktype} />
+        <Separator orientation="vertical" />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              asChild
+              className="mx-0"
+              onClick={() => {
+                editorUtiliy.toggleLink(editor, 'link');
+              }}
+            >
+              <Button
+                variant={'ghost'}
+                size={'sm'}
+                className="hover:dark:bg-[#3b3b40] rounded-none mx-0"
               >
-                <Button variant="secondary" size={'sm'}>
-                  {item.icon}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  <span className="capitalize">{item.mark}</span>
-                  <span className="ml-1">{item.shortcut}</span>
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+                <Iconwithtext
+                  icons={<Icons.link size={15} />}
+                  text="Link"
+                  className="w-full"
+                />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Add Link</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <Separator orientation="vertical" />
+        {marks.map((item) => (
+          <MarkButtons item={item} key={item.id} />
         ))}
       </div>
     </div>
