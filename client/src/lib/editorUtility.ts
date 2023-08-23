@@ -1,13 +1,68 @@
 import { CustomElement, ImageElement, LinkElement } from '@/types';
 import { isHotkey } from 'is-hotkey';
 import React from 'react';
-import { Editor, Element, Transforms, Range, Path, Point } from 'slate';
+import {
+  Editor,
+  Element,
+  Transforms,
+  Range,
+  Path,
+  Point,
+  Selection,
+} from 'slate';
 import { ReactEditor } from 'slate-react';
 
 const LIST_TYPES = ['numberList', 'bulletedList'];
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
 
+interface emojiPatternProps {
+  editor: Editor;
+  setEmoji: (value: string) => void;
+  setEmojiToggle: (value: boolean) => void;
+  setemojiTragetRange: (value: Range) => void;
+}
+
 const editorUtiliy = {
+  detectEmojiPattern: ({
+    editor,
+    setEmoji,
+    setEmojiToggle,
+    setemojiTragetRange,
+  }: emojiPatternProps) => {
+    const { selection } = editor;
+    if (selection && Range.isCollapsed(selection)) {
+      const [start] = Range.edges(selection);
+      const wordBefore = Editor.before(editor, start, {
+        unit: 'word',
+      });
+      const before = wordBefore && Editor.before(editor, wordBefore);
+      const beforeRange = before && Editor.range(editor, before, start);
+      const beforeText = beforeRange && Editor.string(editor, beforeRange);
+
+      const beforeColonMatch = beforeText && beforeText.match(/^:(\w+)$/);
+
+      const after = Editor.after(editor, start);
+      const afterRange = Editor.range(editor, start, after);
+      const afterText = Editor.string(editor, afterRange);
+      const afterMatch = afterText.match(/^(\s|$)/);
+
+      if (beforeColonMatch && afterMatch) {
+        setEmoji(beforeColonMatch[1]);
+        setEmojiToggle(true);
+        setemojiTragetRange(beforeRange);
+      } else {
+        setEmoji('');
+        setEmojiToggle(false);
+      }
+    }
+  },
+  insertEmoji: (editor: Editor, targetRange: Range, text: any) => {
+    Editor.before(editor, targetRange, {
+      unit: 'character',
+    });
+    Transforms.delete(editor, { at: targetRange });
+    Transforms.insertText(editor, text);
+  },
   gettextBlockStyle: (editor: Editor) => {
     const { selection } = editor;
     if (!selection) {
@@ -266,6 +321,14 @@ const editorUtiliy = {
         children: [],
       });
     }
+  },
+  isLinkNodeatSelection: (editor: Editor, selection: Selection) => {
+    if (!selection) {
+      return false;
+    }
+    const isLink = editorUtiliy.isBlockActive(editor, 'link');
+    console.log(isLink);
+    return isLink;
   },
 };
 export default editorUtiliy;

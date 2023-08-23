@@ -1,10 +1,20 @@
 'use client';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import useEditorConfig from '@/hooks/useEditorConfig';
+import { withHistory } from 'slate-history';
+import Toolbar from './Toolbar/Toolbar';
+import HoveringToolbar from './Toolbar/HoveringToolbar';
+import withImage from './Plugins/withImage';
+import withChecklists from './Plugins/withChecklist';
+import withShortcut from './Plugins/withShortcuts';
+import { useToggle } from '@uidotdev/usehooks';
+import EmojiPicker from './EmojiPicker';
 import {
   createEditor,
   Descendant,
   Element,
   Node,
+  Range,
   Editor as SlateEditor,
 } from 'slate';
 import {
@@ -14,13 +24,6 @@ import {
   RenderElementProps,
   ReactEditor,
 } from 'slate-react';
-import useEditorConfig from '@/hooks/useEditorConfig';
-import { withHistory } from 'slate-history';
-import Toolbar from './Toolbar/Toolbar';
-import HoveringToolbar from './Toolbar/HoveringToolbar';
-import withImage from './Plugins/withImage';
-import withChecklists from './Plugins/withChecklist';
-import withShortcut from './Plugins/withShortcuts';
 
 const initialValue: Descendant[] = [
   {
@@ -174,16 +177,38 @@ const Editor = () => {
     [editor],
   );
   const { RenderElements, renderLeaf, editorUtiliy } = useEditorConfig(editor);
-
+  const [emojistring, setemojistring] = useState('');
+  const [isEmojiOpen, setemojiToggle] = useToggle(false);
+  const [emojiTargetRange, setEmojiTargetRange] = useState<Range>();
   const renderElement = useCallback(
     (props: RenderElementProps) => <RenderElements {...props} />,
     [],
   );
 
+  const emojiPatternProps = {
+    editor: editor,
+    setEmoji: setemojistring,
+    setEmojiToggle: setemojiToggle,
+    setemojiTragetRange: setEmojiTargetRange,
+  };
+
   return (
-    <Slate editor={editor} initialValue={initialValue}>
+    <Slate
+      editor={editor}
+      initialValue={initialValue}
+      onChange={() => {
+        editorUtiliy.detectEmojiPattern(emojiPatternProps);
+      }}
+    >
       <Toolbar />
       <HoveringToolbar />
+      {isEmojiOpen ? (
+        <EmojiPicker
+          searchString={emojistring}
+          emojiRange={emojiTargetRange}
+          changeEmojiRange={setEmojiTargetRange}
+        />
+      ) : null}
       <Editable
         onDOMBeforeInput={handleDOMBeforeInput}
         style={{ outline: 'none' }}

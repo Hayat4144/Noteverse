@@ -9,6 +9,10 @@ import {
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import isUrl from 'is-url';
+import data from '@emoji-mart/data';
+import { init, SearchIndex } from 'emoji-mart';
+
+init({ data });
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -30,6 +34,13 @@ interface OperatorsRespose {
   operators: string[];
   defaultOperator: string;
 }
+
+export const findEmojis = async (search: string) => {
+  const emojis = await SearchIndex.search(search);
+  return emojis.map((item: any) => {
+    return { id: item.id, native: item.skins[0].native };
+  });
+};
 
 export const getOperators = (field: string): OperatorsRespose => {
   if (field === taskField.priority) {
