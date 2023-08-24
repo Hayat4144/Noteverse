@@ -12,49 +12,49 @@ import {
   Heading5block,
   Heading6block,
 } from './Blocks/Headingblock';
-import { Button } from '../ui/button';
 import LinkBlock from './Blocks/LinkBlock';
-import { CustomRenderElementProps } from '@/types';
 import ImageBlock from './Blocks/Imageblock';
 import CheckListblock from './Blocks/CheckListbblock';
 
 const RenderElements = (props: RenderElementProps) => {
+  const style = { textAlign: (props.element as any).align };
   switch (props.element.type) {
     case 'code-block':
-      return <Codeblock {...props} />;
+      return <Codeblock {...props} style={style} />;
     case 'paragraph':
-      return <Paragraphblock {...props} />;
+      return <Paragraphblock {...props} style={style} />;
     case 'heading':
-      return <Heading1block {...props} />;
+      return <Heading1block {...props} style={style} />;
     case 'headingTwo':
-      return <Heading2block {...props} />;
+      return <Heading2block {...props} style={style} />;
     case 'headingThree':
-      return <Heading3block {...props} />;
+      return <Heading3block {...props} style={style} />;
     case 'headingFour':
-      return <Heading4block {...props} />;
+      return <Heading4block {...props} style={style} />;
     case 'headingFive':
-      return <Heading5block {...props} />;
+      return <Heading5block {...props} style={style} />;
     case 'headingSix':
-      return <Heading6block {...props} />;
+      return <Heading6block {...props} style={style} />;
     case 'code-line':
-      return <Codelineblock {...props} />;
+      return <Codelineblock {...props} style={style} />;
     case 'blockQuote':
-      return <BlockQuote {...props} />;
+      return <BlockQuote {...props} style={style} />;
     case 'link':
-      return <LinkBlock {...props} />;
+      return <LinkBlock {...props} style={style} />;
     case 'image':
-      return <ImageBlock {...props} />;
+      return <ImageBlock {...props} style={style} />;
     case 'checkList':
-      return <CheckListblock {...props} />;
+      return <CheckListblock {...props} style={style} />;
     case 'bulletedlList':
       return (
-        <li {...props.attributes} className="ml-6 [&>li]:mt-1">
+        <li {...props.attributes} className="ml-6 [&>li]:mt-1" style={style}>
           {props.children}
         </li>
       );
     case 'numberList':
       return (
         <ol
+          style={style}
           {...props.attributes}
           type="1"
           className="list-decimal ml-6 [&>li]:mt-1"

@@ -33,6 +33,10 @@ export default function Toolbar() {
         <BlockButton format="headingTwo"></BlockButton>
         <BlockButton format="bulletedList"></BlockButton>
         <BlockButton format="numberList"></BlockButton>
+        <BlockButton format="left"></BlockButton>
+        <BlockButton format="right"></BlockButton>
+        <BlockButton format="center"></BlockButton>
+        <BlockButton format="justify"></BlockButton>
         <Button onClick={() => editorUtiliy.toggleLink(editor, 'link')}>
           Link
         </Button>

@@ -23,6 +23,7 @@ import {
   withReact,
   RenderElementProps,
   ReactEditor,
+  RenderPlaceholderProps,
 } from 'slate-react';
 
 const initialValue: Descendant[] = [
@@ -212,7 +213,7 @@ const Editor = () => {
       <Editable
         onDOMBeforeInput={handleDOMBeforeInput}
         style={{ outline: 'none' }}
-        placeholder="write something here"
+        renderPlaceholder={RenderPlaceholder}
         disableDefaultStyles
         renderElement={renderElement}
         onKeyDown={(e) => editorUtiliy.onkeydown(e, editor)}
@@ -223,3 +224,18 @@ const Editor = () => {
 };
 
 export default Editor;
+
+const RenderPlaceholder = (props: RenderPlaceholderProps) => {
+  return (
+    <span
+      contentEditable={false}
+      data-slate-placeholder={true}
+      style={{
+        pointerEvents: 'none',
+        userSelect: 'none',
+      }}
+    >
+      {props.children}
+    </span>
+  );
+};

@@ -9,6 +9,7 @@ import {
   Path,
   Point,
   Selection,
+  NodeEntry,
 } from 'slate';
 import { ReactEditor } from 'slate-react';
 

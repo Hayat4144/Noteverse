@@ -13,11 +13,13 @@ export type CustomText = {
   superscript?: boolean;
   subscript?: boolean;
   strike?: boolean;
+  placeholder?: boolean;
   text: string;
 };
 
 export type EmptyText = {
   text: string;
+  placeholder?: boolean;
   strike?: boolean;
   superscript?: boolean;
   subscript?: boolean;

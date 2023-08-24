@@ -17,7 +17,9 @@ import {
   useSlateStatic,
 } from 'slate-react';
 
-const ImageBlock = (props: RenderElementProps) => {
+const ImageBlock = (
+  props: RenderElementProps & { style?: React.CSSProperties },
+) => {
   const { element } = props;
   const editor = useSlateStatic();
   const path = ReactEditor.findPath(editor, element);
@@ -27,6 +29,7 @@ const ImageBlock = (props: RenderElementProps) => {
   return (
     <div
       contentEditable={false}
+      style={props.style}
       {...props.attributes}
       className="mx-2 relative"
     >
@@ -34,7 +37,7 @@ const ImageBlock = (props: RenderElementProps) => {
       <AspectRatio ratio={16 / 7} className="my-5">
         {props.children}
         <Image
-          src={element.url}
+          src={(element as any).url}
           fill
           alt="Gray by Drew Beamer"
           className={`object-fill rounded-md`}

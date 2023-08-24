@@ -1,9 +1,6 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import React, {
-  ChangeEvent,
-  ChangeEventHandler,
   Fragment,
-  InputHTMLAttributes,
 } from 'react';
 import {
   ReactEditor,
@@ -13,7 +10,9 @@ import {
 } from 'slate-react';
 import { Transforms, Element } from 'slate';
 
-const CheckListblock = (props: RenderElementProps) => {
+const CheckListblock = (
+  props: RenderElementProps & { style?: React.CSSProperties },
+) => {
   const { element } = props;
   const editor = useSlateStatic();
   const readOnly = useReadOnly();
@@ -28,20 +27,21 @@ const CheckListblock = (props: RenderElementProps) => {
   return (
     <Fragment>
       <div
+        style={props.style}
         className="flex items-center space-x-2 space-y-1"
         {...props.attributes}
       >
         <span contentEditable={false}>
           <input
             type="checkbox"
-            checked={element.checked}
+            checked={(element as any).checked}
             onChange={chekcListToggle}
           />
         </span>
         <label
           contentEditable={!readOnly}
           suppressContentEditableWarning
-          className={`${element.checked ? 'line-through' : ''}`}
+          className={`${(element as any).checked ? 'line-through' : ''}`}
         >
           {props.children}
         </label>
