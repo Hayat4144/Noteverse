@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/popover';
 import useEditorConfig from '@/hooks/useEditorConfig';
 import { cn, isValidUrl } from '@/lib/utils';
+import { MarkButtonProps } from '@/types';
 import React, { Fragment } from 'react';
 import { useSlate } from 'slate-react';
 
@@ -23,11 +24,14 @@ export default function Toolbar() {
   return (
     <Fragment>
       <div className="flex items-center space-x-3 flex-wrap">
-        <MarkButton format="bold"></MarkButton>
-        <MarkButton format="italic"></MarkButton>
-        <MarkButton format="underline"></MarkButton>
-        <MarkButton format="subscript"></MarkButton>
-        <MarkButton format="supscript"></MarkButton>
+        <MarkButton format="bold" value={true}></MarkButton>
+        <MarkButton format="italic" value={true}></MarkButton>
+        <MarkButton format="underline" value={true}></MarkButton>
+        <MarkButton format="subscript" value={true}></MarkButton>
+        <MarkButton format="supscript" value={true}></MarkButton>
+        <MarkButton format="fontSize" value={'25px'}></MarkButton>
+        <MarkButton format="highlight" value={'red'}></MarkButton>
+        <MarkButton format="fontFamily" value={'cursive'}></MarkButton>
         <BlockButton format="heading"></BlockButton>
         <BlockButton format="paragraph"></BlockButton>
         <BlockButton format="headingTwo"></BlockButton>
@@ -94,7 +98,7 @@ export default function Toolbar() {
   );
 }
 
-const MarkButton = ({ format }: { format: string }) => {
+const MarkButton = ({ format, value }: MarkButtonProps) => {
   const editor = useSlate();
   const { editorUtiliy } = useEditorConfig(editor);
   return (
@@ -104,7 +108,7 @@ const MarkButton = ({ format }: { format: string }) => {
       }
       onMouseDown={(event) => {
         event.preventDefault();
-        editorUtiliy.toggleMark(editor, format);
+        editorUtiliy.toggleMark(editor, format, value);
       }}
     >
       {format}

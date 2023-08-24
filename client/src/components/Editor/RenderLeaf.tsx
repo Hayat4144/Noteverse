@@ -19,6 +19,22 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   if (leaf.superscript) {
     children = <sup>{children}</sup>;
   }
+
+  if (leaf.highlight) {
+    const style = { backgroundColor: leaf.highlight };
+    children = <span style={style}>{children}</span>;
+  }
+
+  if (leaf.fontSize) {
+    const style = { fontSize: leaf.fontSize };
+    children = <span style={style}>{children}</span>;
+  }
+
+  if (leaf.fontFamily) {
+    const style = { fontFamily: leaf.fontFamily };
+    children = <span style={style}>{children}</span>;
+  }
+
   if (leaf.strike) {
     children = <s>{children}</s>;
   }

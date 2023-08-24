@@ -15,6 +15,9 @@ export type CustomText = {
   strike?: boolean;
   placeholder?: boolean;
   text: string;
+  fontSize?: string;
+  fontFamily?: string;
+  highlight?: string;
 };
 
 export type EmptyText = {
@@ -27,6 +30,9 @@ export type EmptyText = {
   italic?: boolean;
   underline?: boolean;
   code?: boolean;
+  fontSize?: string;
+  fontFamily?: string;
+  highlight?: string;
 };
 
 export type BlockQuoteElement = {
@@ -360,4 +366,9 @@ export interface Typography
 
 export interface CodeProps extends React.HTMLAttributes<HTMLPreElement> {
   asChild?: boolean;
+}
+
+export interface MarkButtonProps {
+  format: string;
+  value: string | boolean;
 }

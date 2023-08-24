@@ -148,23 +148,29 @@ const editorUtiliy = {
         event.preventDefault();
         const markType =
           editorUtiliy.HOT_KEYS[hotkey as keyof typeof editorUtiliy.HOT_KEYS];
-        editorUtiliy.toggleMark(editor, markType);
+        editorUtiliy.toggleMark(editor, markType, true);
       }
     }
   },
-  isMarkActive: (editor: Editor, format: string) => {
-    // Get the marks that would be added to text at the current selection.
-    // return a null if no mark exist and if exist return object containing
-    // mark with boolean value
-    const mark = Editor.marks(editor) as { [key: string]: boolean };
-    return mark ? mark[format] === true : false;
+  isMarkActive: (editor: Editor, format: string, value?: string | boolean) => {
+    const marks = Editor.marks(editor) as {
+      [key: string]: string | boolean;
+    } | null;
+
+    if (value === undefined) {
+      return !!marks && !!marks[format];
+    } else if (marks && format in marks) {
+      return marks[format] === value;
+    } else {
+      return false;
+    }
   },
-  toggleMark: (editor: Editor, markType: string) => {
-    const isActiveMark = editorUtiliy.isMarkActive(editor, markType);
+  toggleMark: (editor: Editor, markType: string, value: string | boolean) => {
+    const isActiveMark = editorUtiliy.isMarkActive(editor, markType, value);
     if (isActiveMark) {
       Editor.removeMark(editor, markType);
     } else {
-      Editor.addMark(editor, markType, true);
+      Editor.addMark(editor, markType, value);
     }
   },
   isBlockActive: (editor: Editor, format: string, blockType = 'type') => {
