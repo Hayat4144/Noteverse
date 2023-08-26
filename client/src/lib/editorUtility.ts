@@ -9,7 +9,6 @@ import {
   Path,
   Point,
   Selection,
-  NodeEntry,
 } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -150,6 +149,10 @@ const editorUtiliy = {
           editorUtiliy.HOT_KEYS[hotkey as keyof typeof editorUtiliy.HOT_KEYS];
         editorUtiliy.toggleMark(editor, markType, true);
       }
+    }
+    if (isHotkey('tab', event)) {
+      event.preventDefault();
+      Transforms.insertText(editor, '   ');
     }
   },
   isMarkActive: (editor: Editor, format: string, value?: string | boolean) => {

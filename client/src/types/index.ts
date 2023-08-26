@@ -372,3 +372,14 @@ export interface MarkButtonProps {
   format: string;
   value: string | boolean;
 }
+
+export interface languageTypes {
+  id: string;
+  name: string;
+  value: string;
+}
+
+export interface languageProps {
+  language: string;
+  element: CustomElement;
+}

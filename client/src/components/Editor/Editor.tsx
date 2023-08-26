@@ -25,118 +25,21 @@ import {
   ReactEditor,
   RenderPlaceholderProps,
 } from 'slate-react';
+import pipe from 'lodash/fp/pipe';
+import withCodeblock from './Plugins/withCodeBlock';
+import { initialValue } from '@/lib/constants';
 
-const initialValue: Descendant[] = [
-  {
-    type: 'paragraph',
-    children: [
-      {
-        text: 'There are two ways to add links. You can either add a link via the toolbar icon above or if you want in on a little secret, copy a URL to your keyboard and paste it while a range of text is selected.',
-      },
-      {
-        type: 'link',
-        url: 'https://www.smashingmagazine.com/2020/05/building-wysiwyg-editor-javascript-slatejs/',
-        children: [{ text: 'click here ' }],
-      },
-      {
-        text: ',hello',
-      },
-    ],
-  },
-  {
-    type: 'heading',
-    children: [{ text: 'This is heading 1' }],
-  },
-  {
-    type: 'headingTwo',
-    children: [{ text: 'This is heading 2' }],
-  },
-  {
-    type: 'headingThree',
-    children: [{ text: 'This is heading 3' }],
-  },
-  {
-    type: 'headingFour',
-    children: [{ text: 'This is heading 4' }],
-  },
-  {
-    type: 'headingFive',
-    children: [{ text: 'This is heading 5' }],
-  },
-  {
-    type: 'headingSix',
-    children: [{ text: 'This is heading 6' }],
-  },
-  {
-    type: 'paragraph',
-    children: [
-      {
-        text: 'There are two ways to add links. You can either add a link via the toolbar icon above or if you want in on a little secret, copy a URL to your keyboard and paste it while a range of text is selected.',
-      },
-      {
-        type: 'link',
-        url: 'https://www.smashingmagazine.com/2020/05/building-wysiwyg-editor-javascript-slatejs/',
-        children: [{ text: 'click here ' }],
-      },
-      {
-        text: ',hello',
-      },
-    ],
-  },
-  {
-    type: 'checkList',
-    checked: false,
-    children: [{ text: 'learn typescript in 1 on shot' }],
-  },
-
-  {
-    type: 'checkList',
-    checked: false,
-    children: [{ text: 'work on yourself' }],
-  },
-  {
-    type: 'checkList',
-    checked: true,
-    children: [{ text: 'Watch openhiemer movie' }],
-  },
-  {
-    type: 'image',
-    url: 'https://source.unsplash.com/zOwZKwZOZq8',
-    children: [{ text: '' }],
-  },
-  {
-    type: 'paragraph',
-    children: [{ text: 'write something here' }],
-  },
-  {
-    type: 'image',
-    url: 'https://source.unsplash.com/kFrdX5IeQzI',
-    children: [{ text: '' }],
-  },
-  {
-    type: 'paragraph',
-    children: [{ text: 'write something here' }],
-  },
-  {
-    type: 'heading',
-    children: [
-      { text: 'Here is the examples of the image rendering in slate js' },
-    ],
-  },
-  {
-    type: 'blockQuote',
-    children: [{ text: 'works everyday for your future' }],
-  },
-];
+const createEditorWithPlugins = pipe(
+  withReact,
+  withHistory,
+  withImage,
+  withShortcut,
+  withChecklists,
+  withCodeblock,
+);
 
 const Editor = () => {
-  const editor = useMemo(
-    () =>
-      withShortcut(
-        withChecklists(withImage(withReact(withHistory(createEditor())))),
-      ),
-    [],
-  );
+  const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
   const handleDOMBeforeInput = useCallback(
     (e: InputEvent) => {
       queueMicrotask(() => {
