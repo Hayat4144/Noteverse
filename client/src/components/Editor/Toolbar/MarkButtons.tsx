@@ -22,8 +22,7 @@ export default function MarkButtons({ item }: MarkButtonsProps) {
       <Tooltip>
         <TooltipTrigger
           asChild
-          
-          onClick={() => editorUtiliy.toggleMark(editor, item.mark)}
+          onClick={() => editorUtiliy.toggleMark(editor, item.mark, true)}
         >
           <Button
             variant={'ghost'}
