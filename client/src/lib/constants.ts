@@ -72,43 +72,111 @@ export const initialValue: Descendant[] = [
     ],
   },
   {
-    type: 'headingTwo',
-    children: [{ text: 'This is heading 2' }],
-  },
-  {
-    type: 'code-block',
-    language: 'javascript',
+    type: 'table',
     children: [
       {
-        text: `// TypeScript users only add this code
-import { BaseEditor, Descendant } from 'slate'
-import { ReactEditor } from 'slate-react'
-
-type CustomElement = { type: 'paragraph'; children: CustomText[] }
-type CustomText = { text: string }
-
-declare module 'slate' {
-  interface CustomTypes {
-    Editor: BaseEditor & ReactEditor
-    Element: CustomElement
-    Text: CustomText
-  }
-}`,
+        type: 'table-row',
+        children: [
+          {
+            type: 'table-cell',
+            children: [{ text: '' }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: 'Human', bold: true }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: 'Dog', bold: true }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: 'Cat', bold: true }],
+          },
+        ],
+      },
+      {
+        type: 'table-row',
+        children: [
+          {
+            type: 'table-cell',
+            children: [{ text: '# of Feet', bold: true }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: '2' }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: '4' }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: '4' }],
+          },
+        ],
+      },
+      {
+        type: 'table-row',
+        children: [
+          {
+            type: 'table-cell',
+            children: [{ text: '# of Lives', bold: true }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: '1' }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: '1' }],
+          },
+          {
+            type: 'table-cell',
+            children: [{ text: '9' }],
+          },
+        ],
       },
     ],
   },
   {
-    type: 'headingThree',
-    children: [{ text: 'This is heading 3' }],
+    type: 'headingTwo',
+    children: [{ text: 'This is heading 2' }],
   },
-  {
-    type: 'heading',
-    children: [
-      { text: 'Here is the examples of the image rendering in slate js' },
-    ],
-  },
-  {
-    type: 'blockQuote',
-    children: [{ text: 'works everyday for your future' }],
-  },
+  //   {
+  //     type: 'code-block',
+  //     language: 'javascript',
+  //     children: [
+  //       {
+  //         text: `// TypeScript users only add this code
+  // import { BaseEditor, Descendant } from 'slate'
+  // import { ReactEditor } from 'slate-react'
+
+  // type CustomElement = { type: 'paragraph'; children: CustomText[] }
+  // type CustomText = { text: string }
+
+  // declare module 'slate' {
+  //   interface CustomTypes {
+  //     Editor: BaseEditor & ReactEditor
+  //     Element: CustomElement
+  //     Text: CustomText
+  //   }
+  // }`,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     type: 'headingThree',
+  //     children: [{ text: 'This is heading 3' }],
+  //   },
+  //   {
+  //     type: 'heading',
+  //     children: [
+  //       { text: 'Here is the examples of the image rendering in slate js' },
+  //     ],
+  //   },
+  //   {
+  //     type: 'blockQuote',
+  //     children: [{ text: 'works everyday for your future' }],
+  //   },
 ];

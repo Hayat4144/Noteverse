@@ -11,7 +11,6 @@ import { useToggle } from '@uidotdev/usehooks';
 import EmojiPicker from './EmojiPicker';
 import {
   createEditor,
-  Descendant,
   Element,
   Node,
   Range,
@@ -23,16 +22,19 @@ import {
   withReact,
   RenderElementProps,
   ReactEditor,
-  RenderPlaceholderProps,
 } from 'slate-react';
 import pipe from 'lodash/fp/pipe';
 import withCodeblock from './Plugins/withCodeBlock';
 import { initialValue } from '@/lib/constants';
+import { isSelectionTable, withTables } from './Plugins/withTable';
+import TableModal from './TableModal';
+import { Button } from '../ui/button';
 
 const createEditorWithPlugins = pipe(
   withReact,
   withHistory,
   withImage,
+  withTables,
   withShortcut,
   withChecklists,
   withCodeblock,
@@ -88,7 +90,7 @@ const Editor = () => {
     (props: RenderElementProps) => <RenderElements {...props} />,
     [],
   );
-
+  const [isTableModal, tableModalToggle] = useToggle(false);
   const emojiPatternProps = {
     editor: editor,
     setEmoji: setemojistring,
@@ -102,10 +104,21 @@ const Editor = () => {
       initialValue={initialValue}
       onChange={() => {
         editorUtiliy.detectEmojiPattern(emojiPatternProps);
+        const { selection } = editor;
+        if (selection && isSelectionTable(editor)) {
+          tableModalToggle(true);
+        }
       }}
     >
       <Toolbar />
+      <Button onClick={(e) => tableModalToggle(!isTableModal)}>Table</Button>
       <HoveringToolbar />
+      {isTableModal ? (
+        <TableModal
+          isTableModal={isTableModal}
+          tableModalToggle={tableModalToggle}
+        />
+      ) : null}
       {isEmojiOpen ? (
         <EmojiPicker
           searchString={emojistring}
@@ -116,7 +129,6 @@ const Editor = () => {
       <Editable
         onDOMBeforeInput={handleDOMBeforeInput}
         style={{ outline: 'none' }}
-        renderPlaceholder={RenderPlaceholder}
         disableDefaultStyles
         renderElement={renderElement}
         onKeyDown={(e) => editorUtiliy.onkeydown(e, editor)}
@@ -127,18 +139,3 @@ const Editor = () => {
 };
 
 export default Editor;
-
-const RenderPlaceholder = (props: RenderPlaceholderProps) => {
-  return (
-    <span
-      contentEditable={false}
-      data-slate-placeholder={true}
-      style={{
-        pointerEvents: 'none',
-        userSelect: 'none',
-      }}
-    >
-      {props.children}
-    </span>
-  );
-};

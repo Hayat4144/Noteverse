@@ -15,10 +15,27 @@ import {
 import LinkBlock from './Blocks/LinkBlock';
 import ImageBlock from './Blocks/Imageblock';
 import CheckListblock from './Blocks/CheckListbblock';
+import { Table, TableBody, TableCell, TableRow } from '../ui/table';
 
 const RenderElements = (props: RenderElementProps) => {
   const style = { textAlign: (props.element as any).align };
   switch (props.element.type) {
+    case 'table':
+      return (
+        <Table className="my-2">
+          <TableBody {...props.attributes} className="border">
+            {props.children}
+          </TableBody>
+        </Table>
+      );
+    case 'table-row':
+      return <TableRow {...props.attributes}>{props.children}</TableRow>;
+    case 'table-cell':
+      return (
+        <TableCell {...props.attributes} className="border">
+          {props.children}
+        </TableCell>
+      );
     case 'code-block':
       return <Codeblock {...props} style={style} />;
     case 'paragraph':
