@@ -1,4 +1,5 @@
 import {
+  AppWindow,
   AtSign,
   Badge,
   Heading3,
@@ -164,6 +165,7 @@ export const Icons = {
   warning: AlertTriangle,
   search: Search,
   filter: Filter,
+  openTab: AppWindow,
   alarm: AlarmClock,
   calendar: CalendarDays,
   user: User,

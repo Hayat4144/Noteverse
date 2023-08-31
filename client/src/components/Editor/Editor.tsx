@@ -29,6 +29,7 @@ import { initialValue } from '@/lib/constants';
 import { isSelectionTable, withTables } from './Plugins/withTable';
 import TableModal from './TableModal';
 import { Button } from '../ui/button';
+import LinkModal from './LinkModal';
 
 const createEditorWithPlugins = pipe(
   withReact,
@@ -91,6 +92,7 @@ const Editor = () => {
     [],
   );
   const [isTableModal, tableModalToggle] = useToggle(false);
+  const [isLinkModal, linkModalToggle] = useToggle(false);
   const emojiPatternProps = {
     editor: editor,
     setEmoji: setemojistring,
@@ -108,6 +110,12 @@ const Editor = () => {
         if (selection && isSelectionTable(editor)) {
           tableModalToggle(true);
         }
+        if (
+          selection &&
+          editorUtiliy.isLinkNodeatSelection(editor, selection)
+        ) {
+          linkModalToggle(true);
+        }
       }}
     >
       <Toolbar />
@@ -117,6 +125,12 @@ const Editor = () => {
         <TableModal
           isTableModal={isTableModal}
           tableModalToggle={tableModalToggle}
+        />
+      ) : null}
+      {isLinkModal ? (
+        <LinkModal
+          isLinkModal={isLinkModal}
+          linkModalToggle={linkModalToggle}
         />
       ) : null}
       {isEmojiOpen ? (

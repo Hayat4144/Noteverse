@@ -9,6 +9,7 @@ import {
   Path,
   Point,
   Selection,
+  Node,
 } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -101,7 +102,6 @@ const editorUtiliy = {
           */
         reader.addEventListener('load', () => {
           const url = reader.result;
-          console.log(url);
           url &&
             typeof url === 'string' &&
             editorUtiliy.insertImage(editor, url);
@@ -228,7 +228,6 @@ const editorUtiliy = {
               Element.isElement(n) &&
               n.type === blocktype,
           });
-          console.log(m);
           return;
         }
       }
@@ -266,13 +265,25 @@ const editorUtiliy = {
     };
     return link;
   },
-  toggleLink: (editor: Editor, block: string) => {
+  updateLink: (editor: Editor, url: string) => {
+    const { selection } = editor;
+    if (!selection) return;
+
+    const inLink = editorUtiliy.isLinkNodeatSelection(editor, selection);
+    if (!inLink) return;
+    const linkNodePath = ReactEditor.findPath(
+      editor,
+      Node.parent(editor, selection.focus.path),
+    );
+    Transforms.setNodes(editor, { url }, { at: linkNodePath });
+  },
+  toggleLink: (editor: Editor, url: string, urlText: string) => {
     const { selection } = editor;
     ReactEditor.focus(editor);
     const isCollapsed = selection && Range.isCollapsed(selection);
     const isLinkActive = editorUtiliy.isBlock(editor, 'link');
     if (!selection) {
-      editorUtiliy.InsertNode(editor, editorUtiliy.linkElement());
+      editorUtiliy.InsertNode(editor, editorUtiliy.linkElement(url, urlText));
       return;
     }
     if (isLinkActive) {
@@ -287,7 +298,7 @@ const editorUtiliy = {
       editorUtiliy.removeLink(editor);
       return;
     }
-    editorUtiliy.wrapNodes(editor, editorUtiliy.linkElement());
+    editorUtiliy.wrapNodes(editor, editorUtiliy.linkElement(url, urlText));
   },
   toggleBlock: (editor: Editor, format: string) => {
     const isActive = editorUtiliy.isBlockActive(
@@ -337,7 +348,6 @@ const editorUtiliy = {
       return false;
     }
     const isLink = editorUtiliy.isBlockActive(editor, 'link');
-    console.log(isLink);
     return isLink;
   },
 };
