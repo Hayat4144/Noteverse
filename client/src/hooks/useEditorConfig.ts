@@ -9,9 +9,5 @@ export default function useEditorConfig(editor: Editor) {
   editor.isVoid = (element) => {
     return ['image'].includes(element.type) || isVoid(element);
   };
-  editor.isInline = (element) => {
-    return ['link'].includes(element.type);
-  };
-  editor.isInline = (element) => ['link'].includes(element.type);
   return { renderLeaf, RenderElements, editorUtiliy };
 }

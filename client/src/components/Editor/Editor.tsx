@@ -30,6 +30,7 @@ import { isSelectionTable, withTables } from './Plugins/withTable';
 import TableModal from './TableModal';
 import { Button } from '../ui/button';
 import LinkModal from './LinkModal';
+import withLink from './Plugins/withLink';
 
 const createEditorWithPlugins = pipe(
   withReact,
@@ -37,6 +38,7 @@ const createEditorWithPlugins = pipe(
   withImage,
   withTables,
   withShortcut,
+  withLink,
   withChecklists,
   withCodeblock,
 );
@@ -116,6 +118,7 @@ const Editor = () => {
         ) {
           linkModalToggle(true);
         }
+        editorUtiliy.identifyLinksInTextIfAny(editor);
       }}
     >
       <Toolbar />

@@ -1,5 +1,6 @@
 import { CustomElement, ImageElement, LinkElement } from '@/types';
 import { isHotkey } from 'is-hotkey';
+import isUrl from 'is-url';
 import React from 'react';
 import {
   Editor,
@@ -10,6 +11,8 @@ import {
   Point,
   Selection,
   Node,
+  Text,
+  BasePoint,
 } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -24,6 +27,97 @@ interface emojiPatternProps {
 }
 
 const editorUtiliy = {
+  identifyLinksInTextIfAny: (editor: Editor) => {
+    // if selection is not collapsed, we do not proceed with the link detection.
+    if (editor.selection == null || !Range.isCollapsed(editor.selection)) {
+      return;
+    }
+
+    const [node] = Editor.parent(editor, editor.selection);
+    // if we are already inside a link, exit early.
+    if ((node as any).type === 'link') {
+      return;
+    }
+
+    const [currentNode, currentNodePath] = Editor.node(
+      editor,
+      editor.selection,
+    );
+    if (!Text.isText(currentNode)) {
+      return;
+    }
+
+    let [start] = Range.edges(editor.selection);
+    const cursorPoint = start;
+
+    const startPointOfLastCharacter = Editor.before(editor, editor.selection, {
+      unit: 'character',
+    });
+    if (!startPointOfLastCharacter || !start) return;
+    let lastCharacter = Editor.string(
+      editor,
+      Editor.range(editor, startPointOfLastCharacter, cursorPoint),
+    );
+
+    if (lastCharacter !== ' ') {
+      return;
+    }
+
+    let end = startPointOfLastCharacter;
+    start = Editor.before(editor, end, {
+      unit: 'character',
+    }) as BasePoint;
+
+    const startOfTextNode = Editor.point(editor, currentNodePath, {
+      edge: 'start',
+    });
+
+    lastCharacter = Editor.string(editor, Editor.range(editor, start, end));
+
+    while (lastCharacter !== ' ' && !Point.isBefore(start, startOfTextNode)) {
+      end = start;
+      start = Editor.before(editor, end, { unit: 'character' }) as BasePoint;
+      lastCharacter = Editor.string(editor, Editor.range(editor, start, end));
+    }
+
+    const lastWordRange = Editor.range(editor, end, startPointOfLastCharacter);
+    const lastWord = Editor.string(editor, lastWordRange);
+
+    if (isUrl(lastWord)) {
+      Promise.resolve().then(() =>
+        editorUtiliy.createLinkForRange(
+          editor,
+          lastWordRange,
+          lastWord,
+          lastWord,
+          false,
+        ),
+      );
+    }
+  },
+  createLinkForRange: (
+    editor: Editor,
+    range: Range,
+    linkText: string,
+    linkURL: string,
+    isInsertion: boolean,
+  ) => {
+    isInsertion
+      ? Transforms.insertNodes(
+          editor,
+          {
+            type: 'link',
+            url: linkURL,
+            children: [{ text: linkText }],
+          },
+          range != null ? { at: range } : undefined,
+        )
+      : Transforms.wrapNodes(
+          editor,
+          { type: 'link', url: linkURL, children: [{ text: linkText }] },
+          { split: true, at: range },
+        );
+  },
   detectEmojiPattern: ({
     editor,
     setEmoji,

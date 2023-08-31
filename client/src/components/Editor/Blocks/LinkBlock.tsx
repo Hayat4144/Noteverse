@@ -1,5 +1,3 @@
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { RenderElementProps } from 'slate-react';
 
 const LinkBlock = (
@@ -9,12 +7,9 @@ const LinkBlock = (
   return (
     <a
       style={props.style}
-      className={cn(
-        buttonVariants({ variant: 'link' }),
-        'underline cursor-pointer px-0 text-base',
-      )}
       {...props.attributes}
       href={(element as any).url}
+      className="underline cursor-pointer"
     >
       {props.children}
     </a>
