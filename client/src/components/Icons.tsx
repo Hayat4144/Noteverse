@@ -2,6 +2,7 @@ import {
   AppWindow,
   AtSign,
   Badge,
+  Baseline,
   Heading3,
   Heading4,
   Heading5,
@@ -99,6 +100,7 @@ export type Icon = LucideIcon;
 export const Icons = {
   bell: Bell,
   home: Home,
+  color: Baseline,
   down: ArrowDown,
   updown: ArrowUpDown,
   loader: Loader,

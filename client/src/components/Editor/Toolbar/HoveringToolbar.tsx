@@ -15,6 +15,7 @@ import {
   TooltipContent,
 } from '@/components/ui/tooltip';
 import Iconwithtext from '@/components/Iconwithtext';
+import ColorModal from './ColorModal';
 
 export interface Marks {
   id: string;
@@ -141,6 +142,7 @@ export default function HoveringToolbar() {
           {marks.map((item) => (
             <MarkButtons item={item} key={item.id} />
           ))}
+          <ColorModal />
         </div>
       </div>
     </Portal>
