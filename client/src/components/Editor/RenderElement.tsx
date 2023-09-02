@@ -1,5 +1,5 @@
 'use client';
-import { RenderElementProps } from 'slate-react';
+import { RenderElementProps, useSelected, useSlate } from 'slate-react';
 import Codeblock from './Blocks/Codeblock';
 import Paragraphblock from './Blocks/Paragraphblock';
 import Codelineblock from './Blocks/Codelineblock';
@@ -16,9 +16,18 @@ import LinkBlock from './Blocks/LinkBlock';
 import ImageBlock from './Blocks/Imageblock';
 import CheckListblock from './Blocks/CheckListbblock';
 import { Table, TableBody, TableCell, TableRow } from '../ui/table';
+import { Node, Range } from 'slate';
+import { TypographyP } from '../ui/TypographyP';
 
 const RenderElements = (props: RenderElementProps) => {
   const style = { textAlign: (props.element as any).align };
+  const selected = useSelected();
+  const editor = useSlate();
+  const { selection } = editor;
+  const isCollapased = selection && Range.isCollapsed(selection);
+  const isEmpty =
+    Node.string(props.element).trim() === '' &&
+    props.element.children.length === 1;
   switch (props.element.type) {
     case 'table':
       return (
@@ -39,19 +48,76 @@ const RenderElements = (props: RenderElementProps) => {
     case 'code-block':
       return <Codeblock {...props} style={style} />;
     case 'paragraph':
-      return <Paragraphblock {...props} style={style} />;
+      return (
+        <TypographyP
+          {...props}
+          style={style}
+          className={`${
+            selected && isCollapased && isEmpty ? 'selected-empty-element' : ''
+          }`}
+        />
+      );
     case 'heading':
-      return <Heading1block {...props} style={style} />;
+      return (
+        <Heading1block
+          {...props}
+          style={style}
+          className={`${
+            selected && isCollapased && isEmpty ? 'selected-empty-element' : ''
+          }`}
+        />
+      );
+
     case 'headingTwo':
-      return <Heading2block {...props} style={style} />;
+      return (
+        <Heading2block
+          {...props}
+          style={style}
+          className={`${
+            selected && isCollapased && isEmpty ? 'selected-empty-element' : ''
+          }`}
+        />
+      );
     case 'headingThree':
-      return <Heading3block {...props} style={style} />;
+      return (
+        <Heading3block
+          {...props}
+          style={style}
+          className={`${
+            selected && isCollapased && isEmpty ? 'selected-empty-element' : ''
+          }`}
+        />
+      );
     case 'headingFour':
-      return <Heading4block {...props} style={style} />;
+      return (
+        <Heading4block
+          {...props}
+          style={style}
+          className={`${
+            selected && isCollapased && isEmpty ? 'selected-empty-element' : ''
+          }`}
+        />
+      );
     case 'headingFive':
-      return <Heading5block {...props} style={style} />;
+      return (
+        <Heading5block
+          {...props}
+          style={style}
+          className={`${
+            selected && isCollapased && isEmpty ? 'selected-empty-element' : ''
+          }`}
+        />
+      );
     case 'headingSix':
-      return <Heading6block {...props} style={style} />;
+      return (
+        <Heading6block
+          {...props}
+          style={style}
+          className={`${
+            selected && isCollapased && isEmpty ? 'selected-empty-element' : ''
+          }`}
+        />
+      );
     case 'code-line':
       return <Codelineblock {...props} style={style} />;
     case 'blockQuote':

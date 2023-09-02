@@ -31,6 +31,8 @@ import TableModal from './TableModal';
 import { Button } from '../ui/button';
 import LinkModal from './LinkModal';
 import withLink from './Plugins/withLink';
+import CommandMenu from './CommandMenu';
+import withHeading from './Plugins/withHeading';
 
 const createEditorWithPlugins = pipe(
   withReact,
@@ -41,6 +43,7 @@ const createEditorWithPlugins = pipe(
   withLink,
   withChecklists,
   withCodeblock,
+  withHeading,
 );
 
 const Editor = () => {
@@ -93,6 +96,7 @@ const Editor = () => {
     (props: RenderElementProps) => <RenderElements {...props} />,
     [],
   );
+  const [isCommandMenu, toggleCommandMenu] = useToggle(false);
   const [isTableModal, tableModalToggle] = useToggle(false);
   const [isLinkModal, linkModalToggle] = useToggle(false);
   const emojiPatternProps = {
@@ -107,8 +111,9 @@ const Editor = () => {
       editor={editor}
       initialValue={initialValue}
       onChange={() => {
-        editorUtiliy.detectEmojiPattern(emojiPatternProps);
         const { selection } = editor;
+        editorUtiliy.detectCommandMenuPattern(editor, toggleCommandMenu);
+        editorUtiliy.detectEmojiPattern(emojiPatternProps);
         if (selection && isSelectionTable(editor)) {
           tableModalToggle(true);
         }
@@ -124,6 +129,12 @@ const Editor = () => {
       <Toolbar />
       <Button onClick={(e) => tableModalToggle(!isTableModal)}>Table</Button>
       <HoveringToolbar />
+      {isCommandMenu ? (
+        <CommandMenu
+          CommandMenuToggle={toggleCommandMenu}
+          isCommandMenu={isCommandMenu}
+        />
+      ) : null}
       {isTableModal ? (
         <TableModal
           isTableModal={isTableModal}

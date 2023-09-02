@@ -31,6 +31,7 @@ export default function Toolbar() {
         <MarkButton format="supscript" value={true}></MarkButton>
         <MarkButton format="fontSize" value={'25px'}></MarkButton>
         <MarkButton format="highlight" value={'red'}></MarkButton>
+        <MarkButton format="color" value={'blue'}></MarkButton>
         <MarkButton format="fontFamily" value={'cursive'}></MarkButton>
         <BlockButton format="heading"></BlockButton>
         <BlockButton format="paragraph"></BlockButton>
@@ -41,7 +42,15 @@ export default function Toolbar() {
         <BlockButton format="right"></BlockButton>
         <BlockButton format="center"></BlockButton>
         <BlockButton format="justify"></BlockButton>
-        <Button onClick={() => editorUtiliy.toggleLink(editor, 'link')}>
+        <Button
+          onClick={() =>
+            editorUtiliy.toggleLink(
+              editor,
+              'http://www.google.com',
+              'click here',
+            )
+          }
+        >
           Link
         </Button>
 

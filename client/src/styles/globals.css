@@ -58,3 +58,13 @@
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
+
+.selected-empty-element {
+  position: relative;
+}
+.selected-empty-element:after {
+  content: " Press '/' to open command menu";
+  position: absolute;
+  color: #aaa;
+  top: 0;
+}

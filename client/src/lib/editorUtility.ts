@@ -27,6 +27,31 @@ interface emojiPatternProps {
 }
 
 const editorUtiliy = {
+  emptyNode: (editor: Editor) => {
+    const { selection } = editor;
+
+    if (selection) {
+      const [start] = Range.edges(selection);
+      const characterBefore = Editor.before(editor, start, {
+        unit: 'character',
+      });
+      Transforms.delete(editor, { at: characterBefore });
+      Transforms.setNodes(editor, { text: ' ' });
+    }
+  },
+  detectCommandMenuPattern: (
+    editor: Editor,
+    toggleCommandMenu: (value: boolean) => void,
+  ) => {
+    const { selection } = editor;
+    if (selection && Range.isCollapsed(selection)) {
+      const [start] = Range.edges(selection);
+      const [node] = Editor.node(editor, start.path);
+      if ((node as any).text.endsWith('/')) {
+        toggleCommandMenu(true);
+      }
+    }
+  },
   identifyLinksInTextIfAny: (editor: Editor) => {
     // if selection is not collapsed, we do not proceed with the link detection.
     if (editor.selection == null || !Range.isCollapsed(editor.selection)) {

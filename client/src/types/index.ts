@@ -18,6 +18,7 @@ export type CustomText = {
   fontSize?: string;
   fontFamily?: string;
   highlight?: string;
+  color?: string;
 };
 
 export type EmptyText = {
@@ -33,6 +34,7 @@ export type EmptyText = {
   fontSize?: string;
   fontFamily?: string;
   highlight?: string;
+  color?: string;
 };
 
 export type BlockQuoteElement = {

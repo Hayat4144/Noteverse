@@ -1,5 +1,4 @@
-import { Fragment } from 'react';
-import { DefaultLeaf, RenderLeafProps } from 'slate-react';
+import { RenderLeafProps } from 'slate-react';
 
 const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   if (leaf.bold) {
@@ -24,9 +23,13 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     const style = { backgroundColor: leaf.highlight };
     children = <span style={style}>{children}</span>;
   }
-
   if (leaf.fontSize) {
     const style = { fontSize: leaf.fontSize };
+    children = <span style={style}>{children}</span>;
+  }
+
+  if (leaf.color) {
+    const style = { color: leaf.color };
     children = <span style={style}>{children}</span>;
   }
 
