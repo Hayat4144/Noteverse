@@ -20,12 +20,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export interface ColorsBackground {
-  id: string;
-  icon: React.ReactNode;
-  value: string;
-}
-const colorArray: ColorsBackground[] = [
+export const colorArray: ColorsBackground[] = [
   {
     id: '1',
     icon: <Icons.color size={20} color="red" />,
@@ -77,6 +72,13 @@ const colorArray: ColorsBackground[] = [
     value: 'blue',
   },
 ];
+
+export interface ColorsBackground {
+  id: string;
+  icon: React.ReactNode;
+  value: string;
+}
+
 export default function ColorModal() {
   const [open, setOpen] = React.useState(false);
   const editor = useSlate();

@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 
 interface TurnIntoDropDownProps {
   blockType: string;
+  isHooveringtoolbar?: boolean;
 }
 export interface BlockType {
   id: string;
@@ -35,7 +36,10 @@ export interface BlockType {
   shortcut?: string;
 }
 
-export default function TurnIntoDropDown({ blockType }: TurnIntoDropDownProps) {
+export default function TurnIntoDropDown({
+  blockType,
+  isHooveringtoolbar = true,
+}: TurnIntoDropDownProps) {
   const editor = useSlateStatic();
   const { editorUtiliy } = useEditorConfig(editor);
   const blockTypes: BlockType[] = [
@@ -161,11 +165,12 @@ export default function TurnIntoDropDown({ blockType }: TurnIntoDropDownProps) {
       blockTypes.find((block) => block.type === blockType)?.lable || '';
     setselectedBlock(selectedBlockLabel);
   }, [blockType, blockTypes]);
+
   return (
     <Fragment>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger className="py-0" asChild>
+          <TooltipTrigger className="py-0">
             <DropdownMenu open={open} onOpenChange={setOpen}>
               <DropdownMenuTrigger
                 onClick={(e) => e.preventDefault()}
@@ -175,17 +180,23 @@ export default function TurnIntoDropDown({ blockType }: TurnIntoDropDownProps) {
                 <Button
                   variant={'ghost'}
                   size={'sm'}
-                  className="hover:dark:bg-[#3b3b40] rounded-none mx-0"
+                  className={`${
+                    isHooveringtoolbar
+                      ? 'hover:dark:bg-[#3b3b40] rounded-none mx-0 space-x-1'
+                      : 'rounded-md space-x-2'
+                  }`}
                 >
-                  {selectedBlock}
-                  <Icons.chevronDown size={16} />
+                  <span> {selectedBlock}</span>
+                  {open ? (
+                    <Icons.chevronUp size={16} className="translate-y-1" />
+                  ) : (
+                    <Icons.chevronDown size={16} className="translate-y-1" />
+                  )}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[13em]" align="start">
                 <Command>
-                  {/* <CommandInput placeholder="Filter label..." /> */}
                   <CommandList>
-                    {/* <CommandEmpty>No label found.</CommandEmpty> */}
                     <CommandGroup>
                       {blockTypes.map((block) => (
                         <CommandItem

@@ -1,4 +1,8 @@
 import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
   AppWindow,
   AtSign,
   Badge,
@@ -7,11 +11,14 @@ import {
   Heading4,
   Heading5,
   Heading6,
+  Highlighter,
   Link,
   List,
   ListOrdered,
   Quote,
+  Redo,
   Table,
+  Undo,
   Video,
 } from 'lucide-react';
 import {
@@ -99,6 +106,14 @@ export type Icon = LucideIcon;
 
 export const Icons = {
   bell: Bell,
+  alignCenter: AlignCenter,
+  alignRight: AlignRight,
+  alignLeft: AlignLeft,
+  alignJustify: AlignJustify,
+  undo: Undo,
+  redo: Redo,
+  highlight: Highlighter,
+  minus: Minus,
   home: Home,
   color: Baseline,
   down: ArrowDown,

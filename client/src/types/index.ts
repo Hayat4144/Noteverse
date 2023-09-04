@@ -373,6 +373,7 @@ export interface CodeProps extends React.HTMLAttributes<HTMLPreElement> {
 export interface MarkButtonProps {
   format: string;
   value: string | boolean;
+  icon: React.ReactNode;
 }
 
 export interface languageTypes {

@@ -1,141 +1,178 @@
 import { Icons } from '@/components/Icons';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import useEditorConfig from '@/hooks/useEditorConfig';
-import { cn, isValidUrl } from '@/lib/utils';
 import { MarkButtonProps } from '@/types';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useSlate } from 'slate-react';
+import TurnIntoDropDown from './TurnIntoDropDown';
+import TextColorHighlight from './TextColor';
+import FontSizeModal from './FontSizeModal';
+import { Separator } from '@/components/ui/separator';
+import FontFamilyModal from './FontFamilyModal';
+import InsertLink from './InsertLink';
+import InsertImage from './InsertImage';
 
 export default function Toolbar() {
   const editor = useSlate();
   const { editorUtiliy } = useEditorConfig(editor);
-  const fileuploadChange = (files: FileList) => {
-    if (files && files.length > 0) {
-      editorUtiliy.updloadImagehandler(editor, files);
+  const [blocktype, setblocktype] = useState('paragraph');
+
+  useEffect(() => {
+    if (editor.selection) {
+      const blocktype = editorUtiliy.gettextBlockStyle(editor);
+      if (blocktype) {
+        setblocktype(blocktype);
+      }
     }
-  };
+  }, [editor.selection]);
 
   return (
     <Fragment>
-      <div className="flex items-center space-x-3 flex-wrap">
-        <MarkButton format="bold" value={true}></MarkButton>
-        <MarkButton format="italic" value={true}></MarkButton>
-        <MarkButton format="underline" value={true}></MarkButton>
-        <MarkButton format="subscript" value={true}></MarkButton>
-        <MarkButton format="supscript" value={true}></MarkButton>
-        <MarkButton format="fontSize" value={'25px'}></MarkButton>
-        <MarkButton format="highlight" value={'red'}></MarkButton>
-        <MarkButton format="color" value={'blue'}></MarkButton>
-        <MarkButton format="fontFamily" value={'cursive'}></MarkButton>
-        <BlockButton format="heading"></BlockButton>
-        <BlockButton format="paragraph"></BlockButton>
-        <BlockButton format="headingTwo"></BlockButton>
-        <BlockButton format="bulletedList"></BlockButton>
-        <BlockButton format="numberList"></BlockButton>
-        <BlockButton format="left"></BlockButton>
-        <BlockButton format="right"></BlockButton>
-        <BlockButton format="center"></BlockButton>
-        <BlockButton format="justify"></BlockButton>
-        <Button
-          onClick={() =>
-            editorUtiliy.toggleLink(
-              editor,
-              'http://www.google.com',
-              'click here',
-            )
-          }
-        >
-          Link
-        </Button>
-
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            const userUrl = prompt('Enter your image url');
-            if (userUrl && !isValidUrl(userUrl)) {
-              alert('it is not valid url');
-              return;
-            }
-            userUrl && editorUtiliy.insertImage(editor, userUrl);
-          }}
-        >
-          <Icons.image size={19} />
-        </Button>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="secondary">Share</Button>
-          </PopoverTrigger>
-          <PopoverContent align="start" className="w-[520px]">
-            <div className="flex flex-col space-y-2 text-center sm:text-left">
-              <h3 className="text-lg font-semibold">Share preset</h3>
-              <p className="text-sm text-muted-foreground">
-                Anyone who has this link and an OpenAI account will be able to
-                view this.
-              </p>
-            </div>
-            <div className="flex items-center space-x-2 pt-4">
-              <Label
-                htmlFor="file"
-                className={cn(
-                  buttonVariants({ variant: 'outline' }),
-                  'cursor-pointer w-full',
-                )}
-              >
-                Upload file
-              </Label>
-              <input
-                type="file"
-                multiple
-                hidden
-                id="file"
-                onChange={(e) => {
-                  e.preventDefault();
-                  e.target.files && fileuploadChange(e.target.files);
-                }}
-              />
-            </div>
-          </PopoverContent>
-        </Popover>
+      <div className="flex items-center space-x-1 flex-wrap mx-5">
+        <HistoryButton type="undo" icon={<Icons.undo size={15} />} />
+        <HistoryButton type="redo" icon={<Icons.redo size={15} />} />
+        <Separator orientation="vertical" className="h-5 font-semibold" />
+        <MarkButton
+          format="bold"
+          icon={<Icons.bold size={15} />}
+          value={true}
+        />{' '}
+        <MarkButton
+          format="italic"
+          value={true}
+          icon={<Icons.Italic size={15} />}
+        />{' '}
+        <MarkButton
+          icon={<Icons.underline size={15} />}
+          format="underline"
+          value={true}
+        />{' '}
+        <MarkButton
+          format="subscript"
+          icon={<Icons.subscript size={15} />}
+          value={true}
+        />{' '}
+        <MarkButton
+          icon={<Icons.Superscript size={15} />}
+          format="supscript"
+          value={true}
+        />{' '}
+        <MarkButton
+          icon={<Icons.strike size={15} />}
+          format="strike"
+          value={true}
+        />
+        <Separator orientation="vertical" className="h-5 font-semibold" />
+        <FontFamilyModal />
+        <Separator orientation="vertical" className="h-5 font-semibold" />
+        <FontSizeModal format="fontSize" />
+        <Separator orientation="vertical" className="h-5 font-semibold" />
+        <TurnIntoDropDown blockType={blocktype} isHooveringtoolbar={false} />
+        <Separator orientation="vertical" className="h-5 font-semibold" />
+        <TextColorHighlight
+          format="color"
+          tooltipContent="Text Color"
+          icon={<Icons.color size={15} />}
+        />
+        <TextColorHighlight
+          format="highlight"
+          tooltipContent="Highlight Color"
+          icon={<Icons.highlight size={15} />}
+        />
+        <Separator orientation="vertical" className="h-5" />
+        <AlignButton format="justify" icon={<Icons.alignJustify size={15} />} />
+        <AlignButton icon={<Icons.alignLeft size={15} />} format="left" />
+        <AlignButton icon={<Icons.alignRight size={15} />} format="right" />
+        <AlignButton icon={<Icons.alignCenter size={15} />} format="center" />
+        <InsertLink />
+        <InsertImage />
       </div>
     </Fragment>
   );
 }
 
-const MarkButton = ({ format, value }: MarkButtonProps) => {
-  const editor = useSlate();
-  const { editorUtiliy } = useEditorConfig(editor);
+interface HistoryButtonProps {
+  icon: React.ReactNode;
+  type: string;
+}
+
+const HistoryButton = ({ type, icon }: HistoryButtonProps) => {
   return (
-    <Button
-      variant={
-        editorUtiliy.isMarkActive(editor, format) ? 'secondary' : 'outline'
-      }
-      onMouseDown={(event) => {
-        event.preventDefault();
-        editorUtiliy.toggleMark(editor, format, value);
-      }}
-    >
-      {format}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button size={'icon'} variant={'ghost'} className="h-8">
+            {icon}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          {type}{' '}
+          {type === 'undo' ? <span>(Ctrl+Z)</span> : <span>(Ctrl+Y)</span>}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
-const BlockButton = ({ format }: { format: string }) => {
+const MarkButton = ({ format, value, icon }: MarkButtonProps) => {
   const editor = useSlate();
   const { editorUtiliy } = useEditorConfig(editor);
   return (
-    <Button
-      onMouseDown={(event) => {
-        event.preventDefault();
-        editorUtiliy.toggleBlock(editor, format);
-      }}
-    >
-      {format}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant={
+              editorUtiliy.isMarkActive(editor, format) ? 'secondary' : 'ghost'
+            }
+            size={'icon'}
+            className="h-8"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              editorUtiliy.toggleMark(editor, format, value);
+            }}
+          >
+            {icon}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent className="capitalize">{format}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
+interface BlockButtonProps {
+  format: string;
+  icon: React.ReactNode;
+}
+const AlignButton = ({ format, icon }: BlockButtonProps) => {
+  const editor = useSlate();
+  const { editorUtiliy } = useEditorConfig(editor);
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size={'icon'}
+            variant={'ghost'}
+            onMouseDown={(event) => {
+              event.preventDefault();
+              editorUtiliy.toggleBlock(editor, format);
+            }}
+          >
+            {icon}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent className="space-x-1">
+          <span className="capitalize">{format}</span> align
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };

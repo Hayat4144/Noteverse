@@ -54,6 +54,65 @@ export const languages: languageTypes[] = [
   },
 ];
 
+interface FontFamily {
+  name: string;
+  category: string;
+}
+
+export const FontFamilies: FontFamily[] = [
+  { name: 'Arial', category: 'Sans-serif' },
+  { name: 'Helvetica', category: 'Sans-serif' },
+  { name: 'Times New Roman', category: 'Serif' },
+  { name: 'Georgia', category: 'Serif' },
+  { name: 'Verdana', category: 'Sans-serif' },
+  { name: 'Tahoma', category: 'Sans-serif' },
+  { name: 'Courier New', category: 'Monospace' },
+  { name: 'Lucida Console', category: 'Monospace' },
+  { name: 'Impact', category: 'Sans-serif' },
+  { name: 'Comic Sans MS', category: 'Sans-serif' },
+  { name: 'Trebuchet MS', category: 'Sans-serif' },
+  { name: 'Palatino Linotype', category: 'Serif' },
+  { name: 'Garamond', category: 'Serif' },
+  { name: 'Book Antiqua', category: 'Serif' },
+  { name: 'Courier', category: 'Monospace' },
+];
+
+interface fontArray {
+  value: string;
+}
+export const fonts: fontArray[] = [
+  {
+    value: '12',
+  },
+  {
+    value: '14',
+  },
+  {
+    value: '16',
+  },
+  {
+    value: '18',
+  },
+  {
+    value: '20',
+  },
+  {
+    value: '22',
+  },
+  {
+    value: '24',
+  },
+  {
+    value: '26',
+  },
+  {
+    value: '28',
+  },
+  {
+    value: '30',
+  },
+];
+
 export const headings = [
   'heading',
   'headingTwo',
