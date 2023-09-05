@@ -126,8 +126,7 @@ const Editor = () => {
         editorUtiliy.identifyLinksInTextIfAny(editor);
       }}
     >
-      <Toolbar />
-      <Button onClick={(e) => tableModalToggle(!isTableModal)}>Table</Button>
+      <Toolbar tableModalToggle={tableModalToggle} isTable={isTableModal} />
       <HoveringToolbar />
       {isCommandMenu ? (
         <CommandMenu

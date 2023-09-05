@@ -18,7 +18,12 @@ import FontFamilyModal from './FontFamilyModal';
 import InsertLink from './InsertLink';
 import InsertImage from './InsertImage';
 
-export default function Toolbar() {
+interface ToolbarProps {
+  isTable: boolean;
+  tableModalToggle: (value: boolean) => void;
+}
+
+export default function Toolbar({ isTable, tableModalToggle }: ToolbarProps) {
   const editor = useSlate();
   const { editorUtiliy } = useEditorConfig(editor);
   const [blocktype, setblocktype] = useState('paragraph');
@@ -92,6 +97,28 @@ export default function Toolbar() {
         <AlignButton icon={<Icons.alignCenter size={15} />} format="center" />
         <InsertLink />
         <InsertImage />
+        <BlockButton
+          icon={<Icons.numberList size={15} />}
+          format="numberList"
+          tooltipContent="Insert Numberlist"
+        />
+        <BlockButton
+          icon={<Icons.list size={15} />}
+          format="bulletedlList"
+          tooltipContent="Insert Bulletedlist"
+        />
+        <BlockButton
+          icon={<Icons.checkList size={15} />}
+          format="checkList"
+          tooltipContent="Insert Checklist"
+        />
+        <BlockButton
+          icon={<Icons.table size={15} />}
+          format="table"
+          istable={isTable}
+          tableModalToggle={tableModalToggle}
+          tooltipContent="Insert table"
+        />
       </div>
     </Fragment>
   );
@@ -150,6 +177,9 @@ const MarkButton = ({ format, value, icon }: MarkButtonProps) => {
 interface BlockButtonProps {
   format: string;
   icon: React.ReactNode;
+  tooltipContent?: string;
+  istable?: boolean;
+  tableModalToggle?: (value: boolean) => void;
 }
 const AlignButton = ({ format, icon }: BlockButtonProps) => {
   const editor = useSlate();
@@ -161,6 +191,7 @@ const AlignButton = ({ format, icon }: BlockButtonProps) => {
           <Button
             size={'icon'}
             variant={'ghost'}
+            className="h-8"
             onMouseDown={(event) => {
               event.preventDefault();
               editorUtiliy.toggleBlock(editor, format);
@@ -171,6 +202,43 @@ const AlignButton = ({ format, icon }: BlockButtonProps) => {
         </TooltipTrigger>
         <TooltipContent className="space-x-1">
           <span className="capitalize">{format}</span> align
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+const BlockButton = ({
+  format,
+  icon,
+  istable,
+  tooltipContent,
+  tableModalToggle,
+}: BlockButtonProps) => {
+  const editor = useSlate();
+  const { editorUtiliy } = useEditorConfig(editor);
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size={'icon'}
+            variant={'ghost'}
+            className="h-8"
+            disabled={editor.selection ? false : true}
+            onMouseDown={(event) => {
+              event.preventDefault();
+              if (format === 'table' && tableModalToggle) {
+                tableModalToggle(!istable);
+              } else {
+                editorUtiliy.toggleBlock(editor, format);
+              }
+            }}
+          >
+            {icon}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent className="space-x-1">
+          <span className="capitalize">{tooltipContent}</span>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

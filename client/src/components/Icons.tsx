@@ -14,6 +14,7 @@ import {
   Highlighter,
   Link,
   List,
+  ListChecks,
   ListOrdered,
   Quote,
   Redo,
@@ -203,6 +204,7 @@ export const Icons = {
   placeholder: Image,
   clothing: Shirt,
   shoes: Footprints,
+  checkList: ListChecks,
   accessories: HardHat,
   logo: (props: LucideProps) => (
     <svg
