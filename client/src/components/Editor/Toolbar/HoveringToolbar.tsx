@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/tooltip';
 import Iconwithtext from '@/components/Iconwithtext';
 import ColorModal from './ColorModal';
+import TextColorHighlight from './TextColor';
 
 export interface Marks {
   id: string;
@@ -36,37 +37,37 @@ export default function HoveringToolbar() {
       id: '1',
       icon: <Icons.bold size={17} />,
       mark: 'bold',
-      shortcut: 'ctrl+b',
+      shortcut: '(Ctrl+B)',
     },
     {
       id: '2',
       icon: <Icons.Italic size={17} />,
       mark: 'italic',
-      shortcut: 'ctrl+b',
+      shortcut: '(Ctrl+I)',
     },
     {
       id: '3',
       icon: <Icons.underline size={17} />,
       mark: 'underline',
-      shortcut: 'ctrl+u',
+      shortcut: '(Ctrl+U)',
     },
     {
       id: '4',
       icon: <Icons.Superscript size={17} />,
       mark: 'superscript',
-      shortcut: 'ctrl+s',
+      shortcut: '(Ctrl+Shift+P)',
     },
     {
       id: '5',
       icon: <Icons.subscript size={17} />,
       mark: 'subscript',
-      shortcut: 'ctrl+p',
+      shortcut: '(Ctrl+Shift+B)',
     },
     {
       id: '6',
       icon: <Icons.strike size={17} />,
       mark: 'strike',
-      shortcut: 'ctrl+shift+x',
+      shortcut: '(Ctrl+Shift+X)',
     },
   ];
 
@@ -143,6 +144,11 @@ export default function HoveringToolbar() {
             <MarkButtons item={item} key={item.id} />
           ))}
           <ColorModal />
+          <TextColorHighlight
+            format="highlight"
+            tooltipContent="Highlight text"
+            icon={<Icons.highlight size={15} />}
+          />
         </div>
       </div>
     </Portal>

@@ -39,38 +39,41 @@ export default function Toolbar({ isTable, tableModalToggle }: ToolbarProps) {
 
   return (
     <Fragment>
-      <div className="flex items-center space-x-1 flex-wrap mx-5">
+      <div
+        className="flex items-center space-x-1 flex-wrap px-2 fixed
+       bg-background top-0 py-1 border-b"
+      >
         <HistoryButton type="undo" icon={<Icons.undo size={15} />} />
         <HistoryButton type="redo" icon={<Icons.redo size={15} />} />
         <Separator orientation="vertical" className="h-5 font-semibold" />
         <MarkButton
-          format="bold"
+          format="bold (Ctrl+B)"
           icon={<Icons.bold size={15} />}
           value={true}
         />{' '}
         <MarkButton
-          format="italic"
+          format="italic (Ctrl+I)"
           value={true}
           icon={<Icons.Italic size={15} />}
         />{' '}
         <MarkButton
           icon={<Icons.underline size={15} />}
-          format="underline"
+          format="underline (Ctrl+U)"
           value={true}
         />{' '}
         <MarkButton
-          format="subscript"
+          format="subscript (Ctrl+Shift+B)"
           icon={<Icons.subscript size={15} />}
           value={true}
         />{' '}
         <MarkButton
           icon={<Icons.Superscript size={15} />}
-          format="supscript"
+          format="supscript (Ctrl+Shift+P)"
           value={true}
         />{' '}
         <MarkButton
           icon={<Icons.strike size={15} />}
-          format="strike"
+          format="strike (Ctrl+Shift+X)"
           value={true}
         />
         <Separator orientation="vertical" className="h-5 font-semibold" />
@@ -146,7 +149,7 @@ const HistoryButton = ({ type, icon }: HistoryButtonProps) => {
             {icon}
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent className="capitalize">
           {type}{' '}
           {type === 'undo' ? <span>(Ctrl+Z)</span> : <span>(Ctrl+Y)</span>}
         </TooltipContent>

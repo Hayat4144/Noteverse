@@ -18,7 +18,7 @@ const Codeblock = (
   return (
     <pre
       className="mt-2 max-h-[650px] w-[800px] overflow-y-auto p-4 border
-      rounded-md whitespace-pre-wrap relative bg-zinc-950 dark:bg-zinc-900
+      rounded-md whitespace-pre-wrap relative bg-accent text-accent-foreground dark:bg-zinc-900
       my-4"
       style={props.style}
       {...props.attributes}
@@ -46,7 +46,7 @@ const CopyButton = ({ handleCopy }: CopyButtonProps) => {
   const handleCopyButton = async () => {
     handleCopy();
     setisCopy(true);
-    toast({ title: 'Code has been successfully to your clipborad. ' });
+    toast({ title: 'Code has been successfully copied to your clipboard. ' });
     setTimeout(() => setisCopy(false), 4000);
   };
   return (

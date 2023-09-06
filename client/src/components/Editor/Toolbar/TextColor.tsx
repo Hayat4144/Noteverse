@@ -57,6 +57,15 @@ export default function TextColorHighlight({
                   {format}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="capitalize"
+                  onMouseDown={(e) => {
+                    setOpen(false);
+                    editorUtiliy.toggleMark(editor, format, false);
+                  }}
+                >
+                  Remove {format}
+                </DropdownMenuItem>
                 {colorArray.map((item) => (
                   <DropdownMenuItem
                     key={item.id}
