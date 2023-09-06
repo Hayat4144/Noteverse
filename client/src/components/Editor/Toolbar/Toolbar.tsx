@@ -130,11 +130,19 @@ interface HistoryButtonProps {
 }
 
 const HistoryButton = ({ type, icon }: HistoryButtonProps) => {
+  const editor = useSlate();
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button size={'icon'} variant={'ghost'} className="h-8">
+          <Button
+            size={'icon'}
+            variant={'ghost'}
+            className="h-8"
+            onClick={(e) => {
+              type === 'undo' ? editor.undo() : editor.redo();
+            }}
+          >
             {icon}
           </Button>
         </TooltipTrigger>
