@@ -154,6 +154,7 @@ const Editor = () => {
         />
       ) : null}
       <Editable
+        className="mt-24 px-5"
         onDOMBeforeInput={handleDOMBeforeInput}
         style={{ outline: 'none' }}
         disableDefaultStyles

@@ -236,6 +236,14 @@ const editorUtiliy = {
       children: [{ text: '' }],
     };
     editorUtiliy.InsertNode(editor, imageNode);
+    Transforms.insertNodes(
+      editor,
+      {
+        type: 'paragraph',
+        children: [{ text: '' }],
+      },
+      { mode: 'highest' },
+    );
   },
   removeImage: (editor: Editor, path: Path) => {
     Transforms.removeNodes(editor, { at: path });
@@ -426,7 +434,7 @@ const editorUtiliy = {
       TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type',
     );
     const isList = LIST_TYPES.includes(format);
-
+    const { selection } = editor;
     // remove the the one or more parent node from selection
     Transforms.unwrapNodes(editor, {
       match: (n) =>
@@ -459,6 +467,15 @@ const editorUtiliy = {
       Transforms.wrapNodes(editor, {
         type: format as keyof typeof newProperties.type,
         children: [],
+      });
+    }
+    if (format === 'code-block' && selection) {
+      const paragraphElement: Element = {
+        type: 'paragraph',
+        children: [{ text: '' }],
+      };
+      Transforms.insertNodes(editor, paragraphElement, {
+        at: selection,
       });
     }
   },

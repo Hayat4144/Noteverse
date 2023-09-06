@@ -29,7 +29,11 @@ export default function ImageLinkForm({ setOpen }: ImageLinkFormProps) {
   });
   const editor = useSlate();
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    editorUtiliy.toggleLink(editor, data.link, 'click here');
+    editorUtiliy.insertImage(editor, data.link);
+    editorUtiliy.InsertNode(editor, {
+      type: 'paragraph',
+      children: [{ text: '' }],
+    });
     setOpen(false);
   };
   return (
