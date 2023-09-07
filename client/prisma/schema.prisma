@@ -22,9 +22,27 @@ model User {
   created_at DateTime @default(now())
   password   String
   roleId     String
+  Task       Task[]
   Role       Role     @relation(fields: [roleId], references: [id])
 
   @@index([email, name])
+}
+
+model Task {
+  id            String       @id
+  title         String
+  description   String?
+  due_date      DateTime
+  status        String
+  priority      TaskPriority @default(Low)
+  parent_id     String?
+  is_standalone Boolean
+  assignee      String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  tags          String[]
+  userId        String
+  User          User         @relation(fields: [userId], references: [id])
 }
 
 enum UserRole {
@@ -32,4 +50,10 @@ enum UserRole {
   ADMIN
   COLLABORATOR
   VIEWER
+}
+
+enum TaskPriority {
+  High
+  Low
+  Medium
 }

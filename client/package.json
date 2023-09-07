@@ -71,7 +71,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@prisma/client": "^5.0.0",
+    "@prisma/client": "^5.2.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie": "^0.5.1",
     "@types/deep-equal": "^1.0.1",
@@ -80,6 +80,6 @@
     "@types/prismjs": "^1.26.0",
     "i": "^0.3.7",
     "npm": "^9.8.0",
-    "prisma": "^5.0.0"
+    "prisma": "^5.2.0"
   }
 }

@@ -1,3 +1,5 @@
+import { toast } from '@/components/ui/use-toast';
+import uploadImage from '@/service/uploadImage';
 import { CustomElement, ImageElement, LinkElement } from '@/types';
 import { isHotkey } from 'is-hotkey';
 import isUrl from 'is-url';
@@ -18,6 +20,11 @@ import { ReactEditor } from 'slate-react';
 
 const LIST_TYPES = ['numberList', 'bulletedList'];
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
+
+interface imageUploadResponse {
+  data?: Array<{ url: string }> | undefined;
+  error?: { message: string } | undefined;
+}
 
 interface emojiPatternProps {
   editor: Editor;
@@ -210,24 +217,32 @@ const editorUtiliy = {
 
     return blockType;
   },
-  updloadImagehandler: (editor: Editor, files: FileList) => {
+  updloadImagehandler: async (
+    editor: Editor,
+    files: FileList,
+    token: string | undefined,
+  ): Promise<boolean> => {
+    let formData = new FormData();
+    formData.append('noteBookId', '812c097e-e526-424c-9536-87c3566fcac6');
     for (const file of files) {
-      // FileReader read the files from user storage
-      const reader = new FileReader();
       const [mime] = file.type.split('/');
       if (mime === 'image') {
-        /* send the file to server for saving
-              image upload to server or image service provider
-          */
-        reader.addEventListener('load', () => {
-          const url = reader.result;
-          url &&
-            typeof url === 'string' &&
-            editorUtiliy.insertImage(editor, url);
-        });
-        reader.readAsDataURL(file);
+        formData.append('images', file);
       }
     }
+    const { data, error } = (await uploadImage(
+      token,
+      formData,
+    )) as imageUploadResponse;
+    if (data) {
+      data.map((image) => {
+        editorUtiliy.insertImage(editor, image.url);
+      });
+    }
+    if (error) {
+      toast({ title: error.message, variant: 'destructive' });
+    }
+    return true;
   },
   insertImage: (editor: Editor, url: string) => {
     const imageNode: ImageElement = {

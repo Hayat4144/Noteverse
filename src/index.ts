@@ -4,12 +4,14 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import logger from './utils/logger';
 import ErrorMiddleware from './middlewares/ErroMiddleware';
-import { CustomError } from './utils/CustomError';
 import Authrouter from './routes/authRoutes';
 import taskRouter from './routes/taskRoutes';
+import noteBookRoutes from './routes/noteBookRoutes';
+import CloudinaryConfiguration from './config/CloudinayConfig';
 
 const app = express();
 app.use(cookieParser());
+CloudinaryConfiguration();
 dotenv.config();
 app.use(
   cors({
@@ -24,7 +26,7 @@ app.use(
     optionsSuccessStatus: 200,
   }),
 );
-app.use(express.json())
+app.use(express.json());
 
 const port = process.env.PORT || 8000;
 
@@ -33,7 +35,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use(Authrouter);
-app.use(taskRouter)
+app.use(taskRouter);
+app.use(noteBookRoutes);
 
 app.use(ErrorMiddleware);
 app.listen(port, () => {

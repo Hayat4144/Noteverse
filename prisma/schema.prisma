@@ -24,9 +24,32 @@ model User {
   roleId     String
   Role       Role     @relation(fields: [roleId], references: [id])
 
+  notes Notebook[]
   tasks Task[]
 
   @@index([email, name])
+}
+
+model Notebook {
+  id        String   @id @default(uuid())
+  title     String?
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mediaFile MediaFile[]
+  User      User?       @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model MediaFile {
+  id         String    @id @default(uuid())
+  publicId   String
+  url        String // You can store the file path where the media is stored on your server
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  Notebook   Notebook? @relation(fields: [notebookId], references: [id])
+  notebookId String?
 }
 
 model Task {
@@ -42,7 +65,7 @@ model Task {
   user          User         @relation(fields: [userId], references: [id])
   userId        String
   createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   tags          String[]
 }
 

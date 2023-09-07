@@ -211,12 +211,12 @@ export const initialValue: Descendant[] = [
     type: 'headingTwo',
     children: [{ text: 'This is heading 2' }],
   },
-  //   {
-  //     type: 'code-block',
-  //     language: 'javascript',
-  //     children: [
-  //       {
-  //         text: `// TypeScript users only add this code
+  // {
+  //   type: 'code-block',
+  //   language: 'javascript',
+  //   children: [
+  //     {
+  //       text: `// TypeScript users only add this code
   // import { BaseEditor, Descendant } from 'slate'
   // import { ReactEditor } from 'slate-react'
 
@@ -230,9 +230,9 @@ export const initialValue: Descendant[] = [
   //     Text: CustomText
   //   }
   // }`,
-  //       },
-  //     ],
-  //   },
+  //     },
+  //   ],
+  // },
   //   {
   //     type: 'headingThree',
   //     children: [{ text: 'This is heading 3' }],
