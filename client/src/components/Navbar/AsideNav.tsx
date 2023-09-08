@@ -6,26 +6,35 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-} from '../ui/dropdown-menu';
-import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { useToggle } from '@uidotdev/usehooks';
+import AddNotebookform from '../forms/AddNotebookform';
+import Notebooks from './Notebooks';
+import { ScrollArea } from '../ui/scroll-area';
+import Iconwithtext from '../Iconwithtext';
+import { signOut } from 'next-auth/react';
+import { toast } from '../ui/use-toast';
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function AsideNav({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isNoteCollapsed, setisNoteCollapsed] = useState(true);
   const pathname = usePathname();
+  const [isDialogOpen, toggleDialog] = useToggle(false);
+
+  const logout = () => {
+    signOut({ redirect: true, callbackUrl: '/signin' });
+    toast({ title: 'you are successfully logout.' });
+  };
+
   return (
     <nav className={cn('border-r', className)}>
-      <div className="space-y-4 pt-4 pb-2 flex flex-col h-full w-full">
+      <div className="space-y-2 pt-4 pb-2 flex flex-col h-full w-full">
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             Noteverse
@@ -51,18 +60,25 @@ export default function AsideNav({ className }: SidebarProps) {
                 <span className={` ${isCollapsed ? 'hidden' : ''}`}>Tasks</span>
               </Link>
             </Button>
-            <Button
-              variant={pathname === '/reminder' ? 'secondary' : 'link'}
-              asChild
-              className="w-full justify-start hover:no-underline hover:bg-accent"
-            >
-              <Link href={'/reminder'} className="space-x-2">
-                <Icons.bell size={17} />
-                <span className={` ${isCollapsed ? 'hidden' : ''}`}>
-                  Reminders
-                </span>
-              </Link>
-            </Button>
+            <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
+              <DialogTrigger asChild>
+                <Button
+                  variant={'ghost'}
+                  className="w-full justify-start space-x-1 hover:no-underline hover:bg-accent"
+                >
+                  <Icons.add size={17} />
+                  <span className={` ${isCollapsed ? 'hidden' : ''}`}>
+                    New Notebook
+                  </span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add a new Notebook</DialogTitle>
+                  <AddNotebookform toggleDialog={toggleDialog} action="add" />
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <div className="px-3 py-1 flex-1">
@@ -80,68 +96,19 @@ export default function AsideNav({ className }: SidebarProps) {
               )}
             </h2>
             {isNoteCollapsed && (
-              <div className="pl-6 space-y-1">
-                <h3>Note 1</h3>
-                <h3>Note 2</h3>
-                <h3>Note 3</h3>
-              </div>
+              <ScrollArea className="pl-2 h-80">
+                <Notebooks />
+              </ScrollArea>
             )}
           </div>
         </div>
-        <div className="py-2 px-3">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                className="w-full justify-start px-1 space-x-1  h-12 py-3"
-                variant={'outline'}
-              >
-                <Avatar>
-                  <AvatarImage
-                    src="http://github.com/hayat4144.png"
-                    alt="@Hayat4144"
-                  />
-                  <AvatarFallback>Cn</AvatarFallback>
-                </Avatar>
-                <h3 className="flex items-center justify-between space-x-4">
-                  <span className="text-sm">Hayat ilyas</span>
-                  <Icons.horizontalThreeDots size={18} />
-                </h3>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-full min-w-[12rem]">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link href={'profile'}>
-                    <Icons.user className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link href={'/notification'}>
-                    <Icons.notification className="mr-2 h-4 w-4" />
-                    <span>Notification</span>
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link href={'/settings'}>
-                    <Icons.settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  <Icons.logout className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <Button
+          variant={'outline'}
+          className="mx-3 justify-start"
+          onClick={() => logout()}
+        >
+          <Iconwithtext icons={<Icons.logout size={16} />} text="Logout" />
+        </Button>
       </div>
     </nav>
   );
