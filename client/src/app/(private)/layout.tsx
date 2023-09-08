@@ -8,7 +8,7 @@ interface LayoutProps {
 export default function layout({ children }: LayoutProps) {
   return (
     <main className="flex">
-      <AsideNav className="w-[15rem] h-screen sticky top-0" />
+      <AsideNav className="w-[18rem] h-screen sticky top-0" />
       {children}
     </main>
   );
