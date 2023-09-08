@@ -13,6 +13,7 @@ import {
   createEditor,
   Element,
   Node,
+  Operation,
   Range,
   Editor as SlateEditor,
 } from 'slate';
@@ -28,11 +29,14 @@ import withCodeblock from './Plugins/withCodeBlock';
 import { initialValue } from '@/lib/constants';
 import { isSelectionTable, withTables } from './Plugins/withTable';
 import TableModal from './TableModal';
-import { Button } from '../ui/button';
 import LinkModal from './LinkModal';
 import withLink from './Plugins/withLink';
 import CommandMenu from './CommandMenu';
 import withHeading from './Plugins/withHeading';
+import saveNoteBookContent from '@/service/saveNotebookContent';
+import { useSession } from 'next-auth/react';
+import { useParams, useRouter } from 'next/navigation';
+import { toast } from '../ui/use-toast';
 
 const createEditorWithPlugins = pipe(
   withReact,
@@ -46,7 +50,15 @@ const createEditorWithPlugins = pipe(
   withHeading,
 );
 
-const Editor = () => {
+interface EditorProps {
+  data: {
+    id: string;
+    content: any;
+    title: string;
+  };
+}
+
+const Editor = ({ data }: EditorProps) => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
   const handleDOMBeforeInput = useCallback(
     (e: InputEvent) => {
@@ -96,6 +108,8 @@ const Editor = () => {
     (props: RenderElementProps) => <RenderElements {...props} />,
     [],
   );
+  const session = useSession();
+  const { id } = useParams();
   const [isCommandMenu, toggleCommandMenu] = useToggle(false);
   const [isTableModal, tableModalToggle] = useToggle(false);
   const [isLinkModal, linkModalToggle] = useToggle(false);
@@ -106,11 +120,13 @@ const Editor = () => {
     setemojiTragetRange: setEmojiTargetRange,
   };
 
+  const editorValue = useMemo(() => data.content || initialValue, []);
+
   return (
     <Slate
       editor={editor}
-      initialValue={initialValue}
-      onChange={() => {
+      initialValue={editorValue}
+      onChange={async (Value) => {
         const { selection } = editor;
         editorUtiliy.detectCommandMenuPattern(editor, toggleCommandMenu);
         editorUtiliy.detectEmojiPattern(emojiPatternProps);
@@ -124,6 +140,19 @@ const Editor = () => {
           linkModalToggle(true);
         }
         editorUtiliy.identifyLinksInTextIfAny(editor);
+        const isAstChange = editor.operations.some(
+          (op: Operation) => 'set_selection' !== op.type,
+        );
+        if (isAstChange) {
+          const { error } = await saveNoteBookContent(
+            session.data?.user.AccessToken,
+            id,
+            Value,
+          );
+          if (error) {
+            toast({ title: error, variant: 'destructive' });
+          }
+        }
       }}
     >
       <Toolbar tableModalToggle={tableModalToggle} isTable={isTableModal} />

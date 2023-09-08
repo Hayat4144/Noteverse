@@ -3,6 +3,7 @@ import addNotebook from '@/Notebook/addNotebook';
 import deleteNotebook from '@/Notebook/deleteNotebook';
 import noteBookById from '@/Notebook/noteBookById';
 import readNotebook from '@/Notebook/readNotebook';
+import updateNotebookContent from '@/Notebook/updateNotebook';
 import updateNotebook from '@/Notebook/updateNotebookTitle';
 import authMiddleware from '@/middlewares/authMiddleware';
 import express from 'express';
@@ -30,7 +31,11 @@ noteBookRoutes.delete(
   authMiddleware,
   deleteNotebook,
 );
-
+noteBookRoutes.put(
+  '/api/update/notebook/content',
+  authMiddleware,
+  updateNotebookContent,
+);
 noteBookRoutes.put('/api/update/notebook', authMiddleware, updateNotebook);
 
 export default noteBookRoutes;
