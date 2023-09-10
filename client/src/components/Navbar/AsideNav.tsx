@@ -16,9 +16,7 @@ import { useToggle } from '@uidotdev/usehooks';
 import AddNotebookform from '../forms/AddNotebookform';
 import Notebooks from './Notebooks';
 import { ScrollArea } from '../ui/scroll-area';
-import Iconwithtext from '../Iconwithtext';
-import { signOut } from 'next-auth/react';
-import { toast } from '../ui/use-toast';
+import Themedropdown from './Theme-dropdown';
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function AsideNav({ className }: SidebarProps) {
@@ -26,11 +24,6 @@ export default function AsideNav({ className }: SidebarProps) {
   const [isNoteCollapsed, setisNoteCollapsed] = useState(true);
   const pathname = usePathname();
   const [isDialogOpen, toggleDialog] = useToggle(false);
-
-  const logout = () => {
-    signOut({ redirect: true, callbackUrl: '/signin' });
-    toast({ title: 'you are successfully logout.' });
-  };
 
   return (
     <nav className={cn('border-r', className)}>
@@ -102,13 +95,9 @@ export default function AsideNav({ className }: SidebarProps) {
             )}
           </div>
         </div>
-        <Button
-          variant={'outline'}
-          className="mx-3 justify-start"
-          onClick={() => logout()}
-        >
-          <Iconwithtext icons={<Icons.logout size={16} />} text="Logout" />
-        </Button>
+        <div className="px-3 w-full">
+          <Themedropdown />
+        </div>
       </div>
     </nav>
   );
