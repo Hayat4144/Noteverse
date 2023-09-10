@@ -18,9 +18,9 @@ declare module 'next-auth' {
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    // AccessToken: string;
-    // RefreshToken: string;
-    // AccessTokenExpiry: number | undefined;
-    // error?: string;
+    AccessToken: string;
+    RefreshToken: string;
+    AccessTokenExpiry: number | undefined;
+    error?: string;
   }
 }

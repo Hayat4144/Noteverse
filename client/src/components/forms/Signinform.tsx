@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { authSchma } from '@/lib/validation/auth';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,16 +14,17 @@ import {
 } from '@/components/ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Icons } from '../Icons';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
+import { toast } from '../ui/use-toast';
+import { useRouter } from 'next/navigation';
+import { useToggle } from '@uidotdev/usehooks';
+import { Loader2 } from 'lucide-react';
 
 type Inputs = z.infer<typeof authSchma>;
 
 export default function Signinform() {
-  const [isPending, startTransition] = React.useTransition();
-  const m = useSession()
-  console.log(m)
-  // react-hook-form
+  const [isLoading, setisLoading] = useToggle(false);
+
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchma),
     defaultValues: {
@@ -31,19 +32,22 @@ export default function Signinform() {
       password: '',
     },
   });
-
+  const router = useRouter();
   const onSubmit = async (values: Inputs) => {
+    setisLoading(true);
     const result = await signIn('credentials', {
       redirect: false,
       email: values.email,
       password: values.password,
-      // callbackUrl:'/'
     });
-    console.log(result)
     if (result?.error) {
+      setisLoading(true);
+      toast({ title: result.error, variant: 'destructive' });
       alert(`Error:${result.error}`);
     } else {
-      alert(`Success: login successful.`);
+      setisLoading(true);
+      toast({ title: 'You are successfully signin.' });
+      router.push('/');
     }
   };
   return (
@@ -75,15 +79,15 @@ export default function Signinform() {
             </FormItem>
           )}
         ></FormField>
-        <Button disabled={isPending}>
-          {isPending && (
-            <Icons.spinner
-              className="mr-2 h-4 w-4 animate-spin"
-              aria-hidden="true"
-            />
+        <Button disabled={isLoading}>
+          {isLoading ? (
+            <Fragment>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <span>Please wait</span>
+            </Fragment>
+          ) : (
+            <span>Signin</span>
           )}
-          Sign in
-          <span className="sr-only">Sign in</span>
         </Button>
       </form>
     </Form>

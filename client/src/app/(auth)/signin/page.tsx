@@ -1,4 +1,3 @@
-import OAuthSignin from '@/components/auth/OAuthSignin';
 import Signinform from '@/components/forms/Signinform';
 import {
   Card,
@@ -21,7 +20,7 @@ export default function Signin() {
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <OAuthSignin />
+        {/* <OAuthSignin />
         <div className="single-signin relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
@@ -31,7 +30,7 @@ export default function Signin() {
               Or continue with
             </span>
           </div>
-        </div>
+        </div> */}
         <Signinform />
       </CardContent>
       <CardFooter className="flex flex-wrap items-center justify-between gap-2">
