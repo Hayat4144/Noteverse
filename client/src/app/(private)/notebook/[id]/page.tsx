@@ -12,7 +12,7 @@ export default async function page({ params }: { params: { id: string } }) {
   }
   const { data } = await getNotebook(session.user.AccessToken, params.id);
   return (
-    <div className="w-full h-screen my-2">
+    <div className="ml-[14rem] w-full overflow-y-auto">
       <Editor data={data} />
     </div>
   );

@@ -14,7 +14,7 @@ export default async function Task() {
   const tasks = await getTasks(session.user.AccessToken);
   return (
     <Fragment>
-      <div className="md:my-5 w-full mx-3 overflow-y-auto">
+      <div className="ml-[14rem] w-full overflow-y-auto px-2">
         <HeaderTask />
         <TaskfilterView taskData={{ ...tasks, isLoading: false }} />
       </div>
