@@ -66,7 +66,7 @@ export default function LinkModal({
       return;
     }
     const linkBlock = editorUtiliy.getBlock(editor, 'link');
-    setlinkUrl(linkBlock[0].url);
+    setlinkUrl((linkBlock[0] as any).url);
     const domSelection = getSelection();
     const domRange = domSelection?.getRangeAt(0);
     const rect = domRange?.getBoundingClientRect();
