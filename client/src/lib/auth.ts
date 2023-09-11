@@ -78,7 +78,6 @@ export const authOptions: NextAuthOptions = {
   providers,
   callbacks: {
     jwt: async ({ token, user, session }) => {
-      console.log(token);
       /* Token is stored data after the successfull login
          user is return variable from the providers.the user is undefined initially.
         it is only avaible at login time at successful login 

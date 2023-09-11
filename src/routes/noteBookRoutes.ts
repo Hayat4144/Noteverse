@@ -1,3 +1,4 @@
+import recentNotebook from '@/Notebook/RecentNotebook';
 import uploadMedia from '@/Notebook/UploadMedia';
 import addNotebook from '@/Notebook/addNotebook';
 import deleteNotebook from '@/Notebook/deleteNotebook';
@@ -37,5 +38,10 @@ noteBookRoutes.put(
   updateNotebookContent,
 );
 noteBookRoutes.put('/api/update/notebook', authMiddleware, updateNotebook);
+noteBookRoutes.get(
+  '/api/recent/notebook/:type',
+  authMiddleware,
+  recentNotebook,
+);
 
 export default noteBookRoutes;

@@ -345,7 +345,9 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
                   />
                 </div>
               </FormControl>
-              <FormDescription>Note:Press comma (,) to create tag</FormDescription>
+              <FormDescription>
+                Note:Press comma (,) to create tag
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -379,7 +381,7 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
             </FormItem>
           )}
         />
-        <Button>Add Task</Button>
+        <Button>{isupdateForm ? 'Update Task' : 'Add Task'}</Button>
       </form>
     </Form>
   );
