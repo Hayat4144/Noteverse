@@ -23,7 +23,6 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import deleteTasks from '@/service/DeletedTasks';
@@ -31,6 +30,8 @@ import { useSession } from 'next-auth/react';
 import { toast } from '@/components/ui/use-toast';
 import { ActionTypes } from '@/context/actions';
 import { Button } from '@/components/ui/button';
+import { useToggle } from '@uidotdev/usehooks';
+import { Loader2 } from 'lucide-react';
 
 export default function BoardTask() {
   const { data, resultPerPage, totalResults } = useAppSelector(
@@ -154,6 +155,7 @@ const TaskContent = ({ data, createQueryString }: TaskContentProps) => {
   const dispatch = useAppDispatch();
   const [dialOpen, setdialOpen] = useState(false);
   const [deleteId, setdeleteId] = useState<string | null>(null);
+  const [isLoading, toggleLoading] = useToggle(false);
 
   const editHandler = (id: string) => {
     router.push(pathname + '?' + createQueryString('id', id));
@@ -165,12 +167,14 @@ const TaskContent = ({ data, createQueryString }: TaskContentProps) => {
   };
 
   const DeleteTasks = async (taskIds: string[]) => {
+    toggleLoading(true);
     const { error, message } = await deleteTasks(
       taskIds,
       session.data?.user.AccessToken,
     );
+    toggleLoading(false);
     if (error) {
-      toast({ variant: 'destructive', title: error });
+      return toast({ variant: 'destructive', title: error });
     }
     taskIds.map((id) => {
       dispatch({ type: ActionTypes.removeTask, id });
@@ -244,7 +248,14 @@ const TaskContent = ({ data, createQueryString }: TaskContentProps) => {
                   }
                 }}
               >
-                Delete
+                {isLoading ? (
+                  <Fragment>
+                    <Loader2 className="mr-2 animate-spin" />
+                    Please wait
+                  </Fragment>
+                ) : (
+                  'Delete'
+                )}
               </Button>
             </DialogFooter>
           </DialogContent>

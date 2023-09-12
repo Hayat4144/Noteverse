@@ -9,10 +9,10 @@ export const addtaskSchema = z.object({
     .max(200, { message: 'Title must be atleast 4 character long.' }),
 
   description: z.string().optional(),
-  status: z.string().min(4, { message: 'Status must be 4 character long.' }),
+  status: z.string().min(3, { message: 'Status must be 3 character long.' }),
   priority: z
     .string()
-    .min(4, { message: 'Priority must be 4 character long.' }),
+    .min(3, { message: 'Priority must be 3 character long.' }),
   tags: z.string(),
   assignee: z
     .string()

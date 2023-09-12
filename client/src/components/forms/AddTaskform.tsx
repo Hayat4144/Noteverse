@@ -1,6 +1,6 @@
 import { addtaskSchema } from '@/lib/validation/task';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
@@ -31,6 +31,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import getTasksId from '@/service/getTaskById';
 import { useQuery } from '@tanstack/react-query';
 import updateTask from '@/service/updateTask';
+import { useToggle } from '@uidotdev/usehooks';
+import { Loader2 } from 'lucide-react';
 
 interface RowSelections {
   unSelectRow?: () => void;
@@ -46,6 +48,7 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
   const taskId = searchParams.get('id');
   const router = useRouter();
   const pathname = usePathname();
+  const [isLoading, toggleLoading] = useToggle(false);
 
   const [defaultValue, setdefaultValue] = useState<taskInput>({
     due_date: new Date(),
@@ -162,7 +165,7 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
 
   const onSubmit = async (values: taskInput) => {
     let { tags, ...dataValue } = values;
-
+    toggleLoading(true);
     const task = { ...dataValue, tags: tasktags };
     if (isupdateForm) {
       const { error, data } = await updateTask(
@@ -171,6 +174,7 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
         { ...task },
       );
       if (error) {
+        toggleLoading(false);
         return toast({ title: error, variant: 'destructive' });
       }
       form.reset();
@@ -179,6 +183,7 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
       if (unSelectRow) {
         unSelectRow();
       }
+      toggleLoading(false);
       return toast({ title: 'Task has been updated Successfully.' });
     } else {
       const { error, data } = await addTask(
@@ -186,10 +191,12 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
         session.data?.user.AccessToken,
       );
       if (error) {
+        toggleLoading(false);
         return toast({ title: error, variant: 'destructive' });
       }
       form.reset();
       dispatch({ type: ActionTypes.taskSheetoogle, payload: false });
+      toggleLoading(false);
       return toast({ title: data });
     }
   };
@@ -365,7 +372,18 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
             </FormItem>
           )}
         />
-        <Button>{isupdateForm ? 'Update Task' : 'Add Task'}</Button>
+        <Button disabled={isLoading}>
+          {isLoading ? (
+            <Fragment>
+              <Loader2 size={17} className='mr-2 animate-spin' />
+              Please wait
+            </Fragment>
+          ) : isupdateForm ? (
+            'Update Task'
+          ) : (
+            'Add Task'
+          )}
+        </Button>
       </form>
     </Form>
   );

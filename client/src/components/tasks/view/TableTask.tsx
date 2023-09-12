@@ -41,9 +41,7 @@ export default function TableTask<TData, TValue>({
   const router = useRouter();
   const pathname = usePathname();
   const [currentPage, setcurrentPage] = useState<number>(1);
-  console.log(totalResults, resultPerPage);
   const totalPages = Math.ceil(totalResults / resultPerPage);
-  console.log(totalPages);
 
   const table = useReactTable({
     data,
