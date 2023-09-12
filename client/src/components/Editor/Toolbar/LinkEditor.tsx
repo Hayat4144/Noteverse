@@ -26,7 +26,7 @@ export default function LinkEditor() {
       match: (n) =>
         !Editor.isEditor(n) && Element.isElement(n) && n.type === 'link',
     });
-    setlinkUrl(match[0].url);
+    setlinkUrl((match[0] as any).url);
     const domSelection = getSelection();
     const domRange = domSelection?.getRangeAt(0);
     const rect = domRange?.getBoundingClientRect();
@@ -52,7 +52,7 @@ export default function LinkEditor() {
               value={linkUrl}
               onChange={(e) => {
                 setlinkUrl(e.target.value);
-                e.preventDefault()
+                e.preventDefault();
               }}
             />
             <Button type="submit" variant={'default'}>

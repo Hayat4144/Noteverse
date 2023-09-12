@@ -9,6 +9,7 @@ import ImageLinkForm from '../forms/ImageLinkForm';
 import { useSession } from 'next-auth/react';
 import { useToggle } from '@uidotdev/usehooks';
 import { Loader2 } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
 interface ImageLinkProps {
   setOpen: (value: boolean) => void;
@@ -18,14 +19,16 @@ export default function ImageContent({ setOpen }: ImageLinkProps) {
   const editor = useSlate();
   const [isLoading, setisLoadingToggle] = useToggle(false);
   const session = useSession();
-
+  const { id } = useParams();
   const Imageupload = async (files: FileList) => {
     setisLoadingToggle(true);
     if (files && files.length > 0) {
+      const filesArray = [...files];
       const isUploaded = await editorUtiliy.updloadImagehandler(
         editor,
-        files,
+        filesArray,
         session.data?.user.AccessToken,
+        id,
       );
       setisLoadingToggle(false);
       setOpen(false);

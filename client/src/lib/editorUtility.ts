@@ -23,7 +23,7 @@ const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
 
 interface imageUploadResponse {
   data?: Array<{ url: string }> | undefined;
-  error?: { message: string } | undefined;
+  error?: string | undefined;
 }
 
 interface emojiPatternProps {
@@ -219,11 +219,12 @@ const editorUtiliy = {
   },
   updloadImagehandler: async (
     editor: Editor,
-    files: FileList,
+    files: File[],
     token: string | undefined,
+    id: string,
   ): Promise<boolean> => {
     let formData = new FormData();
-    formData.append('noteBookId', '812c097e-e526-424c-9536-87c3566fcac6');
+    formData.append('noteBookId', id);
     for (const file of files) {
       const [mime] = file.type.split('/');
       if (mime === 'image') {
@@ -240,7 +241,8 @@ const editorUtiliy = {
       });
     }
     if (error) {
-      toast({ title: error.message, variant: 'destructive' });
+      console.log(error);
+      toast({ title: error, variant: 'destructive' });
     }
     return true;
   },
@@ -472,7 +474,7 @@ const editorUtiliy = {
           : isList
           ? 'bulletedlList'
           : (format as keyof typeof newProperties.type),
-      };
+      } as Partial<Element>;
     }
 
     //  set the nodes

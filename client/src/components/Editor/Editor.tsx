@@ -4,7 +4,6 @@ import useEditorConfig from '@/hooks/useEditorConfig';
 import { withHistory } from 'slate-history';
 import Toolbar from './Toolbar/Toolbar';
 import HoveringToolbar from './Toolbar/HoveringToolbar';
-import withImage from './Plugins/withImage';
 import withChecklists from './Plugins/withChecklist';
 import withShortcut from './Plugins/withShortcuts';
 import { useToggle } from '@uidotdev/usehooks';
@@ -35,13 +34,12 @@ import CommandMenu from './CommandMenu';
 import withHeading from './Plugins/withHeading';
 import saveNoteBookContent from '@/service/saveNotebookContent';
 import { useSession } from 'next-auth/react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { toast } from '../ui/use-toast';
 
 const createEditorWithPlugins = pipe(
   withReact,
   withHistory,
-  withImage,
   withTables,
   withShortcut,
   withLink,
@@ -121,6 +119,19 @@ const Editor = ({ data }: EditorProps) => {
   };
 
   const editorValue = useMemo(() => data.content || initialValue, []);
+  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    const files = Array.from(event.dataTransfer.items).map(
+      (item) => item.getAsFile() as File,
+    );
+    if (files && files.length > 0) {
+      editorUtiliy.updloadImagehandler(
+        editor,
+        files,
+        session.data.user.AccessToken,
+        id,
+      );
+    }
+  };
 
   return (
     <Slate
@@ -184,6 +195,7 @@ const Editor = ({ data }: EditorProps) => {
       ) : null}
       <Editable
         className="mt-24 px-5"
+        onDrop={onDrop}
         onDOMBeforeInput={handleDOMBeforeInput}
         style={{ outline: 'none' }}
         disableDefaultStyles
