@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "name": "noteversebackend",
+  "builds": [
+    { "src": "dist/index.js", "use": "@vercel/node", "config": "dist/**" }
+  ],
+  "routes": [{ "src": "/(.*)", "dest": "dist/index.js" }]
+}
