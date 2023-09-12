@@ -131,12 +131,3 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
-
-export const comparepassword = async (
-  password: string,
-  encodedPassword: string,
-): Promise<Boolean> => {
-  const hashPassword = await bcrypt.compare(password, encodedPassword);
-  if (!hashPassword) return false;
-  return true;
-};
