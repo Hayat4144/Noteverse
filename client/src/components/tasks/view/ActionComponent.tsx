@@ -16,6 +16,9 @@ import { useSession } from 'next-auth/react';
 import { useToast } from '@/components/ui/use-toast';
 import { ActionTypes } from '@/context/actions';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useToggle } from '@uidotdev/usehooks';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 interface RowSelections {
   selectionRow: SelectionRow;
@@ -34,6 +37,7 @@ export default function ActionComponent({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isLoading, toggleloading] = useToggle(false);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -56,13 +60,16 @@ export default function ActionComponent({
   );
 
   const DeleteTasks = async (taskIds: string[]) => {
+    toggleloading(true);
     const { error, message } = await deleteTasks(
       taskIds,
       session.data?.user.AccessToken,
     );
     if (error) {
-      toast({ variant: 'destructive', title: error });
+      toggleloading(false);
+      return toast({ variant: 'destructive', title: error });
     }
+    toggleloading(false);
     taskIds.map((id) => {
       dispatch({ type: ActionTypes.removeTask, id });
     });
@@ -88,12 +95,20 @@ export default function ActionComponent({
                   const taskIds: string[] = GetSelectedRow(selectionRow, data);
                   DeleteTasks(taskIds);
                 }}
+                asChild
               >
-                <Iconwithtext
-                  icons={<Icons.trash size={16} />}
-                  text="Delete"
-                  className="text-red-600"
-                />
+                {isLoading ? (
+                  <Button variant="ghost" disabled={isLoading}>
+                    <Loader2 className="mr-2 animate-spin" />
+                    Please wait
+                  </Button>
+                ) : (
+                  <Iconwithtext
+                    icons={<Icons.trash size={16} />}
+                    text="Delete"
+                    className="text-red-600 cursor-pointer"
+                  />
+                )}
               </TooltipTrigger>
               <TooltipContent>Delete Task</TooltipContent>
             </Tooltip>
