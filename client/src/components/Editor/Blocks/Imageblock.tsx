@@ -31,15 +31,14 @@ const ImageBlock = (
       contentEditable={false}
       style={props.style}
       {...props.attributes}
-      className="mx-2 relative"
+      className="mx-2 relative w-[80%]"
     >
-      {props.children}
-      <AspectRatio ratio={16 / 7} className="my-5">
+      <AspectRatio ratio={10 / 4} className="my-5">
         {props.children}
         <Image
           src={(element as any).url}
           fill
-          alt="Gray by Drew Beamer"
+          alt="image"
           className={`object-fill rounded-md`}
         />
         {selected && focused && (
@@ -50,7 +49,6 @@ const ImageBlock = (
                 asChild
                 onClick={(e) => {
                   e.preventDefault();
-                  console.log('removed');
                   editorUtiliy.removeImage(editor, path);
                 }}
               >

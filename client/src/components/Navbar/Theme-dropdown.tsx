@@ -27,7 +27,7 @@ export default function Themedropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={'secondary'} className="w-full">
+        <Button variant={'secondary'} className="w-full justify-start">
           {session.data?.user?.name || 'Username'}
         </Button>
       </DropdownMenuTrigger>

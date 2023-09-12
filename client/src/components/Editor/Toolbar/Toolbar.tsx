@@ -41,7 +41,7 @@ export default function Toolbar({ isTable, tableModalToggle }: ToolbarProps) {
     <Fragment>
       <div
         className="flex items-center space-x-1 flex-wrap px-2 fixed
-       bg-background top-0 py-1 border-b"
+       bg-background top-0 py-1 border-b z-50"
       >
         <HistoryButton type="undo" icon={<Icons.undo size={15} />} />
         <HistoryButton type="redo" icon={<Icons.redo size={15} />} />
