@@ -1,4 +1,3 @@
-import { TaskPriority, TaskStatus } from '@/types';
 import { z } from 'zod';
 
 export const addtaskSchema = z.object({
@@ -10,8 +9,10 @@ export const addtaskSchema = z.object({
     .max(200, { message: 'Title must be atleast 4 character long.' }),
 
   description: z.string().optional(),
-  status: z.nativeEnum(TaskStatus),
-  priority: z.nativeEnum(TaskPriority),
+  status: z.string().min(4, { message: 'Status must be 4 character long.' }),
+  priority: z
+    .string()
+    .min(4, { message: 'Priority must be 4 character long.' }),
   tags: z.string(),
   assignee: z
     .string()

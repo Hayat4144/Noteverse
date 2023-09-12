@@ -49,13 +49,13 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
 
   const [defaultValue, setdefaultValue] = useState<taskInput>({
     due_date: new Date(),
-    is_standalone: false,
     status: TaskStatus.Not_Started,
     priority: TaskPriority.Low,
     title: '',
-    description: '',
     tags: '',
     assignee: '',
+    is_standalone: false,
+    description: '',
   });
 
   const createQueryString = useCallback(
@@ -361,22 +361,6 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
               <FormControl>
                 <Input placeholder="Task assigne" {...field} />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="is_standalone"
-          render={({ field }) => (
-            <FormItem className="flex items-center space-x-2">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <FormLabel>is this task is is_standalone</FormLabel>
               <FormMessage />
             </FormItem>
           )}
