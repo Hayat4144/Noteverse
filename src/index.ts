@@ -18,10 +18,7 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? [
-            'https://frontend-hayat4144.vercel.app',
-            'https://dashboard-hayat4144.vercel.app',
-          ]
+        ? [process.env.FRONTENEND_URL as string]
         : ['http://localhost:3000'],
     credentials: true,
     optionsSuccessStatus: 200,
