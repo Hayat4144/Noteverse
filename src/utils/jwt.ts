@@ -1,24 +1,29 @@
-import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { payload } from '../types';
 import { CustomError } from './CustomError';
 
 const options: SignOptions = {
-  algorithm: 'ES256',
+  algorithm: 'HS256',
   expiresIn: '24h',
 };
 
-const getPrivateKeySecret = (): Buffer => {
-  const filePath = join(process.cwd(), 'private.ec.key');
-  const secretKey = readFileSync(filePath);
-  return secretKey;
+// const getPrivateKeySecret = (): Buffer => {
+//   const filePath = join(process.cwd(), 'private.ec.key');
+//   const secretKey = readFileSync(filePath);
+//   return secretKey;
+// };
+
+// const getPublicKeySecret = (): Buffer => {
+//   const filePath = join(process.cwd(), 'public.pem');
+//   const secretKey = readFileSync(filePath);
+//   return secretKey;
+// };
+const getPrivateKeySecret = (): string => {
+  return process.env.JWT_SECRET as string;
 };
 
-const getPublicKeySecret = (): Buffer => {
-  const filePath = join(process.cwd(), 'public.pem');
-  const secretKey = readFileSync(filePath);
-  return secretKey;
+const getPublicKeySecret = (): string => {
+  return process.env.JWT_SECRET as string;
 };
 
 const getAccessToken = async (payload: any): Promise<string> => {
@@ -36,10 +41,10 @@ const getRefreshToken = async (paylod: payload): Promise<string> => {
   return token;
 };
 
-const verifyToken = async (token: string, expiryDate:number): Promise<payload> => {
-  const options: VerifyOptions = {
-    algorithms: ['ES256'],
-  };
+const verifyToken = async (
+  token: string,
+  expiryDate: number,
+): Promise<payload> => {
   const secret = getPublicKeySecret();
   const decodedToken = (await jwt.verify(token, secret, options)) as payload;
 
