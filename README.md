@@ -100,7 +100,7 @@ Resources i used to build this application are
 - [Slate js documentation](https://docs.slatejs.org/)
 - [Slate js examples](https://www.slatejs.org/examples/richtext)
 - [Slate js based editor](https://github.com/accordproject/web-components/)
-- [Small rich text editor example](hhttps://www.smashingmagazine.com/2021/05/building-wysiwyg-editor-javascript-slatejs/)
+- [Small Rich text Editor example](https://www.smashingmagazine.com/2021/05/building-wysiwyg-editor-javascript-slatejs/)
 - [Shadcn UI](https://ui.shadcn.com/)
 - [Radix UI](https://www.radix-ui.com/)
 - [NextAuth js](https://next-auth.js.org/)
