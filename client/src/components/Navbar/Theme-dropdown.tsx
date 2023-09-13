@@ -46,10 +46,10 @@ export default function Themedropdown() {
               <DropdownMenuItem onSelect={() => setTheme('dark')}>
                 Dark
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setTheme('dark')}>
+              <DropdownMenuItem onSelect={() => setTheme('light')}>
                 Light
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setTheme('dark')}>
+              <DropdownMenuItem onSelect={() => setTheme('system')}>
                 System
               </DropdownMenuItem>
             </DropdownMenuSubContent>

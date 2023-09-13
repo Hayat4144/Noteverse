@@ -41,11 +41,10 @@ export default function Signinform() {
       password: values.password,
     });
     if (result?.error) {
-      setisLoading(true);
+      setisLoading(false);
       toast({ title: result.error, variant: 'destructive' });
-      alert(`Error:${result.error}`);
     } else {
-      setisLoading(true);
+      setisLoading(false);
       toast({ title: 'You are successfully signin.' });
       router.push('/');
     }

@@ -17,12 +17,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Icons } from '../Icons';
 import { BASE_URL } from '@/lib/BASE_URL';
 import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
 
 type SignupInput = z.infer<typeof SignupSchema>;
 
 export default function SignupForm() {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   // react-hook-form validation with zod
   const form = useForm<SignupInput>({
@@ -38,7 +40,7 @@ export default function SignupForm() {
   // handle the registeration
   const onSubmit = async (values: SignupInput) => {
     try {
-      setIsLoading(!isLoading)
+      setIsLoading(!isLoading);
       const RegisterResponse = await fetch(`${BASE_URL}/api/auth/v/signup`, {
         method: 'POST',
         headers: {
@@ -47,12 +49,14 @@ export default function SignupForm() {
         body: JSON.stringify({ ...values }),
       });
       const result = await RegisterResponse.json();
-      setIsLoading(false)
+      setIsLoading(false);
       if (RegisterResponse.status !== 200) {
         toast({ title: result.error, variant: 'destructive' });
         return;
       }
       toast({ title: result.data });
+      router.push('/signin');
+
       return;
     } catch (error) {
       console.error(error);
