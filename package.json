@@ -9,8 +9,7 @@
     "dev": "concurrently -n 'server,client' -c 'green,blue' \"npm run dev:server\" \"npm run dev:client\"",
     "build": "tsc",
     "start": "ts-node src/index.ts",
-    "postinstall": "prisma generate",
-    "vercel-build": "echo hello"
+    "postinstall": "prisma generate"
   },
   "repository": {
     "type": "git",
