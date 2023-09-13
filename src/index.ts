@@ -18,7 +18,7 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? [process.env.FRONTENEND_URL as string]
+        ? [process.env.FRONTEND_URL as string]
         : ['http://localhost:3000'],
     credentials: true,
     optionsSuccessStatus: 200,
