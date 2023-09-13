@@ -27,7 +27,7 @@ model User {
   notes Notebook[]
   tasks Task[]
 
-  @@index([email, name])
+  @@index([email, id])
 }
 
 model Notebook {
@@ -40,6 +40,8 @@ model Notebook {
   mediaFile MediaFile[]
   User      User?       @relation(fields: [userId], references: [id])
   userId    String?
+
+  @@index([id, title, userId])
 }
 
 model MediaFile {
@@ -50,6 +52,8 @@ model MediaFile {
   updatedAt  DateTime  @updatedAt
   Notebook   Notebook? @relation(fields: [notebookId], references: [id])
   notebookId String?
+
+  @@index([id, notebookId])
 }
 
 model Task {
@@ -67,6 +71,8 @@ model Task {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   tags          String[]
+
+  @@index([id, title, userId])
 }
 
 enum TaskPriority {

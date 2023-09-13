@@ -2,18 +2,19 @@ import 'module-alias/register';
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import cookieParser from 'cookie-parser';
 import logger from './utils/logger';
 import ErrorMiddleware from './middlewares/ErroMiddleware';
 import Authrouter from './routes/authRoutes';
 import taskRouter from './routes/taskRoutes';
 import noteBookRoutes from './routes/noteBookRoutes';
 import CloudinaryConfiguration from './config/CloudinayConfig';
+import responsetime from 'response-time';
 
 const app = express();
-app.use(cookieParser());
+app.use(responsetime());
 CloudinaryConfiguration();
 dotenv.config();
+
 app.use(
   cors({
     origin:
