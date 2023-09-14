@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Portal from '../Portal';
-import { useSlate } from 'slate-react';
+import { ReactEditor, useSlate } from 'slate-react';
 import { BaseSelection } from 'slate';
 import { Card, CardContent } from '../ui/card';
 import { Label } from '../ui/label';
@@ -65,17 +65,32 @@ export default function LinkModal({
       el?.removeAttribute('style');
       return;
     }
+    const domRange = ReactEditor.toDOMRange(editor, selection);
+    const rect = domRange.getBoundingClientRect();
     const linkBlock = editorUtiliy.getBlock(editor, 'link');
     setlinkUrl((linkBlock[0] as any).url);
-    const domSelection = getSelection();
-    const domRange = domSelection?.getRangeAt(0);
-    const rect = domRange?.getBoundingClientRect();
-    if (rect) {
-      el.style.opacity = '1';
-      el.style.top = `${rect.bottom}px`;
-      el.style.left = `${rect.left}px`;
+    const CARET_TOP_OFFSET = 15;
+    el.style.opacity = '1';
+    el.style.top = `${
+      rect.top + rect.height + window.pageYOffset + CARET_TOP_OFFSET
+    }px`;
+    let calPos = rect.left - el.offsetWidth / 2;
+
+    // calculate the endpoint of the modal
+    const rightEndPos = calPos + el.offsetWidth;
+    const containerWidth = el.parentElement.offsetWidth;
+
+    // When the modal goes off the page from right side
+    if (rightEndPos > containerWidth) {
+      let diff = rightEndPos - containerWidth;
+      // extra space of 10px on right side to look clean
+      diff += 10;
+      calPos -= diff;
+      const shift = diff - 5;
     }
-  }, [editor, isLinkModal]);
+
+    el.style.left = `${calPos}px`;
+  }, [isLinkModal, editor]);
 
   const removeLink = () => {
     editorUtiliy.removeLink(editor);
