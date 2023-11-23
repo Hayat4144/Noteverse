@@ -27,6 +27,12 @@ export enum ActionTypes {
   openPopoverState = 'OPENPOPOVERSTATE',
   removeTask = 'REMOVETASK',
   updateTask = 'UPDATETASK',
+  addTask = 'ADDTASK',
+}
+
+export interface AddTaskAction {
+  type: ActionTypes.addTask;
+  payload: taskObject;
 }
 
 export interface AddFilterAction {
@@ -121,5 +127,9 @@ export type SortActionType =
   | sortOpenAction
   | deleteSortAction;
 export type TaskToggleActionType = taskTabToggleAction;
-export type TaskActionType = taskAction | removeTask | updateTaskAction;
+export type TaskActionType =
+  | taskAction
+  | removeTask
+  | updateTaskAction
+  | AddTaskAction;
 export type TaskSheetToggleActionType = addTaskSheet;

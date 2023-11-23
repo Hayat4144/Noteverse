@@ -186,7 +186,7 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
       toggleLoading(false);
       return toast({ title: 'Task has been updated Successfully.' });
     } else {
-      const { error, data } = await addTask(
+      const { error, data, responseData } = await addTask(
         { ...task },
         session.data?.user.AccessToken,
       );
@@ -195,6 +195,7 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
         return toast({ title: error, variant: 'destructive' });
       }
       form.reset();
+      dispatch({ type: ActionTypes.addTask, payload: responseData });
       dispatch({ type: ActionTypes.taskSheetoogle, payload: false });
       toggleLoading(false);
       return toast({ title: data });
@@ -375,7 +376,7 @@ export default function AddTaskform({ unSelectRow }: RowSelections) {
         <Button disabled={isLoading}>
           {isLoading ? (
             <Fragment>
-              <Loader2 size={17} className='mr-2 animate-spin' />
+              <Loader2 size={17} className="mr-2 animate-spin" />
               Please wait
             </Fragment>
           ) : isupdateForm ? (

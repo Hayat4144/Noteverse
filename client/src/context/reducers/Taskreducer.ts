@@ -10,6 +10,8 @@ const initailsState: taskstate = {
 
 const TaskReducer = (state = initailsState, action: TaskActionType) => {
   switch (action.type) {
+    case ActionTypes.addTask:
+      return { ...state, data: [...state.data, action.payload] };
     case ActionTypes.task:
       const { isLoading, data, resultPerPage, totalResults } =
         action.payload.field;
