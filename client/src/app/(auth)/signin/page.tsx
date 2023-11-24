@@ -1,3 +1,4 @@
+import PasswordResetrequest from '@/components/forms/PasswordResetrequest';
 import Signinform from '@/components/forms/Signinform';
 import {
   Card,
@@ -46,13 +47,7 @@ export default function Signin() {
             Sign up
           </Link>
         </div>
-        <Link
-          aria-label="Reset password"
-          href="/signin/reset-password"
-          className="text-sm text-primary underline-offset-4 transition-colors hover:underline"
-        >
-          Reset password
-        </Link>
+        <PasswordResetrequest />
       </CardFooter>{' '}
     </Card>
   );

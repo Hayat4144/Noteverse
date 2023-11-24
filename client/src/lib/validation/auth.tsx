@@ -1,5 +1,24 @@
 import { z } from 'zod';
 
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, {
+        message: 'password must be at least 8 characters long',
+      })
+      .max(100)
+      .regex(/^(?=.*[a-z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/, {
+        message:
+          'password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character',
+      }),
+    confirmpassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmpassword, {
+    message: "Password doesn't match.",
+    path: ['confirmpassword'],
+  });
+
 export const changePasswordSchema = z
   .object({
     password: z.string(),
