@@ -3,7 +3,9 @@ import { ActionTypes } from '@/context/actions';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { sortsState } from '@/types';
 import React, { useEffect } from 'react';
-import SortContentPopver from './SortContentPopver';
+import dynamic from 'next/dynamic';
+
+const SortContentPopver = dynamic(() => import('./SortContentPopver'));
 
 export default function Sort() {
   const { isOpen, popoverOpen, sorts }: sortsState = useAppSelector(

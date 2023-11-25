@@ -3,8 +3,10 @@ import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverTrigger } from '@/components/ui/popover';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import React, { Fragment, useEffect, useState } from 'react';
-import FilterPopover from './FilterPopover';
 import { ActionTypes } from '@/context/actions';
+import dynamic from 'next/dynamic';
+
+const FilterPopover = dynamic(() => import('./FilterPopover'));
 
 export default function AddFilterBadge() {
   const { popoverOpen } = useAppSelector((state) => state.Filter);

@@ -5,10 +5,12 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import { getOperators } from '@/lib/utils';
 import { Popover } from '@radix-ui/react-popover';
 import React, { Fragment } from 'react';
-import OperatorComponent from './OperatorComponent';
-import DeleteFilter from './DeleteFilter';
-import SpecificFilter from './SpecificFilter';
 import { ActionTypes } from '@/context/actions';
+import dynamic from 'next/dynamic';
+
+const DeleteFilter = dynamic(() => import('./DeleteFilter'));
+const OperatorComponent = dynamic(() => import('./OperatorComponent'));
+const SpecificFilter = dynamic(() => import('./SpecificFilter'));
 
 export default function BadgePopover() {
   const { openPopoverState, filter } = useAppSelector((state) => state.Filter);

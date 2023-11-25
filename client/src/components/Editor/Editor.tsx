@@ -3,11 +3,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import useEditorConfig from '@/hooks/useEditorConfig';
 import { withHistory } from 'slate-history';
 import Toolbar from './Toolbar/Toolbar';
-import HoveringToolbar from './Toolbar/HoveringToolbar';
 import withChecklists from './Plugins/withChecklist';
 import withShortcut from './Plugins/withShortcuts';
 import { useToggle } from '@uidotdev/usehooks';
-import EmojiPicker from './EmojiPicker';
 import {
   createEditor,
   Element,
@@ -27,8 +25,6 @@ import pipe from 'lodash/fp/pipe';
 import withCodeblock from './Plugins/withCodeBlock';
 import { initialValue } from '@/lib/constants';
 import { isSelectionTable, withTables } from './Plugins/withTable';
-import TableModal from './TableModal';
-import LinkModal from './LinkModal';
 import withLink from './Plugins/withLink';
 import CommandMenu from './CommandMenu';
 import withHeading from './Plugins/withHeading';
@@ -36,6 +32,12 @@ import saveNoteBookContent from '@/service/saveNotebookContent';
 import { useSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import { toast } from '../ui/use-toast';
+import dynamic from 'next/dynamic';
+import HoveringToolbar from './Toolbar/HoveringToolbar';
+
+const EmojiPicker = dynamic(() => import('./EmojiPicker'));
+const LinkModal = dynamic(() => import('./LinkModal'));
+const TableModal = dynamic(() => import('./TableModal'));
 
 const createEditorWithPlugins = pipe(
   withReact,

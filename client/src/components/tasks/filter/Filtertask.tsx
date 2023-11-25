@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { Popover, PopoverTrigger } from '../../ui/popover';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { ActionTypes } from '@/context/actions';
-import FilterPopover from './FilterPopover';
+import dynamic from 'next/dynamic';
+const FilterPopover = dynamic(() => import('./FilterPopover'));
 
 export default function Taskfilter() {
   const { filter } = useAppSelector((state) => state.Filter);

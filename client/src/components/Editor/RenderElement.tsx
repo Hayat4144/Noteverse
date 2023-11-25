@@ -1,8 +1,5 @@
 'use client';
 import { RenderElementProps, useSelected, useSlate } from 'slate-react';
-import Codeblock from './Blocks/Codeblock';
-import Paragraphblock from './Blocks/Paragraphblock';
-import Codelineblock from './Blocks/Codelineblock';
 import { BlockQuote } from '../ui/blockQuote';
 import {
   Heading1block,
@@ -12,12 +9,17 @@ import {
   Heading5block,
   Heading6block,
 } from './Blocks/Headingblock';
-import LinkBlock from './Blocks/LinkBlock';
-import ImageBlock from './Blocks/Imageblock';
-import CheckListblock from './Blocks/CheckListbblock';
 import { Table, TableBody, TableCell, TableRow } from '../ui/table';
 import { Node, Range } from 'slate';
 import { TypographyP } from '../ui/TypographyP';
+import dynamic from 'next/dynamic';
+
+const LinkBlock = dynamic(() => import('./Blocks/LinkBlock'));
+const Paragraphblock = dynamic(() => import('./Blocks/Paragraphblock'));
+const Codeblock = dynamic(() => import('./Blocks/Codeblock'));
+const Codelineblock = dynamic(() => import('./Blocks/Codelineblock'));
+const ImageBlock = dynamic(() => import('./Blocks/Imageblock'));
+const CheckListblock = dynamic(() => import('./Blocks/CheckListbblock'));
 
 const RenderElements = (props: RenderElementProps) => {
   const style = { textAlign: (props.element as any).align };

@@ -7,9 +7,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useToggle } from '@uidotdev/usehooks';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '../ui/button';
-import DeleteModal from './DeleteModal';
 import { Skeleton } from '../ui/skeleton';
-import EditNotebook from '../forms/EditNotebook';
+import dynamic from 'next/dynamic';
+
+const DeleteModal = dynamic(() => import('./DeleteModal'));
+const EditNotebook = dynamic(() => import('../forms/EditNotebook'));
 
 export default function Notebooks() {
   const session = useSession();

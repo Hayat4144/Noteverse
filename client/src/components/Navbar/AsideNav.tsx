@@ -13,11 +13,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToggle } from '@uidotdev/usehooks';
-import AddNotebookform from '../forms/AddNotebookform';
-import Notebooks from './Notebooks';
+import dynamic from 'next/dynamic';
 import { ScrollArea } from '../ui/scroll-area';
 import Themedropdown from './Theme-dropdown';
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const AddNotebookform = dynamic(() => import('../forms/AddNotebookform'));
+const Notebooks = dynamic(() => import('./Notebooks'));
 
 export default function AsideNav({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);

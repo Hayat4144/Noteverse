@@ -5,11 +5,13 @@ import { cn } from '@/lib/utils';
 import { Button, buttonVariants } from '@/components/ui/button';
 import editorUtiliy from '@/lib/editorUtility';
 import { useSlate } from 'slate-react';
-import ImageLinkForm from '../forms/ImageLinkForm';
 import { useSession } from 'next-auth/react';
 import { useToggle } from '@uidotdev/usehooks';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const ImageLinkForm = dynamic(() => import('../forms/ImageLinkForm'));
 
 interface ImageLinkProps {
   setOpen: (value: boolean) => void;

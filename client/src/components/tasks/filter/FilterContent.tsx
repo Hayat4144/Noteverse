@@ -1,8 +1,9 @@
 'use client';
 import React, { Fragment } from 'react';
-import AddFilterBadge from './AddFilterBadge';
-import BadgePopover from './BadgePopover';
 import { useAppSelector } from '@/hooks';
+import dynamic from 'next/dynamic';
+const BadgePopover = dynamic(() => import('./BadgePopover'));
+const AddFilterBadge = dynamic(() => import('./AddFilterBadge'));
 
 export default function FilterContent() {
   const { filter, isOpen } = useAppSelector((state) => state.Filter);

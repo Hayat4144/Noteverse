@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import TableTask from './view/TableTask';
 import BoardTask from './view/BoardTask';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import Loading from '../Loading';
 import TaskFilter from './TaskFilter';
 import { TaskResponse } from '@/types';
 import { ActionTypes } from '@/context/actions';
@@ -13,6 +12,9 @@ import getTasks from '@/service/getTask';
 import { useSession } from 'next-auth/react';
 import { columns } from './view/columns';
 import { useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const Loading = dynamic(() => import('../Loading'));
 
 interface taskfilterProps extends TaskResponse {
   isLoading: boolean;
