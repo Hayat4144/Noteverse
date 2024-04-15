@@ -1,36 +1,31 @@
 'use client';
 import React, { Fragment, useState } from 'react';
 import { Button } from '../ui/button';
-import { useSession } from 'next-auth/react';
 import { BASE_URL } from '@/lib/BASE_URL';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { toast } from '../ui/use-toast';
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import { Loader2 } from 'lucide-react';
 
 export default function PasswordResetrequest() {
   const [isLoading, setisLoading] = useState(false);
-  const [open, setopen] = useState(false);
-  const [message, setmessage] = useState('');
-  const sesssion = useSession();
+  const [email, setemail] = useState('');
+  const [open, setOpen] = useState(false);
 
   const submitHandler = async () => {
     setisLoading(true);
-    const token = sesssion.data.user.AccessToken;
     const response = await fetch(
-      `${BASE_URL}/api/auth/v/resetpassword/request`,
+      `${BASE_URL}/api/auth/v/resetpassword/request?email=${email}`,
       {
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       },
     );
     const { data, error } = await response.json();
@@ -38,41 +33,45 @@ export default function PasswordResetrequest() {
     if (error) {
       return toast({ title: error, variant: 'destructive' });
     }
-    setmessage(data);
-    setopen(true);
-    setTimeout(() => {
-      setopen(false);
-      setmessage('');
-    }, 5000);
+    toast({ title: data });
+    setOpen(false);
   };
+
   return (
-    <Fragment>
-      <AlertDialog open={open} onOpenChange={setopen}>
-        <AlertDialogTrigger></AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogDescription>{message}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Ok</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      <Button
-        aria-label="Reset password"
-        variant="link"
-        onClick={submitHandler}
-        disabled={isLoading}
-      >
-        {isLoading ? (
-          <p>
-            Please wait <span className="animate-bounce">...</span>
-          </p>
-        ) : (
-          'Reset password'
-        )}
-      </Button>
-    </Fragment>
+    <Dialog onOpenChange={setOpen} open={open}>
+      <DialogTrigger asChild>
+        <Button variant="link">reset password</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Reset password request</DialogTitle>
+        </DialogHeader>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            submitHandler();
+          }}
+        >
+          <div className="my-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setemail(e.target.value)}
+            />
+          </div>
+          <Button disabled={isLoading}>
+            {isLoading ? (
+              <Fragment>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                please wait...
+              </Fragment>
+            ) : (
+              'Submit'
+            )}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

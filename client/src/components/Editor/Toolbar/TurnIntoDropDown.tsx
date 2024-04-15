@@ -36,6 +36,123 @@ export interface BlockType {
   shortcut?: string;
 }
 
+const blockTypes: BlockType[] = [
+  {
+    id: '1',
+    icon: <Icons.heading1 size={20} />,
+    type: 'paragraph',
+    lable: 'Paragraph',
+  },
+  {
+    id: '2',
+    icon: <Icons.heading1 size={20} />,
+    type: 'heading',
+    lable: 'Heading 1',
+  },
+  {
+    id: '3',
+    lable: 'Heading 2',
+    icon: <Icons.heading2 size={20} />,
+    type: 'headingTwo',
+  },
+  {
+    id: '4',
+    lable: 'Heading 3',
+    icon: <Icons.heading3 size={20} />,
+    type: 'headingThree',
+  },
+  {
+    id: '5',
+    lable: 'Heading 4',
+    icon: <Icons.heading4 size={20} />,
+    type: 'headingFour',
+  },
+  {
+    id: '6',
+    lable: 'Heading 5',
+    icon: <Icons.heading5 size={20} />,
+    type: 'headingFive',
+  },
+  {
+    id: '7',
+    lable: 'Heading 6',
+    icon: <Icons.heading6 size={20} />,
+    type: 'headingSix',
+  },
+  {
+    id: '8',
+    lable: 'codeblock',
+    icon: <Icons.code size={20} />,
+    type: 'code-block',
+  },
+  {
+    id: '9',
+    lable: 'Inline code',
+    icon: <Icons.code size={20} />,
+    type: 'code-line',
+  },
+  {
+    id: '10',
+    lable: 'Bullet List',
+    icon: <Icons.list size={20} />,
+    type: 'bulletedlList',
+  },
+  {
+    id: '11',
+    lable: 'Number List',
+    icon: <Icons.numberList size={20} />,
+    type: 'numberList',
+  },
+  {
+    id: '12',
+    lable: 'Quote',
+    icon: <Icons.quote size={20} />,
+    type: 'blockQuote',
+  },
+  {
+    id: '13',
+    lable: 'Image',
+    icon: <Icons.image size={20} />,
+    type: 'image',
+  },
+  // {
+  //   id: '14',
+  //   lable: 'Video',
+  //   icon: <Icons.video size={20} />,
+  //   type: 'Video',
+  // },
+  // {
+  //   id: '15',
+  //   lable: 'Table',
+  //   icon: <Icons.table size={20} />,
+  //   type: 'table',
+  // },
+  // {
+  //   id: '16',
+  //   lable: 'Mention',
+  //   icon: <Icons.mention size={20} />,
+  //   type: 'mention',
+  // },
+  // {
+  //   id: '18',
+  //   lable: 'Badge',
+  //   icon: <Icons.badge size={20} />,
+  //   type: 'badge',
+  // },
+  {
+    id: '19',
+    lable: 'Link',
+    icon: <Icons.link size={20} />,
+    type: 'link',
+  },
+  {
+    id: '20',
+    lable: 'Check List',
+    icon: <Icons.task size={20} />,
+    type: 'checkList',
+  },
+];
+
 export default function TurnIntoDropDown({
   blockType,
   isHooveringtoolbar = true,

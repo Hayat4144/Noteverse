@@ -4,12 +4,15 @@ import { httpStatusCode } from '../types/httpStatusCode';
 import prisma from '../config/databaseConfig';
 import jwt from 'jsonwebtoken';
 import { fork } from 'child_process';
+import path from 'path';
+import logger from '@/utils/logger';
 
 const ResetPasswordRequest = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+        const {email} = req.query;
     const IsTokenExist = await prisma.token.findFirst({
       where: {
-        userId: req.user_id,
+                email:email as email
       },
       select: {
         User: {
@@ -39,8 +42,11 @@ const ResetPasswordRequest = asyncHandler(
         User: { connect: { id: req.user_id } },
       },
     });
-
-    const sendMail = fork(process.cwd() + '/src/utils/sendmail.ts');
+    const filepath = process.cwd() + '/src/utils/sendmail.ts';
+    const productionpath = process.cwd() + '/dist/utils/sendmail.js';
+    const childfilepath =
+      process.env.NODE_ENV === 'production' ? productionpath : filepath;
+    const sendMail = fork(childfilepath);
     const message = {
       token,
       user: {

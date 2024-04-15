@@ -21,23 +21,12 @@ export default function Signin() {
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        {/* <OAuthSignin />
-        <div className="single-signin relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-        </div> */}
         <Signinform />
       </CardContent>
       <CardFooter className="flex flex-wrap items-center justify-between gap-2">
         <div className="text-sm text-muted-foreground">
           <span className="mr-1 hidden sm:inline-block">
-            Don&apos;t have an account?
+            Don't have an account?
           </span>
           <Link
             aria-label="Sign up"
@@ -48,7 +37,7 @@ export default function Signin() {
           </Link>
         </div>
         <PasswordResetrequest />
-      </CardFooter>{' '}
+      </CardFooter>
     </Card>
   );
 }
